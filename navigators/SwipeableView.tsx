@@ -11,6 +11,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import ChoresPieCharts from '../components/mockedPieCharts';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -49,7 +50,7 @@ export default function SwipeableView() {
         translateX.value = withTiming(screenWidth, { duration: 300 }, () => {
           runOnJS(setCurrentDayIndex)(currentDayIndex - 1);
           translateX.value = -screenWidth; // Reset to off-screen on the left side
-          translateX.value = withTiming(0, { duration: 0 });
+          translateX.value = withTiming(0, { duration: 300 });
         });
       } else if (
         event.translationX < -65 &&
@@ -59,7 +60,7 @@ export default function SwipeableView() {
         translateX.value = withTiming(-screenWidth, { duration: 300 }, () => {
           runOnJS(setCurrentDayIndex)(currentDayIndex + 1);
           translateX.value = screenWidth; // Reset to off-screen on the right side
-          translateX.value = withTiming(0, { duration: 0 });
+          translateX.value = withTiming(0, { duration: 300 });
         });
       } else {
         // If not swiping far enough, reset position
@@ -79,9 +80,8 @@ export default function SwipeableView() {
       </Animated.View>
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[styles.container, animatedStyle]}>
-          <Text style={styles.text}>{mockData[currentDayIndex].day}</Text>
           <Text style={styles.stats}>{mockData[currentDayIndex].stats}</Text>
-          {/* <ChoresPieCharts /> */}
+          <ChoresPieCharts />
         </Animated.View>
       </GestureDetector>
     </GestureHandlerRootView>
@@ -91,15 +91,14 @@ export default function SwipeableView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     width: '100%',
-    backgroundColor: 'lightblue',
   },
   text: { fontSize: 24 },
-  stats: { fontSize: 16, textAlign: 'center' },
+  stats: { fontSize: 16, textAlign: 'center', paddingTop: 10 },
   headerText: {
     fontSize: 24,
     textAlign: 'center',
     padding: 10,
+    backgroundColor: 'white',
   },
 });

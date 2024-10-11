@@ -38,6 +38,6 @@ export const mUSData: MUSData[] = [
     clean: 5,
     dust: 7,
     dog: 8,
-    bathroom: 1,
+    bathroom: 9,
   },
 ];
