@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text } from 'react-native';
 import {
   Gesture,
   GestureDetector,
@@ -79,9 +79,9 @@ export default function SwipeableView() {
       </Animated.View>
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[styles.container, animatedStyle]}>
-          <View></View>
           <Text style={styles.text}>{mockData[currentDayIndex].day}</Text>
           <Text style={styles.stats}>{mockData[currentDayIndex].stats}</Text>
+          {/* <ChoresPieCharts /> */}
         </Animated.View>
       </GestureDetector>
     </GestureHandlerRootView>
@@ -103,167 +103,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-
-//
-//
-//
-//
-////
-//
-//
-//
-////
-//
-//
-//
-//
-
-// import React, { useRef, useState } from 'react';
-// import { Animated, PanResponder, StyleSheet, Text, View } from 'react-native';
-
-// const SwipeableView = () => {
-//   const [currentDay, setCurrentDay] = useState(0);
-//   const translateX = useRef(new Animated.Value(0)).current;
-
-//   const panResponder = useRef(
-//     PanResponder.create({
-//       onStartShouldSetPanResponder: () => true,
-//       onPanResponderMove: (event, gestureState) => {
-//         translateX.setValue(gestureState.dx);
-//       },
-//       onPanResponderRelease: (event, gestureState) => {
-//         if (gestureState.dx > 50) {
-//           Animated.spring(translateX, {
-//             toValue: 0,
-//             useNativeDriver: true,
-//           }).start(() => {
-//             setCurrentDay((prev) => prev - 1);
-//           });
-//         } else if (gestureState.dx < -50) {
-//           Animated.spring(translateX, {
-//             toValue: 0,
-//             useNativeDriver: true,
-//           }).start(() => {
-//             setCurrentDay((prev) => prev + 1);
-//           });
-//         } else {
-//           Animated.spring(translateX, {
-//             toValue: 0,
-//             useNativeDriver: true,
-//           }).start();
-//         }
-//       },
-//     }),
-//   ).current;
-
-//   return (
-//     <View style={styles.container}>
-//       <Animated.View
-//         style={[styles.swipeableView, { transform: [{ translateX }] }]}
-//         {...panResponder.panHandlers}
-//       >
-//         <Text style={styles.text}>Day: {currentDay}</Text>
-//       </Animated.View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   swipeableView: {
-//     width: '100%',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   text: {
-//     fontSize: 24,
-//   },
-// });
-
-// export default SwipeableView;
-
-//
-//
-//
-//
-////
-//
-//
-//
-////
-//
-//
-//
-////
-//
-//
-//
-////
-//
-//
-//
-//
-
-// import React, { useState } from 'react';
-// import { StyleSheet, Text } from 'react-native';
-// import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-// import Animated, {
-//   useAnimatedStyle,
-//   useSharedValue,
-//   withSpring,
-// } from 'react-native-reanimated';
-
-// const SwipeableView = () => {
-//   const [currentDay, setCurrentDay] = useState(0);
-//   const translateX = useSharedValue(0);
-
-//   const panGesture = Gesture.Pan()
-//     .onStart((ctx) => {
-//       ctx.translationX = translateX.value;
-//     })
-//     .onUpdate((ctx) => {
-//       translateX.value = ctx.translationX + ctx.translationX;
-//     })
-//     .onEnd((event) => {
-//       if (event.translationX > 50) {
-//         translateX.value = withSpring(0);
-//         setCurrentDay((prev) => prev - 1);
-//       } else if (event.translationX < -50) {
-//         translateX.value = withSpring(0);
-//         setCurrentDay((prev) => prev + 1);
-//       } else {
-//         translateX.value = withSpring(0);
-//       }
-//     });
-
-//   const animatedStyle = useAnimatedStyle(() => {
-//     return {
-//       transform: [{ translateX: translateX.value }],
-//     };
-//   });
-
-//   return (
-//     <GestureDetector gesture={panGesture}>
-//       <Animated.View style={[styles.container, animatedStyle]}>
-//         <Text style={styles.text}>Day: {currentDay}</Text>
-//       </Animated.View>
-//     </GestureDetector>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   text: {
-//     fontSize: 24,
-//   },
-// });
-
-// export default SwipeableView;

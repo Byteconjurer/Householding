@@ -1,4 +1,4 @@
-type MUSData = {
+export type MUSData = {
   name: string;
   id: string;
   clean: number;
