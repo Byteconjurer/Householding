@@ -11,9 +11,6 @@ export default function StatisticsScreen({ route }: StatisticsProps) {
     <SafeAreaView style={styles.safeArea}>
       <SwipeableView />
     </SafeAreaView>
-    // <View style={styles.container}>
-    //   <Text style={styles.statisticsText}>STATISTICS SCREEN</Text>
-    // </View>
   );
 }
 
@@ -22,10 +19,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  statisticsText: {
-    fontSize: 30,
-    fontWeight: 'bold',
   },
   safeArea: {
     flex: 1,

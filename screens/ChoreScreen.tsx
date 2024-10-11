@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { chores } from '../components/chores';
+import { chores } from '../components/mockedChores';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 
 type ChoreProps = NativeStackScreenProps<RootStackParamList, 'Chore'>;

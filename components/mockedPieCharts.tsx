@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { chores } from './chores';
+import { chores } from './mockedChores';
 import { MUSData, mUSData } from './mockedUserStatisticData';
 
 export default function ChoresPieCharts() {

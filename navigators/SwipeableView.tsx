@@ -5,6 +5,7 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
+import { IconButton } from 'react-native-paper';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -68,6 +69,26 @@ export default function SwipeableView() {
       }
     });
 
+  const handleLeftPress = () => {
+    if (currentDayIndex > 0) {
+      translateX.value = withTiming(screenWidth, { duration: 300 }, () => {
+        runOnJS(setCurrentDayIndex)(currentDayIndex - 1);
+        translateX.value = -screenWidth;
+        translateX.value = withTiming(0, { duration: 300 });
+      });
+    }
+  };
+
+  const handleRightPress = () => {
+    if (currentDayIndex < mockData.length - 1) {
+      translateX.value = withTiming(-screenWidth, { duration: 300 }, () => {
+        runOnJS(setCurrentDayIndex)(currentDayIndex + 1);
+        translateX.value = screenWidth;
+        translateX.value = withTiming(0, { duration: 300 });
+      });
+    }
+  };
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
     opacity: opacity.value, // Set opacity for fade effect
@@ -75,8 +96,10 @@ export default function SwipeableView() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Animated.View>
+      <Animated.View style={styles.headerContainer}>
+        <IconButton icon="chevron-left" size={30} onPress={handleLeftPress} />
         <Text style={styles.headerText}>{mockData[currentDayIndex].day}</Text>
+        <IconButton icon="chevron-right" size={30} onPress={handleRightPress} />
       </Animated.View>
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[styles.container, animatedStyle]}>
@@ -93,12 +116,18 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-  text: { fontSize: 24 },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // Space out the buttons and text
+    backgroundColor: 'white',
+    height: 40,
+  },
   stats: { fontSize: 16, textAlign: 'center', paddingTop: 10 },
   headerText: {
-    fontSize: 24,
+    fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
     padding: 10,
-    backgroundColor: 'white',
   },
 });

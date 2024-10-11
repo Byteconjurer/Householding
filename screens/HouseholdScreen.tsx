@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { chores } from '../components/chores';
+import { chores } from '../components/mockedChores';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TabParamList } from '../navigators/TabNavigator';
 
