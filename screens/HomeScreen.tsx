@@ -1,27 +1,26 @@
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { TabParamList } from '../navigators/TabNavigator';
+import { useAuth } from '../hooks/useAuth';
 
-type HomeProps = CompositeScreenProps<
-  NativeStackScreenProps<RootStackParamList, 'Home'>,
-  BottomTabScreenProps<TabParamList>
->;
+type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 export default function HomeScreen({ navigation }: HomeProps) {
+  const { authState, setAuthState } = useAuth();
+  
   return (
+   
     <View style={styles.container}>
-      <View>
-        <Text>CHOOSE YOUR HOUSEHOLD!</Text>
         <Button
           title="Go to Household"
           onPress={() =>
-            navigation.navigate('HouseholdNavigator', { screen: 'Household' })
+            navigation.navigate('TopTabNavigator', { screen: 'Hushåll' })
           }
-        ></Button>
-      </View>
+        />
+        <Button
+          title="Logga ut"
+          onPress={() => setAuthState(false)}
+        />
     </View>
   );
 }
@@ -31,6 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
 });

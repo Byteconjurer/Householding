@@ -1,15 +1,14 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ChoreScreen from '../screens/ChoreScreen';
 import HomeScreen from '../screens/HomeScreen';
-import StatisticsScreen from '../screens/StatisticsScreen';
-import TabNavigator, { TabParamList } from './TabNavigator';
+import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
+import TopTabNavigator, { TopTabParamList } from './TopTabNavigator';
 
 export type RootStackParamList = {
+  Login: undefined;
   Home: undefined;
-  HouseholdNavigator: NavigatorScreenParams<TabParamList>;
-  Chore: { id: string };
-  Statistics: undefined;
+  TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
+  ChoreDetails: { id: string };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -19,13 +18,14 @@ export default function RootStackNavigator() {
     <RootStack.Navigator initialRouteName="Home">
       <RootStack.Screen name="Home" component={HomeScreen} />
       <RootStack.Screen
-        name="HouseholdNavigator"
-        component={TabNavigator}
-        options={{ headerTitle: 'Household' }}
+        name="TopTabNavigator"
+        component={TopTabNavigator}
+        options={{ headerShown: false, animation: 'slide_from_right' }}
       />
-      <RootStack.Screen name="Chore" component={ChoreScreen} />
-
-      <RootStack.Screen name="Statistics" component={StatisticsScreen} />
+      <RootStack.Screen 
+        name="ChoreDetails" 
+        component={ChoreDetailsScreen}
+        options={{ animation: 'flip'}} />
     </RootStack.Navigator>
   );
 }
