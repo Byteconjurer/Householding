@@ -8,24 +8,25 @@ type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
   return (
-
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {chores.map((chore) => (
-            <Pressable style={styles.chorePressable} key={chore.id}>
-              <Card
-                style={styles.choreInfo}
-                onPress={() => navigation.navigate('ChoreDetails', { id: chore.id })} 
-              >
-                <View style={styles.textView}>
-                  <Text style={styles.choreName}>CHORE:</Text>
-                  <Text>{chore.name}</Text>
-                </View>
-              </Card>
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {chores.map((chore) => (
+          <Pressable style={styles.chorePressable} key={chore.id}>
+            <Card
+              style={styles.choreInfo}
+              onPress={() =>
+                navigation.navigate('ChoreDetails', { id: chore.id })
+              }
+            >
+              <View style={styles.textView}>
+                <Text style={styles.choreName}>CHORE:</Text>
+                <Text>{chore.name}</Text>
+              </View>
+            </Card>
+          </Pressable>
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 

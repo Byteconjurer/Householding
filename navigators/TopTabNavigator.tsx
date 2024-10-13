@@ -10,9 +10,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export type TopTabParamList = {
   Hushåll: undefined;
   Sysslor: undefined;
-  "Denna veckan": undefined;
-  "Förra veckan": undefined;
-  "Förra månaden": undefined;
+  'Denna veckan': undefined;
+  'Förra veckan': undefined;
+  'Förra månaden': undefined;
 };
 
 const TopTabs = createMaterialTopTabNavigator<TopTabParamList>();
@@ -20,13 +20,16 @@ const TopTabs = createMaterialTopTabNavigator<TopTabParamList>();
 export default function TopTabNavigator() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <TopTabs.Navigator initialRouteName='Hushåll' tabBar={props => <TopTabArrowsBar {...props} />}>
-      <TopTabs.Screen name="Hushåll" component={HouseholdScreen} />
-      <TopTabs.Screen name="Sysslor" component={ChoresScreen} />
-      <TopTabs.Screen name="Denna veckan" component={ThisWeekStatScreen} />
-      <TopTabs.Screen name="Förra veckan" component={PrevWeekStatScreen} />
-      <TopTabs.Screen name="Förra månaden" component={PrevMonthStatScreen} />
-    </TopTabs.Navigator>
+      <TopTabs.Navigator
+        initialRouteName="Hushåll"
+        tabBar={(props) => <TopTabArrowsBar {...props} />}
+      >
+        <TopTabs.Screen name="Hushåll" component={HouseholdScreen} />
+        <TopTabs.Screen name="Sysslor" component={ChoresScreen} />
+        <TopTabs.Screen name="Denna veckan" component={ThisWeekStatScreen} />
+        <TopTabs.Screen name="Förra veckan" component={PrevWeekStatScreen} />
+        <TopTabs.Screen name="Förra månaden" component={PrevMonthStatScreen} />
+      </TopTabs.Navigator>
     </SafeAreaView>
   );
 }

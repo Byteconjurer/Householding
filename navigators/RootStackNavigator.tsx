@@ -22,10 +22,11 @@ export default function RootStackNavigator() {
         component={TopTabNavigator}
         options={{ headerShown: false, animation: 'slide_from_right' }}
       />
-      <RootStack.Screen 
-        name="ChoreDetails" 
+      <RootStack.Screen
+        name="ChoreDetails"
         component={ChoreDetailsScreen}
-        options={{ animation: 'flip'}} />
+        options={{ animation: 'flip' }}
+      />
     </RootStack.Navigator>
   );
 }
