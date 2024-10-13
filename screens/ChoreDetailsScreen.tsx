@@ -1,13 +1,15 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { chores } from '../components/chores';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { RouteProp } from '@react-navigation/native';
 
-type ChoreProps = NativeStackScreenProps<RootStackParamList, 'Chore'>;
+type ChoreDetailsScreenProps = {
+  route: RouteProp<RootStackParamList, 'ChoreDetails'>;
+};
 
-export default function ChoreScreen({ route }: ChoreProps) {
-  const chore = chores.filter((item) => item.id === route.params.id);
+export default function ChoreDetailsScreen(props: ChoreDetailsScreenProps) {
+  const chore = chores.filter((item) => item.id === props.route.params.id);
 
   return (
     <View style={styles.container}>
