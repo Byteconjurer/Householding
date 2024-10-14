@@ -1,4 +1,4 @@
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+/* import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import HouseholdScreen from '../screens/HouseholdScreen';
@@ -39,3 +39,4 @@ export default function TabNavigator() {
     </BottomTab.Navigator>
   );
 }
+ */

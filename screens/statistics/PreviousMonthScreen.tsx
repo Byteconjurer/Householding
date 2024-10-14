@@ -1,14 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { RootStackParamList } from '../../navigators/RootStackNavigator';
 
 type StatisticsProps = NativeStackScreenProps<RootStackParamList>;
 
-export default function StatisticsScreen({ route }: StatisticsProps) {
+export default function PrevMonthStatScreen({ route }: StatisticsProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.statisticsText}>STATISTICS SCREEN</Text>
+      <Text style={styles.statisticsText}>Förra månaden</Text>
     </View>
   );
 }
