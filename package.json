@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check .",
+    "prettier:fix": "prettier --write ."
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.6.1",
@@ -30,7 +32,6 @@
     "eslint": "^8.57.0",
     "eslint-config-expo": "^7.1.2",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
     "typescript": "^5.1.3"
   },
