@@ -19,7 +19,6 @@ export type TopTabParamList = {
 const TopTabs = createMaterialTopTabNavigator<TopTabParamList>();
 
 export default function TopTabNavigator() {
-  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TopTabs.Navigator
@@ -31,7 +30,6 @@ export default function TopTabNavigator() {
         <TopTabs.Screen name="Denna veckan" component={ThisWeekStatScreen} />
         <TopTabs.Screen name="Förra veckan" component={PrevWeekStatScreen} />
         <TopTabs.Screen name="Förra månaden" component={PrevMonthStatScreen} />
-        
       </TopTabs.Navigator>
       <BottomNavigator />
     </SafeAreaView>

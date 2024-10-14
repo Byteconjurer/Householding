@@ -21,7 +21,6 @@ export default function HouseholdScreen({ navigation }: HouseholdProps) {
         </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
-    
   );
 }
 
