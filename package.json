@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --check ."
+    "format": "prettier --check .",
+    "prettier:fix": "prettier --write ."
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.6.1",
