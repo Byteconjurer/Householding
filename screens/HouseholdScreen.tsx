@@ -13,16 +13,9 @@ export default function HouseholdScreen({ navigation }: HouseholdProps) {
     navigation.navigate('Home');
   };
 
-  const onSwipe = ({ nativeEvent }: any) => {
-    const { translationX } = nativeEvent;
-    if (translationX > 5) {
-      goToHome();
-    }
-  };
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <PanGestureHandler onGestureEvent={onSwipe}>
+      <PanGestureHandler onGestureEvent={goToHome}>
         <View style={styles.container}>
           <Text style={styles.statisticsText}>Hushållssida</Text>
         </View>
