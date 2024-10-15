@@ -6,6 +6,7 @@ import ChoresScreen from '../screens/ChoresScreen';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { TopTabArrowsBar } from './TopTabArrowsBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BottomNavigator from '../components/BottomNavigator';
 
 export type TopTabParamList = {
   Hushåll: undefined;
@@ -30,6 +31,7 @@ export default function TopTabNavigator() {
         <TopTabs.Screen name="Förra veckan" component={PrevWeekStatScreen} />
         <TopTabs.Screen name="Förra månaden" component={PrevMonthStatScreen} />
       </TopTabs.Navigator>
+      <BottomNavigator />
     </SafeAreaView>
   );
 }

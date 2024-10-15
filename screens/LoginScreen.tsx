@@ -42,7 +42,7 @@ export default function LoginScreen() {
       />
 
       <TextInput
-        label="Username"
+        label="Användarnamn"
         mode="outlined"
         value={username}
         onChangeText={setUsername}
@@ -55,7 +55,7 @@ export default function LoginScreen() {
       )}
 
       <TextInput
-        label="Password"
+        label="Lösenord"
         mode="outlined"
         value={password}
         onChangeText={setPassword}

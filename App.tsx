@@ -13,7 +13,13 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <RootStackNavigator /> : <LoginScreen />}
+      {isAuthenticated ? (
+        <>
+          <RootStackNavigator />
+        </>
+      ) : (
+        <LoginScreen />
+      )}
     </NavigationContainer>
   );
 }
