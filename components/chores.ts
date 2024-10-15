@@ -4,6 +4,4 @@ type Chores = {
   description: string;
 };
 
-export const chores: Chores[] = [
-
-];
+export const chores: Chores[] = [];

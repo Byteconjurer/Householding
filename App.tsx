@@ -21,11 +21,11 @@ function AppContent() {
 export default function App() {
   return (
     <ReduxProvider store={store}>
-    <AuthProvider>
-      <PaperProvider>
-        <AppContent />
-      </PaperProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <PaperProvider>
+          <AppContent />
+        </PaperProvider>
+      </AuthProvider>
     </ReduxProvider>
   );
 }

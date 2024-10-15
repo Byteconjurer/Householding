@@ -15,7 +15,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
 
   // Skall egentligen hanteras av db. 3 st är redan mockade.
   const [id, setId] = useState(3);
-  
+
   function incrementId() {
     setId(id + 1);
     return id;
