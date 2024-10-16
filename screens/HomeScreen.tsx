@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import { mockedHouseholds } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -9,6 +10,30 @@ export default function HomeScreen({ navigation }: HomeProps) {
   return (
     <View style={styles.root}>
       <View style={styles.householdContainer}>
+        {mockedHouseholds.map((household) => (
+          <Pressable
+            key={household.id}
+            onPress={() =>
+              navigation.navigate('TopTabNavigator', { screen: 'Household' })
+            }
+          >
+            <Card style={styles.card}>
+              <Card.Content style={styles.content}>
+                <Text style={styles.text}>{household.name}</Text>
+                <View style={styles.avatar}>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                  <Text>🐻</Text>
+                </View>
+              </Card.Content>
+            </Card>
+          </Pressable>
+        ))}
         <Pressable
           onPress={() =>
             navigation.navigate('TopTabNavigator', { screen: 'Household' })
@@ -93,6 +118,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
   },
   text: {
     fontSize: 32,
@@ -103,6 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
+    maxWidth: '30%',
   },
   buttonContainer: {
     flexDirection: 'row',
