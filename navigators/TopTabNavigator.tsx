@@ -3,13 +3,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomNavigator from '../components/BottomNavigator';
 import ChoresScreen from '../screens/ChoresScreen';
 import HouseholdScreen from '../screens/HouseholdScreen';
-import ThisWeekStatScreen from '../screens/statistics/ThisWeekScreen';
+import StatisticScreen from '../screens/statistics/StatisticScreen';
 import { TopTabArrowsBar } from './TopTabArrowsBar';
 
 export type TopTabParamList = {
-  Hushåll: undefined;
-  Sysslor: undefined;
-  Statistics: { period: string };
+  Household: undefined;
+  Chores: undefined;
+  ThisWeek: { period: string };
+  PreviousWeek: { period: string };
+  PreviousMonth: { period: string };
 };
 
 const TopTabs = createMaterialTopTabNavigator<TopTabParamList>();
@@ -18,26 +20,34 @@ export default function TopTabNavigator() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TopTabs.Navigator
-        initialRouteName="Hushåll"
+        initialRouteName="Household"
         tabBar={(props) => <TopTabArrowsBar {...props} />}
       >
-        <TopTabs.Screen name="Hushåll" component={HouseholdScreen} />
-        <TopTabs.Screen name="Sysslor" component={ChoresScreen} />
         <TopTabs.Screen
-          name="Statistics"
-          component={ThisWeekStatScreen}
+          name="Household"
+          component={HouseholdScreen}
+          options={{ title: 'Hushåll' }}
+        />
+        <TopTabs.Screen
+          name="Chores"
+          component={ChoresScreen}
+          options={{ title: 'Sysslor' }}
+        />
+        <TopTabs.Screen
+          name="ThisWeek"
+          component={StatisticScreen}
           options={{ title: 'Denna veckan' }}
           initialParams={{ period: 'this-week' }}
         />
         <TopTabs.Screen
-          name="Statistics"
-          component={ThisWeekStatScreen}
+          name="PreviousWeek"
+          component={StatisticScreen}
           options={{ title: 'Förra veckan' }}
           initialParams={{ period: 'previous-week' }}
         />
         <TopTabs.Screen
-          name="Statistics"
-          component={ThisWeekStatScreen}
+          name="PreviousMonth"
+          component={StatisticScreen}
           options={{ title: 'Förra månaden' }}
           initialParams={{ period: 'previous-month' }}
         />

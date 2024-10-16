@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // @ts-ignore
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+// @ts-ignore
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 
 export default function BottomNavigator() {
@@ -12,13 +13,15 @@ export default function BottomNavigator() {
 
   return (
     <View style={styles.bottomNav}>
-      <Pressable onPress={() => navigation.navigate('Hushåll')}>
+      <Pressable onPress={() => navigation.navigate('Household')}>
         <MaterialCommunityIcons name="home" size={30} color="#777" />
       </Pressable>
-      <Pressable onPress={() => navigation.navigate('Sysslor')}>
+      <Pressable onPress={() => navigation.navigate('Chores')}>
         <MaterialIcons name="checklist" size={30} color="#777" />
       </Pressable>
-      <Pressable onPress={() => navigation.navigate('Denna veckan')}>
+      <Pressable
+        onPress={() => navigation.navigate('ThisWeek', { period: 'current' })}
+      >
         <MaterialCommunityIcons name="chart-pie" size={30} color="#777" />
       </Pressable>
     </View>
