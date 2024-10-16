@@ -6,17 +6,17 @@ import { useAuth } from '../hooks/useAuth';
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: HomeProps) {
-  const { setAuthState } = useAuth();
+  const { setUserName } = useAuth();
 
   return (
     <View style={styles.container}>
       <Button
         title="Go to Household"
         onPress={() =>
-          navigation.navigate('TopTabNavigator', { screen: 'Hushåll' })
+          navigation.navigate('TopTabNavigator', { screen: 'Household' })
         }
       />
-      <Button title="Logga ut" onPress={() => setAuthState(false)} />
+      <Button title="Logga ut" onPress={() => setUserName('')} />
     </View>
   );
 }

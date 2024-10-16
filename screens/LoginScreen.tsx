@@ -3,14 +3,15 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { z } from 'zod';
 import { useAuth } from '../hooks/useAuth';
+import { useAppSelector } from '../store/store';
 
 const loginSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
+  username: z.string().min(3, 'Username is required'),
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
 export default function LoginScreen() {
-  const { setAuthState } = useAuth();
+  const { setUserName: setAuthUserName } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{
@@ -18,20 +19,36 @@ export default function LoginScreen() {
     password?: string;
   }>({});
 
+  const users = useAppSelector((state) => state.user);
+
   const handleLogin = () => {
     const validationResult = loginSchema.safeParse({ username, password });
-
+  
+    let newErrors: {
+      username?: string;
+      password?: string;
+    } = {};
+  
     if (!validationResult.success) {
       const formattedErrors = validationResult.error.format();
-      setAuthState(false);
-      setErrors({
+      newErrors = {
         username: formattedErrors.username?._errors[0],
         password: formattedErrors.password?._errors[0],
-      });
-    } else {
-      setAuthState(true);
-      setErrors({});
+      };
     }
+  
+    const userName = users.find((user) => user.name === username);
+  
+    if (!userName) {
+      newErrors.username = 'Username or password is incorrect';
+    }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return; 
+    }
+
+    setAuthUserName(userName!.name);
+    setErrors({});
   };
 
   return (
