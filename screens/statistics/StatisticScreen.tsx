@@ -5,10 +5,10 @@ import { RootStackParamList } from '../../navigators/RootStackNavigator';
 
 type StatisticsProps = NativeStackScreenProps<RootStackParamList>;
 
-export default function PrevWeekStatScreen({ route }: StatisticsProps) {
+export default function StatisticScreen({ route }: StatisticsProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.statisticsText}>Förra veckan</Text>
+      <Text style={styles.statisticsText}>Denna veckan</Text>
     </View>
   );
 }
