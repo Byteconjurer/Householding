@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, StyleSheet, View } from 'react-native';
-import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { useAuth } from '../hooks/useAuth';
+import { RootStackParamList } from '../navigators/RootStackNavigator';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
