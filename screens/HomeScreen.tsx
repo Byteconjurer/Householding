@@ -13,7 +13,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
       <Button
         title="Go to Household"
         onPress={() =>
-          navigation.navigate('TopTabNavigator', { screen: 'Hushåll' })
+          navigation.navigate('TopTabNavigator', { screen: 'Household' })
         }
       />
       <Button title="Logga ut" onPress={() => setAuthState(false)} />

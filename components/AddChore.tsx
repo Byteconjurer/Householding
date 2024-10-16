@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import { Chore } from '../data/types';
+import { addChore } from '../store/chore/choresSlice';
+import { useAppDispatch } from '../store/store';
 
 type AddChoreProps = {
   modalVisible: boolean;
@@ -12,12 +15,29 @@ export default function AddChore({
   setModalVisible,
 }: AddChoreProps) {
   const [newChoreTitle, setNewChoreTitle] = useState('');
+  const dispatch = useAppDispatch();
 
   const handleAddChore = () => {
     // Add logic to save the new chore
+    dispatch(
+      addChore({
+        id: incrementId(),
+        title: 'Städa allt',
+        description: 'Städa allt överallt',
+        interval: 2,
+        energyWeight: 7,
+        householdId: 1,
+      } as Chore),
+    );
     setModalVisible(false);
     setNewChoreTitle('');
   };
+  const [id, setId] = useState(3);
+
+  function incrementId() {
+    setId(id + 1);
+    return id;
+  }
 
   return (
     <Modal
@@ -36,8 +56,42 @@ export default function AddChore({
           value={newChoreTitle}
           onChangeText={setNewChoreTitle}
         />
-        <Button title="Add" onPress={handleAddChore} />
-        <Button title="Cancel" onPress={() => setModalVisible(false)} />
+        <TextInput
+          style={styles.input}
+          placeholder="Chore Description"
+          value={newChoreDescription}
+          onChangeText={setNewChoreDescription}
+        />
+        <Picker
+          selectedValue={newChoreInterval}
+          style={styles.picker}
+          onValueChange={(itemValue) => setNewChoreInterval(itemValue)}
+        >
+          {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
+            <Picker.Item
+              key={num}
+              label={num.toString()}
+              value={num.toString()}
+            />
+          ))}
+        </Picker>
+        <Picker
+          selectedValue={newChoreEnergyWeight}
+          style={styles.picker}
+          onValueChange={(itemValue) => setNewChoreEnergyWeight(itemValue)}
+        >
+          {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+            <Picker.Item
+              key={num}
+              label={num.toString()}
+              value={num.toString()}
+            />
+          ))}
+        </Picker>
+        <View style={styles.modalButtons}>
+          <Button title="Add" onPress={handleAddChore} />
+          <Button title="Cancel" onPress={() => setModalVisible(false)} />
+        </View>
       </View>
     </Modal>
   );
