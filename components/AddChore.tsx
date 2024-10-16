@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Modal, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Button,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Text } from 'react-native-paper';
 import { Chore } from '../data/types';
 import { addChore } from '../store/chore/choresSlice';
@@ -15,23 +23,33 @@ export default function AddChore({
   setModalVisible,
 }: AddChoreProps) {
   const [newChoreTitle, setNewChoreTitle] = useState('');
+  const [newChoreDescription, setNewChoreDescription] = useState('');
+  const [newChoreInterval, setNewChoreInterval] = useState(1);
+  const [newChoreEnergyWeight, setNewChoreEnergyWeight] = useState(1);
+  const [showIntervalPicker, setShowIntervalPicker] = useState(false);
+  const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleAddChore = () => {
-    // Add logic to save the new chore
     dispatch(
       addChore({
         id: incrementId(),
-        title: 'Städa allt',
-        description: 'Städa allt överallt',
-        interval: 2,
-        energyWeight: 7,
+        title: newChoreTitle,
+        description: newChoreDescription,
+        interval: newChoreInterval,
+        energyWeight: newChoreEnergyWeight,
         householdId: 1,
       } as Chore),
     );
     setModalVisible(false);
     setNewChoreTitle('');
+    setNewChoreDescription('');
+    setNewChoreInterval(1);
+    setNewChoreEnergyWeight(1);
+    setShowIntervalPicker(false);
+    setShowEnergyWeightPicker(false);
   };
+
   const [id, setId] = useState(3);
 
   function incrementId() {
@@ -62,32 +80,62 @@ export default function AddChore({
           value={newChoreDescription}
           onChangeText={setNewChoreDescription}
         />
-        <Picker
-          selectedValue={newChoreInterval}
-          style={styles.picker}
-          onValueChange={(itemValue) => setNewChoreInterval(itemValue)}
-        >
-          {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
-            <Picker.Item
-              key={num}
-              label={num.toString()}
-              value={num.toString()}
-            />
-          ))}
-        </Picker>
-        <Picker
-          selectedValue={newChoreEnergyWeight}
-          style={styles.picker}
-          onValueChange={(itemValue) => setNewChoreEnergyWeight(itemValue)}
-        >
-          {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-            <Picker.Item
-              key={num}
-              label={num.toString()}
-              value={num.toString()}
-            />
-          ))}
-        </Picker>
+        {showIntervalPicker ? (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalPicker}
+          >
+            {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
+              <TouchableOpacity
+                key={num}
+                style={[
+                  styles.pickerItem,
+                  newChoreInterval === num && styles.selectedPickerItem,
+                ]}
+                onPress={() => {
+                  setNewChoreInterval(num);
+                  setShowIntervalPicker(false);
+                }}
+              >
+                <Text>{num}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        ) : (
+          <Button
+            title={`Interval: ${newChoreInterval}`}
+            onPress={() => setShowIntervalPicker(true)}
+          />
+        )}
+        {showEnergyWeightPicker ? (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalPicker}
+          >
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+              <TouchableOpacity
+                key={num}
+                style={[
+                  styles.pickerItem,
+                  newChoreEnergyWeight === num && styles.selectedPickerItem,
+                ]}
+                onPress={() => {
+                  setNewChoreEnergyWeight(num);
+                  setShowEnergyWeightPicker(false);
+                }}
+              >
+                <Text>{num}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        ) : (
+          <Button
+            title={`Energy Weight: ${newChoreEnergyWeight}`}
+            onPress={() => setShowEnergyWeightPicker(true)}
+          />
+        )}
         <View style={styles.modalButtons}>
           <Button title="Add" onPress={handleAddChore} />
           <Button title="Cancel" onPress={() => setModalVisible(false)} />
@@ -125,9 +173,27 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 10,
   },
+  picker: {
+    height: 50,
+    width: '100%',
+    marginBottom: 15,
+  },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
+  },
+  horizontalPicker: {
+    marginBottom: 15,
+    width: '100%',
+  },
+  pickerItem: {
+    padding: 10,
+    marginHorizontal: 5,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+  },
+  selectedPickerItem: {
+    backgroundColor: '#d0d0d0',
   },
 });

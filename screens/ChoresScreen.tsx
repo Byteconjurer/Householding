@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
 import {
   Button,
   Pressable,
@@ -9,21 +8,15 @@ import {
   View,
 } from 'react-native';
 import { Card } from 'react-native-paper';
-import AddChore from '../components/AddChore';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
-  const [modalVisible, setModalVisible] = useState(false);
   const chores = useAppSelector((state) => state.chore);
 
   // Skall egentligen hanteras av db. 3 st är redan mockade.
-
-  const handleOnClick = () => {
-    setModalVisible(true);
-  };
 
   return (
     <View style={styles.container}>
@@ -43,9 +36,11 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
             </Card>
           </Pressable>
         ))}
-        <Button title="Add Chore" onPress={handleOnClick} />
+        <Button
+          title="Add Chore"
+          onPress={() => navigation.navigate('AddChore')}
+        />
       </ScrollView>
-      <AddChore modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   );
 }
