@@ -4,7 +4,7 @@ import { User } from '../../data/types';
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: mockedUsers,
+  initialState: mockedUsers, // singular en användare per telefon, settings
   reducers: {
     addUser: (state, action: PayloadAction<User>) => {
       state.push(action.payload);

@@ -4,7 +4,7 @@ import { Household } from '../../data/types';
 
 const householdSlice = createSlice({
   name: 'household',
-  initialState: mockedHouseholds,
+  initialState: mockedHouseholds, // ett subset av vad som finns i databasen
   reducers: {
     addHousehold: (state, action: PayloadAction<Household>) => {
       state.push(action.payload);

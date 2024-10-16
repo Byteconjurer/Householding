@@ -4,7 +4,7 @@ import { Chore } from '../../data/types';
 
 const choreSlice = createSlice({
   name: 'chore',
-  initialState: mockedChores,
+  initialState: mockedChores, // filtrerat på den valda hushållet (i efterhand med en selektorn / eller innan när datan hämtas from db)
   reducers: {
     addChore: (state, action: PayloadAction<Chore>) => {
       state.push(action.payload);
