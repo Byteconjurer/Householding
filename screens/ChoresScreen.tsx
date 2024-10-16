@@ -1,19 +1,25 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
-import { Button, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Card, Text } from 'react-native-paper';
-import AddChore from '../components/AddChore'; // Import the AddChore component
-import { chores } from '../components/chores';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Card } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { addChore } from '../store/chore/choresSlice';
+import { Chore } from '../data/types';
+import { useState } from 'react';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
-  const [modalVisible, setModalVisible] = useState(false);
+  const chores = useAppSelector((state) => state.chore);
+  const dispatch = useAppDispatch();
 
-  const handleOnClick = () => {
-    setModalVisible(true);
-  };
+  // Skall egentligen hanteras av db. 3 st är redan mockade.
+  const [id, setId] = useState(3);
+
+  function incrementId() {
+    setId(id + 1);
+    return id;
+  }
 
   return (
     <View style={styles.container}>
@@ -23,7 +29,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
             <Card
               style={styles.choreInfo}
               onPress={() =>
-                navigation.navigate('ChoreDetails', { id: chore.id })
+                navigation.navigate('ChoreDetails', { id: String(chore.id) })
               }
             >
               <View style={styles.textView}>
@@ -33,9 +39,26 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
             </Card>
           </Pressable>
         ))}
-        <Button title="Add Chore" onPress={handleOnClick} />
+        <Pressable
+          onPress={() =>
+            // Ska egentligen öppna en modal för att skapa en ny chore
+            dispatch(
+              addChore({
+                id: incrementId(),
+                title: 'Städa allt',
+                description: 'Städa allt överallt',
+                interval: 2,
+                energyWeight: 7,
+                householdId: 1,
+              } as Chore),
+            )
+          }
+        >
+          <Card style={styles.choreInfo}>
+            <Text>Add Chore</Text>
+          </Card>
+        </Pressable>
       </ScrollView>
-      <AddChore modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   );
 }
