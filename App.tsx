@@ -9,11 +9,11 @@ import LoginScreen from './screens/LoginScreen';
 import store from './store/store';
 
 function AppContent() {
-  const { authState: isAuthenticated } = useAuth(); // user: User | null
+  const { userName } = useAuth();
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <RootStackNavigator /> : <LoginScreen />}
+      {userName ? <RootStackNavigator /> : <LoginScreen />}
     </NavigationContainer>
   );
 }

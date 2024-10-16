@@ -6,7 +6,7 @@ import { RootStackParamList } from '../navigators/RootStackNavigator';
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: HomeProps) {
-  const { setAuthState } = useAuth();
+  const { setUserName } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -16,7 +16,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
           navigation.navigate('TopTabNavigator', { screen: 'Household' })
         }
       />
-      <Button title="Logga ut" onPress={() => setAuthState(false)} />
+      <Button title="Logga ut" onPress={() => setUserName('')} />
     </View>
   );
 }
