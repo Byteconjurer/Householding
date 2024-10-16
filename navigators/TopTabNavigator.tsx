@@ -23,8 +23,16 @@ export default function TopTabNavigator() {
         initialRouteName="Household"
         tabBar={(props) => <TopTabArrowsBar {...props} />}
       >
-        <TopTabs.Screen name="Household" component={HouseholdScreen} />
-        <TopTabs.Screen name="Chores" component={ChoresScreen} />
+        <TopTabs.Screen
+          name="Household"
+          component={HouseholdScreen}
+          options={{ title: 'Hushåll' }}
+        />
+        <TopTabs.Screen
+          name="Chores"
+          component={ChoresScreen}
+          options={{ title: 'Sysslor' }}
+        />
         <TopTabs.Screen
           name="ThisWeek"
           component={StatisticScreen}
