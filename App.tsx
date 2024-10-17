@@ -5,6 +5,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { useAuth } from './hooks/useAuth';
 import RootStackNavigator from './navigators/RootStackNavigator';
 import { AuthProvider } from './providers/AuthContextProvider';
+import LoginScreen from './screens/LoginScreen';
 import store from './store/store';
 
 function AppContent() {
@@ -12,9 +13,7 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      {/* {isAuthenticated ?  */}
-      <RootStackNavigator />
-      {/*  : <LoginScreen />*/}
+      {isAuthenticated ? <RootStackNavigator /> : <LoginScreen />}
     </NavigationContainer>
   );
 }
