@@ -1,5 +1,6 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AddChoreScreen from '../screens/AddChoreScreen';
 import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import TopTabNavigator, { TopTabParamList } from './TopTabNavigator';
@@ -9,6 +10,7 @@ export type RootStackParamList = {
   Home: undefined;
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
+  AddChore: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +34,12 @@ export default function RootStackNavigator() {
       <RootStack.Screen
         name="ChoreDetails"
         component={ChoreDetailsScreen}
+        options={{ animation: 'flip' }}
+      />
+
+      <RootStack.Screen
+        name="AddChore"
+        component={AddChoreScreen}
         options={{ animation: 'flip' }}
       />
     </RootStack.Navigator>
