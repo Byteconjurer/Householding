@@ -18,7 +18,14 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 export default function RootStackNavigator() {
   return (
     <RootStack.Navigator initialRouteName="Home">
-      <RootStack.Screen name="Home" component={HomeScreen} />
+      <RootStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Startskärm',
+          headerTitleAlign: 'center', // Centrerar titeln.
+        }}
+      />
       <RootStack.Screen
         name="TopTabNavigator"
         component={TopTabNavigator}
