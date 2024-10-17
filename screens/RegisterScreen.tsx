@@ -2,66 +2,59 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { z } from 'zod';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { setUser } from '../store/user/userSlice';
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useAppDispatch } from '../store/store';
+import { useNavigation } from '@react-navigation/native';
 import { FirebaseError } from 'firebase/app';
 
-const loginSchema = z.object({
-  username: z.string().min(3, 'Username is required'),
+const registerSchema = z.object({
+  email: z.string().email('Invalid email format'),
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
-export default function LoginScreen() {
-  
-  const dispatch = useAppDispatch();
-  const [username, setUsername] = useState('');
+export default function RegisterScreen() {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{
-    username?: string;
+    email?: string;
     password?: string;
   }>({});
 
-  const handleLogin = async () => {
-    const validationResult = loginSchema.safeParse({ username, password });
-  
+  const handleRegister = async () => {
+    const validationResult = registerSchema.safeParse({ email, password });
+
     let newErrors: {
-      username?: string;
+      email?: string;
       password?: string;
     } = {};
-  
+
     if (!validationResult.success) {
       const formattedErrors = validationResult.error.format();
       newErrors = {
-        username: formattedErrors.username?._errors[0],
+        email: formattedErrors.email?._errors[0],
         password: formattedErrors.password?._errors[0],
       };
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; 
+      return;
     }
 
-    await signInWithEmailAndPassword(auth, username, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-        dispatch(setUser(user));
-    })
-    .catch((error: unknown) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      setErrors({});
+      // Registration successful, navigate back to login or home
+      navigation.goBack();
+    } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        newErrors.username = error.message;
+        newErrors.email = error.message;
+        setErrors(newErrors);
       }
-      setErrors(newErrors);
-    });
-    setErrors({});
+    }
   };
 
-  const handleRegister = () => {
-    // Navigate to RegisterScreen
-  };
-  
   return (
     <View style={styles.container}>
       <Image
@@ -70,20 +63,20 @@ export default function LoginScreen() {
       />
 
       <TextInput
-        label="Användarnamn"
+        label="Email"
         mode="outlined"
-        value={username}
-        onChangeText={setUsername}
+        value={email}
+        onChangeText={setEmail}
         style={styles.input}
         theme={{ roundness: 10 }}
-        error={!!errors.username}
+        error={!!errors.email}
       />
-      {errors.username && (
-        <Text style={styles.errorText}>{errors.username}</Text>
+      {errors.email && (
+        <Text style={styles.errorText}>{errors.email}</Text>
       )}
 
       <TextInput
-        label="Lösenord"
+        label="Password"
         mode="outlined"
         value={password}
         onChangeText={setPassword}
@@ -105,20 +98,20 @@ export default function LoginScreen() {
       >
         <Button
           mode="contained"
-          onPress={handleLogin}
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-        >
-          Logga in
-        </Button>
-
-        <Button
-          mode="contained"
           onPress={handleRegister}
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >
-          Registrera
+          Submit
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.goBack()}
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+        >
+          Cancel
         </Button>
       </View>
     </View>
@@ -131,11 +124,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ACC1C2',
     justifyContent: 'center',
     padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    textAlign: 'center',
-    marginBottom: 20,
   },
   input: {
     marginBottom: 15,

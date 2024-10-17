@@ -9,7 +9,7 @@ type UserState = {
 
 const initialState: UserState = {
   mockedUsers: mockedUsers,
-  currentUser: mockedUsers[0],
+  currentUser: undefined,
 };
 
 const userSlice = createSlice({

@@ -2,18 +2,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
-import { useAuth } from './hooks/useAuth';
+/* import { useAuth } from './hooks/useAuth'; */
 import RootStackNavigator from './navigators/RootStackNavigator';
 import { AuthProvider } from './providers/AuthContextProvider';
-import LoginScreen from './screens/LoginScreen';
 import store from './store/store';
+import LoginStackNavigator from './navigators/LoginStackNavigator';
 
 function AppContent() {
-  const { userName } = useAuth();
+ /*  const { userName } = useAuth(); */
 
   return (
     <NavigationContainer>
-      {userName ? <RootStackNavigator /> : <LoginScreen />}
+      {/* userName */ ? <RootStackNavigator /> : <LoginStackNavigator/>}
     </NavigationContainer>
   );
 }
