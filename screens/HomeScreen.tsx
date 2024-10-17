@@ -1,12 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, StyleSheet, View } from 'react-native';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { useAuth } from '../hooks/useAuth';
+import { getAuth, signOut } from "firebase/auth";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: HomeProps) {
-  const { setUserName } = useAuth();
+  
+ async function signOutUser() {
+  await signOut(getAuth());
+ }
 
   return (
     <View style={styles.container}>
@@ -16,7 +19,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
           navigation.navigate('TopTabNavigator', { screen: 'Household' })
         }
       />
-      <Button title="Logga ut" onPress={() => setUserName('')} />
+      <Button title="Logga ut" onPress={signOutUser} />
     </View>
   );
 }

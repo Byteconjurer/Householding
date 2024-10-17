@@ -1,14 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { mockedUsers } from '../../data/data';
 import { User } from '../../data/types';
 
 type UserState = {
-  mockedUsers: User[];
   currentUser?: User;
 };
 
 const initialState: UserState = {
-  mockedUsers: mockedUsers,
   currentUser: undefined,
 };
 

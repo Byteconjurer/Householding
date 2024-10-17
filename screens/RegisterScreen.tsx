@@ -42,17 +42,16 @@ export default function RegisterScreen() {
       return;
     }
 
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
       setErrors({});
-      // Registration successful, navigate back to login or home
       navigation.goBack();
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        newErrors.email = error.message;
+    }).catch((error: FirebaseError) => {
+      if (error.code === 'auth/email-already-in-use') {
+        newErrors.email = 'Email already in use';
         setErrors(newErrors);
       }
-    }
+    });
   };
 
   return (
@@ -98,20 +97,20 @@ export default function RegisterScreen() {
       >
         <Button
           mode="contained"
-          onPress={handleRegister}
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-        >
-          Submit
-        </Button>
-
-        <Button
-          mode="contained"
           onPress={() => navigation.goBack()}
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >
           Cancel
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={handleRegister}
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+        >
+          Submit
         </Button>
       </View>
     </View>

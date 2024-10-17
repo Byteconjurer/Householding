@@ -7,13 +7,17 @@ import { setUser } from '../store/user/userSlice';
 import { auth } from "../firebase";
 import { useAppDispatch } from '../store/store';
 import { FirebaseError } from 'firebase/app';
+import { LoginStackParamList } from '../navigators/LoginStackNavigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username is required'),
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
-export default function LoginScreen() {
+type LoginProps = NativeStackScreenProps<LoginStackParamList, 'Login'>;
+
+export default function LoginScreen({ navigation }: LoginProps) {
   
   const dispatch = useAppDispatch();
   const [username, setUsername] = useState('');
@@ -47,19 +51,23 @@ export default function LoginScreen() {
     await signInWithEmailAndPassword(auth, username, password)
     .then((userCredential) => {
       const user = userCredential.user;
-        dispatch(setUser(user));
-    })
-    .catch((error: unknown) => {
-      if (error instanceof FirebaseError) {
-        newErrors.username = error.message;
+        dispatch(setUser({
+          uid: user.uid,
+        }));
+    }).catch((error: FirebaseError) => {
+      if (error.code === 'auth/user-not-found') {
+        newErrors.username = 'User not found';
+        setErrors(newErrors);
+      } else if (error.code === 'auth/wrong-password') {
+        newErrors.password = 'Wrong password';
+        setErrors(newErrors);
       }
-      setErrors(newErrors);
     });
     setErrors({});
   };
 
   const handleRegister = () => {
-    // Navigate to RegisterScreen
+    navigation.navigate('Register');
   };
   
   return (
