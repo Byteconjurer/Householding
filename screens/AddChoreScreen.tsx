@@ -46,7 +46,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.root}>
       <View style={styles.content}>
         <Card style={styles.card}>
           <Card.Content>
@@ -151,33 +151,45 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
           )}
         </View>
       </View>
-      <Card style={styles.addCancelCard}>
-        <Card.Content style={styles.addCancelContent}>
-          <Button icon="plus" onPress={handleAddChore} style={styles.button}>
-            Add
-          </Button>
-          <Button
-            icon="cancel"
-            onPress={() => navigation.navigate('Chores')}
-            style={styles.button}
-          >
-            Cancel
-          </Button>
-        </Card.Content>
-      </Card>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="elevated"
+          icon="plus-circle-outline"
+          textColor="black"
+          buttonColor="#fff"
+          labelStyle={styles.buttonText}
+          onPress={handleAddChore}
+        >
+          Add
+        </Button>
+        <Button
+          mode="elevated"
+          icon="cancel"
+          textColor="black"
+          buttonColor="#fff"
+          labelStyle={styles.buttonText}
+          contentStyle={{ flexDirection: 'row-reverse' }}
+          onPress={() => navigation.navigate('Chores')}
+        >
+          Cancel
+        </Button>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
+    backgroundColor: '#EAEAEA',
     padding: 16,
+    paddingBottom: 40,
   },
   content: {
     flex: 1,
   },
   card: {
+    backgroundColor: '#fff',
     marginBottom: 15,
   },
   input: {
@@ -212,24 +224,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#d0d0d0',
   },
   pickers: {
-    width: "100%",
+    width: '100%',
   },
-  button: {
-    width: 100,
+  buttonText: {
+    fontSize: 20,
+    padding: 2,
   },
   buttonView: {
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  addCancelCard: {
+  buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  addCancelContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
   },
 });
 
