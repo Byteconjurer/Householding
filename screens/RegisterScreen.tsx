@@ -1,43 +1,38 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FirebaseError } from 'firebase/app';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { View, StyleSheet, Text, Image } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 import { z } from 'zod';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { LoginStackParamList } from '../navigators/LoginStackNavigator';
-import { useAppDispatch } from '../store/store';
-import { setUser } from '../store/user/userSlice';
+import { useNavigation } from '@react-navigation/native';
+import { FirebaseError } from 'firebase/app';
 
-const loginSchema = z.object({
-  username: z.string().min(3, 'Username is required'),
+const registerSchema = z.object({
+  email: z.string().email('Invalid email format'),
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
-type LoginProps = NativeStackScreenProps<LoginStackParamList, 'Login'>;
-
-export default function LoginScreen({ navigation }: LoginProps) {
-  const dispatch = useAppDispatch();
-  const [username, setUsername] = useState('');
+export default function RegisterScreen() {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{
-    username?: string;
+    email?: string;
     password?: string;
   }>({});
 
-  const handleLogin = () => {
-    const validationResult = loginSchema.safeParse({ username, password });
+  const handleRegister = async () => {
+    const validationResult = registerSchema.safeParse({ email, password });
 
     let newErrors: {
-      username?: string;
+      email?: string;
       password?: string;
     } = {};
 
     if (!validationResult.success) {
       const formattedErrors = validationResult.error.format();
       newErrors = {
-        username: formattedErrors.username?._errors[0],
+        email: formattedErrors.email?._errors[0],
         password: formattedErrors.password?._errors[0],
       };
     }
@@ -47,29 +42,17 @@ export default function LoginScreen({ navigation }: LoginProps) {
       return;
     }
 
-    signInWithEmailAndPassword(auth, username, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        dispatch(
-          setUser({
-            uid: user.uid,
-          }),
-        );
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setErrors({});
+        navigation.goBack();
       })
       .catch((error: FirebaseError) => {
-        if (error.code === 'auth/user-not-found') {
-          newErrors.username = 'User not found';
-          setErrors(newErrors);
-        } else if (error.code === 'auth/wrong-password') {
-          newErrors.password = 'Wrong password';
+        if (error.code === 'auth/email-already-in-use') {
+          newErrors.email = 'Email already in use';
           setErrors(newErrors);
         }
       });
-    setErrors({});
-  };
-
-  const handleRegister = () => {
-    navigation.navigate('Register');
   };
 
   return (
@@ -80,20 +63,18 @@ export default function LoginScreen({ navigation }: LoginProps) {
       />
 
       <TextInput
-        label="Användarnamn"
+        label="Email"
         mode="outlined"
-        value={username}
-        onChangeText={setUsername}
+        value={email}
+        onChangeText={setEmail}
         style={styles.input}
         theme={{ roundness: 10 }}
-        error={!!errors.username}
+        error={!!errors.email}
       />
-      {errors.username && (
-        <Text style={styles.errorText}>{errors.username}</Text>
-      )}
+      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
       <TextInput
-        label="Lösenord"
+        label="Password"
         mode="outlined"
         value={password}
         onChangeText={setPassword}
@@ -115,11 +96,11 @@ export default function LoginScreen({ navigation }: LoginProps) {
       >
         <Button
           mode="contained"
-          onPress={handleLogin}
+          onPress={() => navigation.goBack()}
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >
-          Logga in
+          Cancel
         </Button>
 
         <Button
@@ -128,7 +109,7 @@ export default function LoginScreen({ navigation }: LoginProps) {
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >
-          Registrera
+          Submit
         </Button>
       </View>
     </View>
@@ -141,11 +122,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ACC1C2',
     justifyContent: 'center',
     padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    textAlign: 'center',
-    marginBottom: 20,
   },
   input: {
     marginBottom: 15,

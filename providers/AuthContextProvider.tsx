@@ -1,8 +1,8 @@
 import React, { createContext, useState } from 'react';
 
 type AuthContextType = {
-  authState: boolean;
-  setAuthState: (state: boolean) => void;
+  userName: string;
+  setUserName: (userName: string) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -10,10 +10,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [authState, setAuthState] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>('');
 
   return (
-    <AuthContext.Provider value={{ authState, setAuthState }}>
+    <AuthContext.Provider value={{ userName, setUserName }}>
       {children}
     </AuthContext.Provider>
   );

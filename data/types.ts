@@ -1,30 +1,29 @@
 export type User = {
-  id: number;
-  name: string;
-  password: string;
+  uid: string;
 };
 
 export type HouseholdMember = {
-  id: number;
-  userId: number;
-  householdId: number;
+  id: string;
+  userId: string;
+  householdId: string;
   avatar: string;
+  name: string;
   owner: boolean;
   isActive: boolean;
   isRequest: boolean;
 };
 
 export type Household = {
-  id: number;
+  id: string;
   name: string;
   code: string;
 };
 
 export type Chore = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   interval: number;
   energyWeight: number;
-  householdId: number;
+  householdId: string;
 };
