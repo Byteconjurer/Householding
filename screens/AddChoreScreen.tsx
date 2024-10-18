@@ -20,6 +20,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   const handleAddChore = () => {
     dispatch(
       addChore({
+        //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
         id: incrementId().toString(),
         title: newChoreTitle,
         description: newChoreDescription,
@@ -38,6 +39,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
     setId(id + 1);
     return id;
   }
+  //mockad id inkrementering. Kan tas bort när vi uppdaterar senare
 
   return (
     <View style={styles.root}>
@@ -79,7 +81,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
                   <TouchableOpacity
                     key={num}
                     style={[
-                      styles.pickerItem,
+                      styles.intervalPickerItem,
                       newChoreInterval === num && styles.selectedPickerItem,
                     ]}
                     onPress={() => {
@@ -87,7 +89,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
                       setShowIntervalPicker(false);
                     }}
                   >
-                    <Text style={styles.pickerItemText}>{num}</Text>
+                    <Text style={styles.intervalPickerItemText}>{num}</Text>
                   </TouchableOpacity>
                 ))}
               </ScrollView>
@@ -123,7 +125,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
                   <TouchableOpacity
                     key={num}
                     style={[
-                      styles.pickerItem,
+                      styles.energyPickerItem,
                       newChoreEnergyWeight === num && styles.selectedPickerItem,
                     ]}
                     onPress={() => {
@@ -131,7 +133,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
                       setShowEnergyWeightPicker(false);
                     }}
                   >
-                    <Text style={styles.pickerItemText}>{num}</Text>
+                    <Text style={styles.energyPickerItemText}>{num}</Text>
                   </TouchableOpacity>
                 ))}
               </ScrollView>
@@ -242,14 +244,27 @@ const styles = StyleSheet.create({
   horizontalPickerContent: {
     alignItems: 'center',
   },
-  pickerItem: {
+  intervalPickerItem: {
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+    marginHorizontal: 8,
+    alignItems: 'center',
+  },
+  energyPickerItem: {
     padding: 10,
     marginHorizontal: 8,
     backgroundColor: '#f0f0f0',
-    borderRadius: 5,
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
   },
-  pickerItemText: {
+  energyPickerItemText: {
     fontSize: 18,
+  },
+  intervalPickerItemText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   selectedPickerItem: {
     backgroundColor: '#d0d0d0',
