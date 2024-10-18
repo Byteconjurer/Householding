@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
 import {
   Image,
   ImageSourcePropType,
@@ -9,11 +8,9 @@ import {
   View,
 } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
-import { Chore } from '../data/types';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { addChore } from '../store/chore/choresSlice';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
@@ -32,19 +29,10 @@ export default function ChoresScreen({ navigation, route }: ChoresProps) {
   const household = useAppSelector((state) => state.household.current);
   const chores = useAppSelector(selectChoresByCurrentHousehold);
   const householdMembers = useAppSelector((state) => state.householdmember);
-  const dispatch = useAppDispatch();
 
   const avatars = householdMembers
     .filter((member) => member.householdId === household?.id)
     .map((member) => member.avatar);
-
-  // Skall egentligen hanteras av db. 3 st är redan mockade.
-  const [id, setId] = useState(3);
-
-  function incrementId() {
-    setId(id + 1);
-    return id;
-  }
 
   return (
     <View style={styles.container}>
@@ -74,26 +62,6 @@ export default function ChoresScreen({ navigation, route }: ChoresProps) {
             </Card>
           </Pressable>
         ))}
-
-        {/* <Pressable
-          onPress={() =>
-            // Ska egentligen öppna en modal för att skapa en ny chore
-            dispatch(
-              addChore({
-                id: incrementId(),
-                title: 'Städa allt',
-                description: 'Städa allt överallt',
-                interval: 2,
-                energyWeight: 7,
-                householdId: 1,
-              } as Chore),
-            )
-          }
-        >
-          <Card style={styles.choreCard}>
-            <Text>Add Chore</Text>
-          </Card>
-        </Pressable> */}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <Button

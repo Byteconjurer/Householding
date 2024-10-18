@@ -15,9 +15,6 @@ const householdSlice = createSlice({
     addHousehold: (state, action: PayloadAction<Household>) => {
       state.list.push(action.payload);
     },
-    // deleteHousehold: (state, action: PayloadAction<number>) => {
-    //   return state.list.filter((household) => household.id !== action.payload);
-    // },
     updateHousehold: (state, action: PayloadAction<Household>) => {
       const index = state.list.findIndex(
         (household) => household.id === action.payload.id,
