@@ -26,9 +26,6 @@ const avatarImages: { [key: string]: ImageSourcePropType } = {
 };
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
-  // const chores = useAppSelector((state) => state.chore);
-
-  // // Skall egentligen hanteras av db. 3 st är redan mockade.
   const household = useAppSelector((state) => state.household.current);
   const chores = useAppSelector(selectChoresByCurrentHousehold);
   const householdMembers = useAppSelector((state) => state.householdmember);
@@ -65,10 +62,6 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
             </Card>
           </Pressable>
         ))}
-        {/* <Button
-          title="Add Chore"
-          onPress={() => navigation.navigate('AddChore')}
-        /> */}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <Button
