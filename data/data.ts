@@ -125,4 +125,12 @@ export const mockedChores: Chore[] = [
     energyWeight: 2,
     householdId: '2',
   },
+  {
+    id: '4',
+    title: 'Vattna Blommorna',
+    description: 'Vattna alla blommorna i huset',
+    interval: 4,
+    energyWeight: 3,
+    householdId: '2',
+  },
 ];
