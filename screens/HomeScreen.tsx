@@ -12,7 +12,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
     await signOut(getAuth());
   }
 
-  const mockedHouseholds = useAppSelector((state) => state.household);
+  const mockedHouseholds = useAppSelector((state) => state.household.list);
 
   return (
     <>
