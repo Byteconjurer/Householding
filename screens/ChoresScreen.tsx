@@ -1,22 +1,41 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
-  Button,
+  Image,
+  ImageSourcePropType,
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
-import { Card } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
-export default function ChoresScreen({ navigation }: ChoresProps) {
-  const chores = useAppSelector((state) => state.chore);
+const avatarImages: { [key: string]: ImageSourcePropType } = {
+  '1.png': require('../assets/avatarImages/1.png'),
+  '2.png': require('../assets/avatarImages/2.png'),
+  '3.png': require('../assets/avatarImages/3.png'),
+  '4.png': require('../assets/avatarImages/4.png'),
+  '5.png': require('../assets/avatarImages/5.png'),
+  '6.png': require('../assets/avatarImages/6.png'),
+  '7.png': require('../assets/avatarImages/7.png'),
+  '8.png': require('../assets/avatarImages/8.png'),
+};
 
-  // Skall egentligen hanteras av db. 3 st är redan mockade.
+export default function ChoresScreen({ navigation }: ChoresProps) {
+  // const chores = useAppSelector((state) => state.chore);
+
+  // // Skall egentligen hanteras av db. 3 st är redan mockade.
+  const household = useAppSelector((state) => state.household.current);
+  const chores = useAppSelector(selectChoresByCurrentHousehold);
+  const householdMembers = useAppSelector((state) => state.householdmember);
+
+  const avatars = householdMembers
+    .filter((member) => member.householdId === household?.id)
+    .map((member) => member.avatar);
 
   return (
     <View style={styles.container}>
@@ -24,53 +43,108 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
         {chores.map((chore) => (
           <Pressable style={styles.chorePressable} key={chore.id}>
             <Card
-              style={styles.choreInfo}
+              style={styles.choreCard}
               onPress={() =>
                 navigation.navigate('ChoreDetails', { id: String(chore.id) })
               }
             >
-              <View style={styles.textView}>
-                <Text style={styles.choreName}>CHORE:</Text>
-                <Text>{chore.title}</Text>
+              <View style={styles.choreContainer}>
+                <View style={styles.widthTitle}>
+                  <Text style={styles.choreTitle}>{chore.title}</Text>
+                </View>
+                <View style={styles.avatarContainer}>
+                  {avatars.map((avatar, index) => (
+                    <Image
+                      key={index}
+                      source={avatarImages[avatar]}
+                      style={styles.avatar}
+                    />
+                  ))}
+                </View>
               </View>
             </Card>
           </Pressable>
         ))}
-        <Button
+        {/* <Button
           title="Add Chore"
           onPress={() => navigation.navigate('AddChore')}
-        />
+        /> */}
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="elevated"
+          icon="plus-circle-outline"
+          textColor="black"
+          buttonColor="#fff"
+          labelStyle={styles.buttonText}
+          onPress={() => console.log('Lägg till')}
+        >
+          Lägg till
+        </Button>
+        <Button
+          mode="elevated"
+          icon="pencil-outline"
+          textColor="black"
+          buttonColor="#fff"
+          labelStyle={styles.buttonText}
+          onPress={() => console.log('Ändra')}
+        >
+          Ändra
+        </Button>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '95%',
+    backgroundColor: '#EAEAEA',
   },
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
   },
-  choreInfo: {
+  chorePressable: {
+    width: '95%',
+  },
+  choreCard: {
     justifyContent: 'center',
     height: 50,
-    marginBottom: 10,
-    marginTop: 10,
+    marginTop: 15,
+    backgroundColor: '#fff',
   },
-  choreName: {
-    marginLeft: 20,
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  textView: {
-    width: '95%',
+  choreContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  chorePressable: {
-    width: '95%',
+  choreTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 15,
+  },
+  avatarContainer: {
+    flexDirection: 'row',
+    marginRight: 15,
+  },
+  avatar: {
+    width: 25,
+    height: 25,
+    marginLeft: 3,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginBottom: 50,
+  },
+  buttonText: {
+    fontSize: 20,
+    padding: 2,
+  },
+  widthTitle: {
+    maxWidth: '50%',
   },
 });
