@@ -2,24 +2,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { addChore } from '../store/chore/choresSlice';
-import { Chore } from '../data/types';
-import { useState } from 'react';
+import { useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
   const chores = useAppSelector((state) => state.chore);
-  const dispatch = useAppDispatch();
-
-  // Skall egentligen hanteras av db. 3 st är redan mockade.
-  const [id, setId] = useState(3);
-
-  function incrementId() {
-    setId(id + 1);
-    return id;
-  }
 
   return (
     <View style={styles.container}>
@@ -39,7 +27,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
             </Card>
           </Pressable>
         ))}
-        <Pressable
+        {/*   <Pressable
           onPress={() =>
             // Ska egentligen öppna en modal för att skapa en ny chore
             dispatch(
@@ -57,7 +45,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           <Card style={styles.choreInfo}>
             <Text>Add Chore</Text>
           </Card>
-        </Pressable>
+        </Pressable> */}
       </ScrollView>
     </View>
   );

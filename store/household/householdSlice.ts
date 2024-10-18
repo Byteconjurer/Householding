@@ -9,7 +9,7 @@ const householdSlice = createSlice({
     addHousehold: (state, action: PayloadAction<Household>) => {
       state.push(action.payload);
     },
-    deleteHousehold: (state, action: PayloadAction<number>) => {
+    deleteHousehold: (state, action: PayloadAction<string>) => {
       return state.filter((household) => household.id !== action.payload);
     },
     updateHousehold: (state, action: PayloadAction<Household>) => {
