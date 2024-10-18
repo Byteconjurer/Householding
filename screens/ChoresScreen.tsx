@@ -1,23 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
   const chores = useAppSelector((state) => state.chore);
-  const dispatch = useAppDispatch();
-
-  // Skall egentligen hanteras av db. 3 st är redan mockade.
-  const [id, setId] = useState(3);
-
-  function incrementId() {
-    setId(id + 1);
-    return id;
-  }
 
   return (
     <View style={styles.container}>
