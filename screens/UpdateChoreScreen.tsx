@@ -57,7 +57,7 @@ export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
           <Card.Content style={styles.energiWeightContainer}>
             <View>
               <Text style={styles.boldText}>Värde:</Text>
-              <Text>Hur energikrävande är sysslan?</Text>
+              <Text style={styles.grey}>Hur energikrävande är sysslan?</Text>
             </View>
             <View style={styles.circle}>
               <Text>{chore.energyWeight}</Text>
@@ -65,18 +65,23 @@ export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
           </Card.Content>
         </Card>
       </View>
+
       <View style={styles.buttonContainer}>
         <Button
-          style={styles.button}
+          style={[styles.button, { marginRight: 0.5 }]}
           icon="plus-circle-outline"
+          textColor="black"
+          buttonColor="#fff"
           labelStyle={{ fontSize: 18 }}
           onPress={() => console.log('klickat på spara')}
         >
           Spara
         </Button>
         <Button
-          style={styles.button}
+          style={[styles.button, { marginLeft: 0.5 }]}
           icon="close-circle-outline"
+          textColor="black"
+          buttonColor="#fff"
           labelStyle={{ fontSize: 18 }}
           onPress={() =>
             console.log(
@@ -101,6 +106,9 @@ const styles = StyleSheet.create({
   white: {
     backgroundColor: '#fff',
   },
+  grey: {
+    color: '#828282',
+  },
   input: {
     padding: 2,
     fontSize: 20,
@@ -114,6 +122,7 @@ const styles = StyleSheet.create({
   },
   recurrentContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   energiWeightContainer: {
     flexDirection: 'row',
@@ -135,5 +144,6 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     justifyContent: 'center',
+    borderRadius: 0,
   },
 });
