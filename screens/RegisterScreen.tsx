@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { z } from 'zod';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { FirebaseError } from 'firebase/app';
 
@@ -43,15 +43,16 @@ export default function RegisterScreen() {
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      setErrors({});
-      navigation.goBack();
-    }).catch((error: FirebaseError) => {
-      if (error.code === 'auth/email-already-in-use') {
-        newErrors.email = 'Email already in use';
-        setErrors(newErrors);
-      }
-    });
+      .then(() => {
+        setErrors({});
+        navigation.goBack();
+      })
+      .catch((error: FirebaseError) => {
+        if (error.code === 'auth/email-already-in-use') {
+          newErrors.email = 'Email already in use';
+          setErrors(newErrors);
+        }
+      });
   };
 
   return (
@@ -70,9 +71,7 @@ export default function RegisterScreen() {
         theme={{ roundness: 10 }}
         error={!!errors.email}
       />
-      {errors.email && (
-        <Text style={styles.errorText}>{errors.email}</Text>
-      )}
+      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
       <TextInput
         label="Password"

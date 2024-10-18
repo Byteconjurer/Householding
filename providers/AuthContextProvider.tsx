@@ -10,11 +10,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-
   const [userName, setUserName] = useState<string>('');
 
   return (
-    <AuthContext.Provider value={{  userName, setUserName }}>
+    <AuthContext.Provider value={{ userName, setUserName }}>
       {children}
     </AuthContext.Provider>
   );

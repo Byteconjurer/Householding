@@ -7,12 +7,12 @@ import RootStackNavigator from './navigators/RootStackNavigator';
 import { AuthProvider } from './providers/AuthContextProvider';
 import store from './store/store';
 import LoginStackNavigator from './navigators/LoginStackNavigator';
-import {auth} from './firebase';
-import {onAuthStateChanged} from 'firebase/auth';
+import { auth } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { User } from './data/types';
 
 function AppContent() {
-  const [user, setUser] = useState<User | null>(null); 
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -20,11 +20,11 @@ function AppContent() {
     });
 
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
 
   return (
     <NavigationContainer>
-      {user ? <RootStackNavigator /> : <LoginStackNavigator/>}
+      {user ? <RootStackNavigator /> : <LoginStackNavigator />}
     </NavigationContainer>
   );
 }

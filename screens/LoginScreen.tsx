@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { z } from 'zod';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { setUser } from '../store/user/userSlice';
-import { auth } from "../firebase";
+import { auth } from '../firebase';
 import { useAppDispatch } from '../store/store';
 import { FirebaseError } from 'firebase/app';
 import { LoginStackParamList } from '../navigators/LoginStackNavigator';
@@ -18,7 +18,6 @@ const loginSchema = z.object({
 type LoginProps = NativeStackScreenProps<LoginStackParamList, 'Login'>;
 
 export default function LoginScreen({ navigation }: LoginProps) {
-  
   const dispatch = useAppDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -29,12 +28,12 @@ export default function LoginScreen({ navigation }: LoginProps) {
 
   const handleLogin = async () => {
     const validationResult = loginSchema.safeParse({ username, password });
-  
+
     let newErrors: {
       username?: string;
       password?: string;
     } = {};
-  
+
     if (!validationResult.success) {
       const formattedErrors = validationResult.error.format();
       newErrors = {
@@ -45,31 +44,34 @@ export default function LoginScreen({ navigation }: LoginProps) {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; 
+      return;
     }
 
     await signInWithEmailAndPassword(auth, username, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-        dispatch(setUser({
-          uid: user.uid,
-        }));
-    }).catch((error: FirebaseError) => {
-      if (error.code === 'auth/user-not-found') {
-        newErrors.username = 'User not found';
-        setErrors(newErrors);
-      } else if (error.code === 'auth/wrong-password') {
-        newErrors.password = 'Wrong password';
-        setErrors(newErrors);
-      }
-    });
+      .then((userCredential) => {
+        const user = userCredential.user;
+        dispatch(
+          setUser({
+            uid: user.uid,
+          }),
+        );
+      })
+      .catch((error: FirebaseError) => {
+        if (error.code === 'auth/user-not-found') {
+          newErrors.username = 'User not found';
+          setErrors(newErrors);
+        } else if (error.code === 'auth/wrong-password') {
+          newErrors.password = 'Wrong password';
+          setErrors(newErrors);
+        }
+      });
     setErrors({});
   };
 
   const handleRegister = () => {
     navigation.navigate('Register');
   };
-  
+
   return (
     <View style={styles.container}>
       <Image

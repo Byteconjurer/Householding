@@ -1,15 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, StyleSheet, View } from 'react-native';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut } from 'firebase/auth';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: HomeProps) {
-  
- async function signOutUser() {
-  await signOut(getAuth());
- }
+  async function signOutUser() {
+    await signOut(getAuth());
+  }
 
   return (
     <View style={styles.container}>

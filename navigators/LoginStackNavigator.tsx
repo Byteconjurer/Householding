@@ -17,10 +17,11 @@ export default function LoginStackNavigator() {
         component={LoginScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="Register" 
-        component={RegisterScreen} 
-        options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
