@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
             buttonColor="#fff"
             labelStyle={styles.buttonText}
             contentStyle={{ flexDirection: 'row-reverse' }}
-            onPress={() => console.log('Tryckt på gå med')}
+            onPress={() => navigation.navigate('JoinHouseholdModal')}
           >
             Gå med
           </Button>

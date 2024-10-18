@@ -34,12 +34,14 @@ const avatars: (keyof typeof avatarImages)[] = [
     '8.png',
 ];
 
-const NameAndAvatarSelection = ({ householdId }: { householdId: number }) => {
+const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
     const [name, setName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+
     const householdMembers = useAppSelector((state) =>
         state.householdmember.filter((member) => member.householdId === householdId)
     );
+
     const { colors } = useTheme();
 
     const handleAvatarSelect = (avatar: keyof typeof avatarImages) => {

@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
 import { useAppSelector } from '../store/store';
+import { Household } from '../data/types';
 
-const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: number) => void }) => {
+const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: string) => void }) => {
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
-    const households = useAppSelector((state) => state.household);
+    const households = useAppSelector((state) => state.household.list);
 
     const validateCode = () => {
-        const foundHousehold = households.find((household) => household.code === code);
+        const foundHousehold = households.find((household: Household) => household.code === code);
         if (foundHousehold) {
             setError('');
             onCodeValidated(foundHousehold.id);
