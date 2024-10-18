@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { z } from 'zod';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { setUser } from '../store/user/userSlice';
-import { auth } from '../firebase';
-import { useAppDispatch } from '../store/store';
-import { FirebaseError } from 'firebase/app';
-import { LoginStackParamList } from '../navigators/LoginStackNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { FirebaseError } from 'firebase/app';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
+import { z } from 'zod';
+import { auth } from '../firebase';
+import { LoginStackParamList } from '../navigators/LoginStackNavigator';
+import { useAppDispatch } from '../store/store';
+import { setUser } from '../store/user/userSlice';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username is required'),
@@ -26,7 +26,7 @@ export default function LoginScreen({ navigation }: LoginProps) {
     password?: string;
   }>({});
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     const validationResult = loginSchema.safeParse({ username, password });
 
     let newErrors: {
@@ -47,7 +47,7 @@ export default function LoginScreen({ navigation }: LoginProps) {
       return;
     }
 
-    await signInWithEmailAndPassword(auth, username, password)
+    signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
         const user = userCredential.user;
         dispatch(
