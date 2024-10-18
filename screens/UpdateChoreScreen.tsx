@@ -6,6 +6,7 @@ import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
 
+// Behöver göra en kombinerad för att kunna välja vilken screen att navigera till från stäng-knappen.
 type UpdateChoreProps = NativeStackScreenProps<
   RootStackParamList,
   'UpdateChore'
