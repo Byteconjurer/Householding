@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
-import { Chore } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { addChore } from '../store/chore/choresSlice';
 import { useAppDispatch } from '../store/store';
@@ -21,13 +20,14 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   const handleAddChore = () => {
     dispatch(
       addChore({
-        id: incrementId(),
+        id: incrementId().toString(),
         title: newChoreTitle,
         description: newChoreDescription,
         interval: newChoreInterval,
         energyWeight: newChoreEnergyWeight,
-        householdId: 1,
-      } as Chore),
+        householdId: '2',
+        //Här ska man ändra '2' som nu är hårdkodat till att vara det aktuella hushållet när databasen är uppsatt.
+      }),
     );
     navigation.navigate('Chores');
   };
@@ -105,9 +105,7 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
                 <View style={styles.inlineText}>
                   <Text style={{ fontSize: 20 }}>var </Text>
                   <View style={styles.circle}>
-                    <Text style={styles.circleText}>
-                      {newChoreInterval}
-                    </Text>
+                    <Text style={styles.circleText}>{newChoreInterval}</Text>
                   </View>
                   <Text style={{ fontSize: 20 }}> dag</Text>
                 </View>
