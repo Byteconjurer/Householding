@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
@@ -21,49 +21,73 @@ export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
   const [description, setDescription] = useState(chore.description);
 
   return (
-    <View style={styles.root}>
-      <Card style={styles.white}>
-        <Card.Content>
-          <TextInput
-            placeholder="Titel"
-            style={styles.input}
-            value={title}
-            multiline={true}
-            onChangeText={(text) => setTitel(text)}
-          />
-        </Card.Content>
-      </Card>
-      <Card style={styles.white}>
-        <Card.Content style={styles.descriptionContainer}>
-          <TextInput
-            placeholder="Beskrivning"
-            style={styles.input}
-            value={description}
-            multiline={true}
-            onChangeText={(description) => setDescription(description)}
-          />
-        </Card.Content>
-      </Card>
+    <>
+      <View style={styles.root}>
+        <Card style={styles.white}>
+          <Card.Content>
+            <TextInput
+              placeholder="Titel"
+              style={styles.input}
+              value={title}
+              multiline={true}
+              onChangeText={(text) => setTitel(text)}
+            />
+          </Card.Content>
+        </Card>
+        <Card style={styles.white}>
+          <Card.Content style={styles.descriptionContainer}>
+            <TextInput
+              placeholder="Beskrivning"
+              style={styles.input}
+              value={description}
+              multiline={true}
+              onChangeText={(description) => setDescription(description)}
+            />
+          </Card.Content>
+        </Card>
 
-      <Card style={styles.white}>
-        <Card.Content style={styles.recurrentContainer}>
-          <Text style={styles.boldText}>Återkommer:</Text>
-          <Text>var {chore.interval} dag</Text>
-        </Card.Content>
-      </Card>
+        <Card style={styles.white}>
+          <Card.Content style={styles.recurrentContainer}>
+            <Text style={styles.boldText}>Återkommer:</Text>
+            <Text>var {chore.interval} dag</Text>
+          </Card.Content>
+        </Card>
 
-      <Card style={styles.white}>
-        <Card.Content style={styles.energiWeightContainer}>
-          <View>
-            <Text style={styles.boldText}>Värde:</Text>
-            <Text>Hur energikrävande är sysslan?</Text>
-          </View>
-          <View style={styles.circle}>
-            <Text>{chore.energyWeight}</Text>
-          </View>
-        </Card.Content>
-      </Card>
-    </View>
+        <Card style={styles.white}>
+          <Card.Content style={styles.energiWeightContainer}>
+            <View>
+              <Text style={styles.boldText}>Värde:</Text>
+              <Text>Hur energikrävande är sysslan?</Text>
+            </View>
+            <View style={styles.circle}>
+              <Text>{chore.energyWeight}</Text>
+            </View>
+          </Card.Content>
+        </Card>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          style={styles.button}
+          icon="plus-circle-outline"
+          labelStyle={{ fontSize: 18 }}
+          onPress={() => console.log('klickat på spara')}
+        >
+          Spara
+        </Button>
+        <Button
+          style={styles.button}
+          icon="close-circle-outline"
+          labelStyle={{ fontSize: 18 }}
+          onPress={() =>
+            console.log(
+              'klickat på stäng. Här måste nog navigatorerna slås ihop så att man kan navigera till rätt',
+            )
+          }
+        >
+          Stäng
+        </Button>
+      </View>
+    </>
   );
 }
 
@@ -103,5 +127,13 @@ const styles = StyleSheet.create({
     height: 25,
     width: 25,
     borderRadius: 12.5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    height: 75,
+  },
+  button: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
