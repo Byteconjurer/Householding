@@ -1,29 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Image,
-  ImageSourcePropType,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import { AvatarImageKeys } from '../data/types';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
+import { avatarImages } from '../utils/avatarImagesMap';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
-
-const avatarImages: { [key: string]: ImageSourcePropType } = {
-  '1.png': require('../assets/avatarImages/1.png'),
-  '2.png': require('../assets/avatarImages/2.png'),
-  '3.png': require('../assets/avatarImages/3.png'),
-  '4.png': require('../assets/avatarImages/4.png'),
-  '5.png': require('../assets/avatarImages/5.png'),
-  '6.png': require('../assets/avatarImages/6.png'),
-  '7.png': require('../assets/avatarImages/7.png'),
-  '8.png': require('../assets/avatarImages/8.png'),
-};
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
   const household = useAppSelector((state) => state.household.current);
@@ -53,7 +37,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
                   {avatars.map((avatar, index) => (
                     <Image
                       key={index}
-                      source={avatarImages[avatar]}
+                      source={avatarImages[avatar as AvatarImageKeys]}
                       style={styles.avatar}
                     />
                   ))}
