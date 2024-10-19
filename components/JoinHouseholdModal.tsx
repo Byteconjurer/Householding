@@ -16,7 +16,7 @@ const JoinHouseholdModal = ({ navigation }: NativeStackScreenProps<RootStackPara
     return (
         <Provider>
             <Portal>
-                <Modal visible={true} contentContainerStyle={styles.modalContainer}>
+                <Modal visible={true} onDismiss={() => navigation.goBack()} contentContainerStyle={styles.modalContainer}>
                     {householdId === null ? (
                         <JoinByCode onCodeValidated={handleCodeValidated} />
                     ) : (
@@ -29,7 +29,12 @@ const JoinHouseholdModal = ({ navigation }: NativeStackScreenProps<RootStackPara
 };
 
 const styles = StyleSheet.create({
-    modalContainer: { padding: 20 },
+    modalContainer: {
+        backgroundColor: '#fff',
+        padding: 20,
+        margin: 20,
+        borderRadius: 10,
+    },
 });
 
 export default JoinHouseholdModal;

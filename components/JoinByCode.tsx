@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { TextInput, Button, } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 import { useAppSelector } from '../store/store';
 import { Household } from '../data/types';
 
@@ -21,23 +21,27 @@ const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: string
 
     return (
         <View style={styles.container}>
+            <Text style={styles.inputtext}>Ange kod</Text>
             <TextInput
-                label="Ange kod"
                 mode="outlined"
                 value={code}
                 onChangeText={setCode}
                 style={styles.input}
+                theme={{ roundness: 10 }}
                 error={!!error}
             />
 
-            {error ? <Text>{error}</Text> : null}
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
             <View style={styles.buttonContainer}>
                 <Button
                     mode="elevated"
+                    disabled={!code}
                     icon="plus-circle-outline"
                     textColor="black"
                     buttonColor="#fff"
                     labelStyle={styles.buttonText}
+                    contentStyle={{ paddingVertical: 5 }}
                     onPress={validateCode}
                 >
                     Gå med
@@ -50,39 +54,33 @@ const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: string
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        backgroundColor: '#EAEAEA',
+        backgroundColor: '#fff',
     },
-    root: {
-        flex: 1,
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingBottom: 80,
-        paddingTop: 40,
-    },
-    content: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-    },
-    text: {
-        fontSize: 32,
-        flex: 1,
-        fontWeight: 700,
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingTop: 20,
-    },
-    buttonText: {
+    inputtext: {
         fontSize: 20,
-        padding: 2,
+        color: 'black',
+        paddingBottom: 5,
+        fontWeight: "bold",
     },
     input: {
         marginBottom: 15,
-        backgroundColor: '#fff',
+        backgroundColor: '#EAEAEA',
         borderRadius: 10,
         elevation: 5,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingTop: 20,
+    },
+    buttonText: {
+        fontSize: 18,
+        padding: 2,
+        color: 'black',
+    },
+    errorText: {
+        color: 'red',
+        marginTop: 5,
     },
 });
 
