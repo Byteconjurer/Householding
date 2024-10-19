@@ -13,14 +13,10 @@ const JoinHouseholdModal = ({ navigation }: NativeStackScreenProps<RootStackPara
         setHouseholdId(id);
     };
 
-    const handleClose = () => {
-        navigation.goBack();
-    };
-
     return (
         <Provider>
             <Portal>
-                <Modal visible={true} onDismiss={handleClose} contentContainerStyle={styles.modalContainer}>
+                <Modal visible={true} contentContainerStyle={styles.modalContainer}>
                     {householdId === null ? (
                         <JoinByCode onCodeValidated={handleCodeValidated} />
                     ) : (
