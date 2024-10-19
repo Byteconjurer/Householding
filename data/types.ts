@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export type User = {
   uid: string;
 };
@@ -37,3 +39,8 @@ export type AvatarImageKeys =
   | '6.png'
   | '7.png'
   | '8.png';
+
+export type AvatarData = {
+  image: ImageSourcePropType;
+  color: string;
+};
