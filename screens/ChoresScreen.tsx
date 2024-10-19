@@ -5,7 +5,7 @@ import { AvatarImageKeys } from '../data/types';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
-import { avatarImages } from '../utils/avatarImagesMap';
+import { avatarData } from '../utils/avatarDataMap';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
@@ -37,7 +37,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
                   {avatars.map((avatar, index) => (
                     <Image
                       key={index}
-                      source={avatarImages[avatar as AvatarImageKeys]}
+                      source={avatarData[avatar as AvatarImageKeys].image}
                       style={styles.avatar}
                     />
                   ))}
