@@ -11,6 +11,7 @@ export type RootStackParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
   AddChore: undefined;
+  Chores: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
