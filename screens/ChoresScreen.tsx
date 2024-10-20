@@ -75,7 +75,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: '95%',
+    flex: 1,
     backgroundColor: '#EAEAEA',
   },
   scrollContainer: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 10,
-    marginBottom: 50,
+    marginBottom: 80,
   },
   buttonText: {
     fontSize: 20,
