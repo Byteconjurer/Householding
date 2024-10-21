@@ -63,7 +63,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           textColor="black"
           buttonColor="#fff"
           labelStyle={styles.buttonText}
-          onPress={() => console.log('Ändra')}
+          onPress={() => navigation.navigate('UpdateChore')}
         >
           Ändra
         </Button>
