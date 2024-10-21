@@ -1,10 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import JoinHouseholdModal from '../components/JoinHouseholdModal';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { useAppSelector } from '../store/store';
-import { useState } from 'react';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -14,7 +15,11 @@ export default function HomeScreen({ navigation }: HomeProps) {
   }
 
   const mockedHouseholds = useAppSelector((state) => state.household.list);
-  const [ShowModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOnClick = () => {
+    setModalVisible(true);
+  };
 
   return (
     <>
@@ -63,11 +68,15 @@ export default function HomeScreen({ navigation }: HomeProps) {
             buttonColor="#fff"
             labelStyle={styles.buttonText}
             contentStyle={{ flexDirection: 'row-reverse' }}
-            onPress={() => navigation.navigate('JoinHouseholdModal')}
+            onPress={handleOnClick}
           >
             Gå med
           </Button>
         </View>
+        <JoinHouseholdModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
       <Button onPress={signOutUser}>Logga ut</Button>
     </>

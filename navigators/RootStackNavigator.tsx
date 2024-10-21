@@ -4,7 +4,6 @@ import AddChoreScreen from '../screens/AddChoreScreen';
 import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import TopTabNavigator, { TopTabParamList } from './TopTabNavigator';
-import JoinHouseholdModal from '../components/JoinHouseholdModal';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -12,7 +11,6 @@ export type RootStackParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
   AddChore: undefined;
-  JoinHouseholdModal: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -44,13 +42,6 @@ export default function RootStackNavigator() {
         component={AddChoreScreen}
         options={{ animation: 'flip' }}
       />
-
-      <RootStack.Screen
-        name="JoinHouseholdModal"
-        component={JoinHouseholdModal}
-        options={{ presentation: 'modal' }}
-      />
-
     </RootStack.Navigator>
   );
 }
