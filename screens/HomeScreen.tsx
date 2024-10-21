@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { useAppSelector } from '../store/store';
+import { useState } from 'react';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -13,6 +14,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
   }
 
   const mockedHouseholds = useAppSelector((state) => state.household.list);
+  const [ShowModal, setShowModal] = useState(false);
 
   return (
     <>
