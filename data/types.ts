@@ -31,16 +31,16 @@ export type Chore = {
 };
 
 export type AvatarImageKeys =
-  | '1.png'
-  | '2.png'
-  | '3.png'
-  | '4.png'
-  | '5.png'
-  | '6.png'
-  | '7.png'
-  | '8.png';
+  | 'chicken'
+  | 'dolphin'
+  | 'fox'
+  | 'frog'
+  | 'octopus'
+  | 'owl'
+  | 'pig'
+  | 'unicorn';
 
-export type AvatarData = {
+export type AvatarType = {
   image: ImageSourcePropType;
   color: string;
 };
