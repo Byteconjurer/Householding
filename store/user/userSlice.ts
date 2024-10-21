@@ -1,16 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { mockedUsers } from '../../data/data';
 import { User } from '../../data/types';
+
+type UserState = {
+  currentUser?: User;
+};
+
+const initialState: UserState = {
+  currentUser: undefined,
+};
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: mockedUsers, // singular en användare per telefon, settings
+  initialState, // singular en användare per telefon, settings
   reducers: {
-    addUser: (state, action: PayloadAction<User>) => {
-      state.push(action.payload);
+    setUser: (state, action: PayloadAction<User | undefined>) => {
+      state.currentUser = action.payload;
     },
   },
 });
 
 export const userReducer = userSlice.reducer;
-export const { addUser } = userSlice.actions;
+export const { setUser } = userSlice.actions;

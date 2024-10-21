@@ -9,11 +9,11 @@ const householdmemberSlice = createSlice({
     addHouseholdmember: (state, action: PayloadAction<HouseholdMember>) => {
       state.push(action.payload);
     },
-    deleteHouseholdmember: (state, action: PayloadAction<number>) => {
-      return state.filter(
-        (householdmember) => householdmember.id !== action.payload,
-      );
-    },
+    // deleteHouseholdmember: (state, action: PayloadAction<number>) => {
+    //   return state.filter(
+    //     (householdmember) => householdmember.id !== action.payload,
+    //   );
+    // },
     updateHouseholdmember: (state, action: PayloadAction<HouseholdMember>) => {
       const index = state.findIndex(
         (householdmember) => householdmember.id === action.payload.id,
@@ -28,6 +28,6 @@ const householdmemberSlice = createSlice({
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
   addHouseholdmember,
-  deleteHouseholdmember,
+  // deleteHouseholdmember,
   updateHouseholdmember,
 } = householdmemberSlice.actions;
