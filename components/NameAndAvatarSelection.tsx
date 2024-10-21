@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Image } from 'react-native';
 import { TextInput, Button, Text, Avatar, Card, useTheme } from 'react-native-paper';
 import { useAppSelector } from '../store/store';
 
@@ -64,7 +64,11 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
             <View style={styles.avatarContainer}>
                 <TouchableOpacity style={styles.avatarCircle} onPress={() => setModalVisible(true)}>
                     {selectedAvatar ? (
-                        <Avatar.Image size={80} source={avatarImages[selectedAvatar]} />
+                        <Avatar.Image
+                            size={80}
+                            source={avatarImages[selectedAvatar]}
+                            style={{ backgroundColor: '#EAEAEA' }}
+                        />
                     ) : (
                         <Text style={styles.circleText}>Välj Avatar</Text>
                     )}
@@ -84,7 +88,7 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View style={styles.modalContainer}>
+                <View style={styles.chooseAvatarContainer}>
                     <FlatList
                         data={avatars}
                         keyExtractor={(item) => item}
@@ -92,16 +96,20 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                         renderItem={({ item }: { item: AvatarKeys }) => {
                             const isTaken = householdMembers.some((member) => member.avatar === item);
                             return (
+
                                 <TouchableOpacity onPress={() => handleAvatarSelect(item)} disabled={isTaken}>
-                                    <Card style={[styles.avatarCard, isTaken && { backgroundColor: colors.tertiary }]}>
-                                        <Avatar.Image
-                                            size={50}
-                                            source={avatarImages[item]}
-                                            style={styles.avatar}
-                                        />
-                                        {isTaken && <Text style={styles.takenText}>Upptagen</Text>}
-                                    </Card>
+                                    <View style={styles.avatarWrapper}>
+                                        <Card style={[styles.avatarCard, isTaken && { backgroundColor: colors.surfaceDisabled }]}>
+                                            <Image
+                                                source={avatarImages[item]}
+                                                style={styles.avatarImage}
+                                                resizeMode="contain"
+                                            />
+                                            {isTaken && <Text style={styles.takenText}>Upptagen</Text>}
+                                        </Card>
+                                    </View>
                                 </TouchableOpacity>
+
                             );
                         }}
                     />
@@ -109,6 +117,7 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                         mode="text"
                         onPress={() => setModalVisible(false)}
                         style={styles.closeButton}
+                        textColor='black'
                     >
                         Stäng
                     </Button>
@@ -136,23 +145,29 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        backgroundColor: '#fff',
+        backgroundColor: 'transparent',
     },
     avatarContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 15,
+        backgroundColor: 'transparent',
     },
     avatarCircle: {
-        width: 80,
-        height: 80,
+        width: 100,
+        height: 100,
         borderRadius: 40,
         borderWidth: 2,
         borderColor: '#EAEAEA',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 15,
-        backgroundColor: '#EAEAEA', // Grå bakgrund för avatar-cirkeln
+        backgroundColor: '#EAEAEA',
+    },
+    avatarWrapper: {
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     circleText: {
         color: 'black',
@@ -173,21 +188,40 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent bakgrund för modal
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    chooseAvatarContainer: {
+        paddingTop: 300,
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        paddingBottom: 20,
     },
     avatarCard: {
-        margin: 10,
+        margin: 15,
         alignItems: 'center',
-        backgroundColor: 'white', // Ställ in bakgrunden för kortet
+        backgroundColor: 'white',
     },
     avatar: {
         marginBottom: 5,
+        backgroundColor: 'transparent',
+    },
+    avatarImage: {
+        width: 60,
+        height: 60,
+        margin: 5,
+        backgroundColor: 'transparent',
     },
     takenText: {
+        position: 'absolute',
         color: 'red',
         fontSize: 12,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        top: '80%',
+        left: '30%',
+        transform: [{ translateX: -15 }, { translateY: -6 }],
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -201,6 +235,9 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         marginTop: 20,
+        paddingVertical: 5,
+        alignSelf: 'center',
+        backgroundColor: 'white',
     },
 });
 
