@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Image } from 'react-native';
-import { TextInput, Button, Text, Avatar, Card, useTheme } from 'react-native-paper';
+import {
+    FlatList,
+    Image,
+    Modal,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import {
+    Avatar,
+    Button,
+    Card,
+    Text,
+    TextInput,
+    useTheme,
+} from 'react-native-paper';
 import { useAppSelector } from '../store/store';
-import { useNavigation } from '@react-navigation/native';
 
 const avatar1 = require('../assets/avatarImages/1.png');
 const avatar2 = require('../assets/avatarImages/2.png');
@@ -37,15 +50,24 @@ const avatars: AvatarKeys[] = [
     '8.png',
 ];
 
-const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
+const NameAndAvatarSelection = ({
+    householdId,
+    setModalVisible,
+    resetHouseholdId,
+}: {
+    householdId: string;
+    setModalVisible: (visible: boolean) => void;
+    resetHouseholdId: () => void;
+}) => {
     const [name, setName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState<AvatarKeys | null>(null);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [avatarModalVisible, setAvatarModalVisible] = useState(false);
     const [saved, setSaved] = useState(false);
 
-    const navigation = useNavigation();
     const householdMembers = useAppSelector((state) =>
-        state.householdmember.filter((member) => member.householdId === householdId)
+        state.householdmember.filter(
+            (member) => member.householdId === householdId,
+        ),
     );
 
     const { colors } = useTheme();
@@ -53,8 +75,12 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
     const handleAvatarSelect = (avatar: AvatarKeys) => {
         if (householdMembers.some((member) => member.avatar === avatar)) return;
         setSelectedAvatar(avatar);
-        setModalVisible(false);
+        setAvatarModalVisible(false);
     };
+
+    const household = useAppSelector((state) =>
+        state.household.list.find((household) => household.id === householdId),
+    );
 
     const handleSubmit = () => {
         if (name && selectedAvatar) {
@@ -63,7 +89,8 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
 
             setTimeout(() => {
                 setSaved(false);
-                navigation.goBack();
+                setModalVisible(false);
+                resetHouseholdId();
             }, 2000);
         }
     };
@@ -71,17 +98,27 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
     return (
         <View style={styles.container}>
             <View style={styles.avatarContainer}>
-                <TouchableOpacity style={styles.avatarCircle} onPress={() => setModalVisible(true)}>
-                    {selectedAvatar ? (
-                        <Avatar.Image
-                            size={80}
-                            source={avatarImages[selectedAvatar]}
-                            style={{ backgroundColor: '#EAEAEA' }}
-                        />
-                    ) : (
-                        <Text style={styles.circleText}>Välj Avatar</Text>
-                    )}
-                </TouchableOpacity>
+                <View>
+                    <TouchableOpacity
+                        style={styles.avatarCircle}
+                        onPress={() => setAvatarModalVisible(true)}
+                    >
+                        {selectedAvatar ? (
+                            <Avatar.Image
+                                size={80}
+                                source={avatarImages[selectedAvatar]}
+                                style={{ backgroundColor: '#EAEAEA' }}
+                            />
+                        ) : (
+                            <Text style={styles.circleText}>Välj Avatar</Text>
+                        )}
+                    </TouchableOpacity>
+                    <View>
+                        {household && (
+                            <Text style={styles.householdName}>{household.name}</Text>
+                        )}
+                    </View>
+                </View>
             </View>
             <Text style={styles.inputtext}>Namn</Text>
             <TextInput
@@ -94,8 +131,7 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
+                visible={avatarModalVisible}
             >
                 <View style={styles.chooseAvatarContainer}>
                     <FlatList
@@ -103,17 +139,29 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                         keyExtractor={(item) => item}
                         numColumns={4}
                         renderItem={({ item }: { item: AvatarKeys }) => {
-                            const isTaken = householdMembers.some((member) => member.avatar === item);
+                            const isTaken = householdMembers.some(
+                                (member) => member.avatar === item,
+                            );
                             return (
-                                <TouchableOpacity onPress={() => handleAvatarSelect(item)} disabled={isTaken}>
+                                <TouchableOpacity
+                                    onPress={() => handleAvatarSelect(item)}
+                                    disabled={isTaken}
+                                >
                                     <View style={styles.avatarWrapper}>
-                                        <Card style={[styles.avatarCard, isTaken && { backgroundColor: colors.surfaceDisabled }]}>
+                                        <Card
+                                            style={[
+                                                styles.avatarCard,
+                                                isTaken && { backgroundColor: colors.surfaceDisabled },
+                                            ]}
+                                        >
                                             <Image
                                                 source={avatarImages[item]}
                                                 style={styles.avatarImage}
                                                 resizeMode="contain"
                                             />
-                                            {isTaken && <Text style={styles.takenText}>Upptagen</Text>}
+                                            {isTaken && (
+                                                <Text style={styles.takenText}>Upptagen</Text>
+                                            )}
                                         </Card>
                                     </View>
                                 </TouchableOpacity>
@@ -122,9 +170,9 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                     />
                     <Button
                         mode="text"
-                        onPress={() => setModalVisible(false)}
+                        onPress={() => setAvatarModalVisible(false)}
                         style={styles.closeButton}
-                        textColor='black'
+                        textColor="black"
                     >
                         Stäng
                     </Button>
@@ -146,9 +194,7 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                 </Button>
             </View>
 
-            {saved && (
-                <Text style={styles.savedText}>Sparat!</Text>
-            )}
+            {saved && <Text style={styles.savedText}>Sparat!</Text>}
         </View>
     );
 };
@@ -184,11 +230,16 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
     },
+    householdName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
     inputtext: {
         fontSize: 20,
         color: 'black',
         paddingBottom: 5,
-        fontWeight: "bold",
+        fontWeight: 'bold',
         textAlign: 'center',
     },
     input: {
