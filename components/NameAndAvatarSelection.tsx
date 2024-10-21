@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Image } from 'react-native';
 import { TextInput, Button, Text, Avatar, Card, useTheme } from 'react-native-paper';
 import { useAppSelector } from '../store/store';
+import { useNavigation } from '@react-navigation/native';
 
 const avatar1 = require('../assets/avatarImages/1.png');
 const avatar2 = require('../assets/avatarImages/2.png');
@@ -40,7 +41,9 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
     const [name, setName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState<AvatarKeys | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [saved, setSaved] = useState(false);
 
+    const navigation = useNavigation();
     const householdMembers = useAppSelector((state) =>
         state.householdmember.filter((member) => member.householdId === householdId)
     );
@@ -56,6 +59,12 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
     const handleSubmit = () => {
         if (name && selectedAvatar) {
             console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
+            setSaved(true);
+
+            setTimeout(() => {
+                setSaved(false);
+                navigation.goBack();
+            }, 2000);
         }
     };
 
@@ -96,7 +105,6 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                         renderItem={({ item }: { item: AvatarKeys }) => {
                             const isTaken = householdMembers.some((member) => member.avatar === item);
                             return (
-
                                 <TouchableOpacity onPress={() => handleAvatarSelect(item)} disabled={isTaken}>
                                     <View style={styles.avatarWrapper}>
                                         <Card style={[styles.avatarCard, isTaken && { backgroundColor: colors.surfaceDisabled }]}>
@@ -109,7 +117,6 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                                         </Card>
                                     </View>
                                 </TouchableOpacity>
-
                             );
                         }}
                     />
@@ -138,6 +145,10 @@ const NameAndAvatarSelection = ({ householdId }: { householdId: string }) => {
                     Spara
                 </Button>
             </View>
+
+            {saved && (
+                <Text style={styles.savedText}>Sparat!</Text>
+            )}
         </View>
     );
 };
@@ -239,11 +250,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         backgroundColor: 'white',
     },
+    savedText: {
+        textAlign: 'center',
+        color: 'green',
+        fontSize: 18,
+        marginTop: 15,
+        fontWeight: 'bold',
+    },
 });
 
 export default NameAndAvatarSelection;
-
-
-//Vad händer efter spara?  
-//Blir ett fel när jag skriver in hushållets kod!
-//Ändra namnet längst upp i skärmen 

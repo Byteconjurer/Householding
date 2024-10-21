@@ -40,3 +40,5 @@ const styles = StyleSheet.create({
 export default JoinHouseholdModal;
 
 //Behöver jag en stänga knapp? 
+//Blir ett fel när jag skriver in hushållets kod!
+//Ändra namnet längst upp i skärmen 
