@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
-import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { TopTabParamList } from '../navigators/TopTabNavigator';
 
-type HouseholdProps = NativeStackScreenProps<RootStackParamList>;
+type HouseholdProps = NativeStackScreenProps<TopTabParamList, "Household">;
 
 export default function HouseholdScreen({ navigation }: HouseholdProps) {
   return (
