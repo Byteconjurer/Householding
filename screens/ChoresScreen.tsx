@@ -1,11 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
-import { AvatarImageKeys } from '../data/types';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
-import { avatarData } from '../utils/avatarDataMap';
+import { avatarsMap } from '../utils/avatarDataMap';
 
 type ChoresProps = NativeStackScreenProps<RootStackParamList>;
 
@@ -37,7 +36,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
                   {avatars.map((avatar, index) => (
                     <Image
                       key={index}
-                      source={avatarData[avatar as AvatarImageKeys].image}
+                      source={avatarsMap[avatar].image}
                       style={styles.avatar}
                     />
                   ))}
