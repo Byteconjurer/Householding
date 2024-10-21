@@ -38,3 +38,5 @@ const styles = StyleSheet.create({
 });
 
 export default JoinHouseholdModal;
+
+//Behöver jag en stänga knapp? 

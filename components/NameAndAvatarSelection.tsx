@@ -242,3 +242,8 @@ const styles = StyleSheet.create({
 });
 
 export default NameAndAvatarSelection;
+
+
+//Vad händer efter spara?  
+//Blir ett fel när jag skriver in hushållets kod!
+//Ändra namnet längst upp i skärmen 
