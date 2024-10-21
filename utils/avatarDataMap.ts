@@ -1,37 +1,37 @@
 import { avatarColors } from '../data/avatarColors';
-import { AvatarData, AvatarImageKeys } from '../data/types';
+import { AvatarType } from '../data/types';
 
-export const avatarData: { [key in AvatarImageKeys]: AvatarData } = {
-  '1.png': {
+export const avatarsMap: { [key: string]: AvatarType } = {
+  chicken: {
     image: require('../assets/avatarImages/1.png'),
-    color: avatarColors['1.png'],
+    color: avatarColors['chicken'],
   },
-  '2.png': {
+  dolphin: {
     image: require('../assets/avatarImages/2.png'),
-    color: avatarColors['2.png'],
+    color: avatarColors['dolphin'],
   },
-  '3.png': {
+  fox: {
     image: require('../assets/avatarImages/3.png'),
-    color: avatarColors['3.png'],
+    color: avatarColors['fox'],
   },
-  '4.png': {
+  frog: {
     image: require('../assets/avatarImages/4.png'),
-    color: avatarColors['4.png'],
+    color: avatarColors['frog'],
   },
-  '5.png': {
+  octopus: {
     image: require('../assets/avatarImages/5.png'),
-    color: avatarColors['5.png'],
+    color: avatarColors['octopus'],
   },
-  '6.png': {
+  owl: {
     image: require('../assets/avatarImages/6.png'),
-    color: avatarColors['6.png'],
+    color: avatarColors['owl'],
   },
-  '7.png': {
+  pig: {
     image: require('../assets/avatarImages/7.png'),
-    color: avatarColors['7.png'],
+    color: avatarColors['pig'],
   },
-  '8.png': {
+  unicorn: {
     image: require('../assets/avatarImages/8.png'),
-    color: avatarColors['8.png'],
+    color: avatarColors['unicorn'],
   },
 };
