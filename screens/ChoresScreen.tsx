@@ -2,12 +2,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { AvatarImageKeys } from '../data/types';
-import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
 import { avatarData } from '../utils/avatarDataMap';
 
-type ChoresProps = NativeStackScreenProps<RootStackParamList>;
+type ChoresProps = NativeStackScreenProps<TopTabParamList, "Chores">;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
   const household = useAppSelector((state) => state.household.current);
