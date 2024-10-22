@@ -12,21 +12,20 @@ import { useAppSelector } from '../store/store';
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: HomeProps) {
+  const [joinModalVisible, setJoinModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
   async function signOutUser() {
     await signOut(getAuth());
   }
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const handleOnClick = () => {
-    setModalVisible(true);
+  const handleJoinOnClick = () => {
+    setJoinModalVisible(true);
   };
-
-  const userHouseholds = useAppSelector(selectUserHouseholds);
-  const [addModalVisible, setAddModalVisible] = useState(false);
-
   const handleAddHousehold = () => {
     setAddModalVisible(true);
   };
+
+  const userHouseholds = useAppSelector(selectUserHouseholds);
 
   return (
     <>
@@ -75,7 +74,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
             buttonColor="#fff"
             labelStyle={styles.buttonText}
             contentStyle={{ flexDirection: 'row-reverse' }}
-            onPress={handleOnClick}
+            onPress={handleJoinOnClick}
           >
             Gå med
           </Button>
@@ -85,10 +84,10 @@ export default function HomeScreen({ navigation }: HomeProps) {
           setAddModalVisible={setAddModalVisible}
         />
       </ScrollView>
-        <JoinHouseholdModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
+      <JoinHouseholdModal
+        joinModalVisible={joinModalVisible}
+        setJoinModalVisible={setJoinModalVisible}
+      />
       <Button onPress={signOutUser}>Logga ut</Button>
     </>
   );

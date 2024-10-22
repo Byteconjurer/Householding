@@ -13,10 +13,6 @@ import { useAppDispatch } from '../store/store';
 
 // const registerSchema = z.object({
 //   name: z.string().min(1, 'Name must be at least 1 characters long'),
-//   code: z
-//     .string()
-//     .min(5, 'Code must be 5 characters long')
-//     .max(5, 'Code must be 5 characters long'),
 // });
 
 type AddHouseholdModalProps = {
@@ -33,6 +29,7 @@ export default function AddHouseholdModal({
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
 
+  // Tillfällig genererad cod, tag bort senare
   const generateHouseholdCode = () => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -47,6 +44,7 @@ export default function AddHouseholdModal({
     generateHouseholdCode();
   }, []);
 
+  //Tillfällig genererad id, tag bort senare
   function incrementId() {
     setId(id + 1);
     return id;
@@ -59,7 +57,6 @@ export default function AddHouseholdModal({
         id: incrementId().toString(),
         name: householdName,
         code: householdCode,
-        //Här ska man ändra '2' som nu är hårdkodat till att vara det aktuella hushållet när databasen är uppsatt.
       }),
     );
     setAddModalVisible(false);
