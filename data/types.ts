@@ -34,3 +34,10 @@ export type AvatarType = {
   icon: ImageSourcePropType;
   color: string;
 };
+
+export type ChoreCompleted = {
+  id: string;
+  choreId: string;
+  householdMemberId: string;
+  choreComplete: Date;
+};
