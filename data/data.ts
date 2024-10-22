@@ -1,10 +1,10 @@
 import { Chore, Household, HouseholdMember, User } from './types';
 
 export const mockedUsers: User[] = [
-  { uid: '1' },
-  { uid: '2' },
+  { uid: 'uUfRsM6E2BY7HllGInuSYklWHz03' },
   { uid: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2' },
-  { uid: '4' },
+  { uid: 'MvsOPoLJTVOlKM241KGQG5pwDJB3' },
+  { uid: 'hlgPocAGNkR3R16JdIRoNipdmlx2' },
 ];
 
 export const mockedHouseholds: Household[] = [
@@ -15,7 +15,7 @@ export const mockedHouseholds: Household[] = [
 export const mockedHouseholdMembers: HouseholdMember[] = [
   {
     id: '1',
-    userId: '1',
+    userId: 'uUfRsM6E2BY7HllGInuSYklWHz03',
     householdId: '1',
     avatar: '1.png',
     owner: true,
@@ -25,7 +25,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
   },
   {
     id: '2',
-    userId: '2',
+    userId: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2',
     householdId: '1',
     avatar: '2.png',
     owner: false,
@@ -35,7 +35,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
   },
   {
     id: '3',
-    userId: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2',
+    userId: 'MvsOPoLJTVOlKM241KGQG5pwDJB3',
     householdId: '1',
     avatar: '3.png',
     owner: false,
@@ -45,7 +45,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
   },
   {
     id: '4',
-    userId: '4',
+    userId: 'hlgPocAGNkR3R16JdIRoNipdmlx2',
     householdId: '2',
     avatar: '2.png',
     owner: true,
@@ -55,7 +55,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
   },
   {
     id: '5',
-    userId: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2',
+    userId: 'MvsOPoLJTVOlKM241KGQG5pwDJB3',
     householdId: '2',
     avatar: '1.png',
     owner: false,
