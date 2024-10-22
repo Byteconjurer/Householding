@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
+import { RootState } from '../store';
 
 const householdmemberSlice = createSlice({
   name: 'householdmember',
@@ -31,3 +32,7 @@ export const {
   // deleteHouseholdmember,
   updateHouseholdmember,
 } = householdmemberSlice.actions;
+
+// SELECTORS
+export const selectHouseholdMembers = (state: RootState) =>
+  state.householdmember;
