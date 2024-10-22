@@ -30,17 +30,7 @@ export type Chore = {
   householdId: string;
 };
 
-export type AvatarImageKeys =
-  | 'chicken'
-  | 'dolphin'
-  | 'fox'
-  | 'frog'
-  | 'octopus'
-  | 'owl'
-  | 'pig'
-  | 'unicorn';
-
 export type AvatarType = {
-  image: ImageSourcePropType;
+  icon: ImageSourcePropType;
   color: string;
 };

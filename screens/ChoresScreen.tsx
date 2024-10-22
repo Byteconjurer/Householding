@@ -3,11 +3,11 @@ import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import { avatarsMap } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
-import { avatarsMap } from '../utils/avatarDataMap';
 
 type ChoresProps = CompositeScreenProps<
   MaterialTopTabScreenProps<TopTabParamList, 'Chores'>,
@@ -42,7 +42,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
                   {avatars.map((avatar, index) => (
                     <Image
                       key={index}
-                      source={avatarsMap[avatar].image}
+                      source={avatarsMap[avatar].icon}
                       style={styles.avatar}
                     />
                   ))}

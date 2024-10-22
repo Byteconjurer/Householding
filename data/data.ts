@@ -1,4 +1,4 @@
-import { Chore, Household, HouseholdMember, User } from './types';
+import { AvatarType, Chore, Household, HouseholdMember, User } from './types';
 
 export const mockedUsers: User[] = [{ uid: '1' }, { uid: '2' }];
 
@@ -134,3 +134,14 @@ export const mockedChores: Chore[] = [
     householdId: '2',
   },
 ];
+
+export const avatarsMap: { [key: string]: AvatarType } = {
+  chicken: { icon: require('../assets/avatarImages/1.png'), color: '#fff58e' },
+  dolphin: { icon: require('../assets/avatarImages/2.png'), color: '#70fffc' },
+  fox: { icon: require('../assets/avatarImages/3.png'), color: '#ffb260' },
+  frog: { icon: require('../assets/avatarImages/4.png'), color: '#71fc78' },
+  squid: { icon: require('../assets/avatarImages/5.png'), color: '#ff728e' },
+  owl: { icon: require('../assets/avatarImages/6.png'), color: '#937f48' },
+  pig: { icon: require('../assets/avatarImages/7.png'), color: '#e2a69a' },
+  unicorn: { icon: require('../assets/avatarImages/8.png'), color: '#f280ea' },
+};
