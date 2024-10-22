@@ -12,13 +12,30 @@ export default function HomeScreen({ navigation }: HomeProps) {
     await signOut(getAuth());
   }
 
-  const mockedHouseholds = useAppSelector((state) => state.household.list);
+  const userHouseholds = useAppSelector((state) => {
+    const loggedInUserId = state.user.currentUser?.uid;
+    const householdsmembers = state.householdmember;
+    const households = state.household.list;
+
+    // Filtrera householdMembers för att hitta alla hushållsid där användaren är medlem
+    const userHouseholdIDs = householdsmembers
+      .filter((member) => member.userId === loggedInUserId)
+      .map((member) => member.householdId);
+    console.log(userHouseholdIDs);
+
+    // Hämta alla hushåll baserat på hushålls-ID:n
+    const userHouseholds = households.filter((household) =>
+      userHouseholdIDs.includes(household.id),
+    );
+
+    return userHouseholds;
+  });
 
   return (
     <>
       <View style={styles.root}>
         <View style={styles.householdContainer}>
-          {mockedHouseholds.map((household) => (
+          {userHouseholds.map((household) => (
             <Pressable
               key={household.id}
               onPress={() =>
