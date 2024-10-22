@@ -3,6 +3,10 @@ import { getAuth, signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import {
+  selectLoggedInUserId,
+  selectUserHouseholds,
+} from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -12,24 +16,9 @@ export default function HomeScreen({ navigation }: HomeProps) {
     await signOut(getAuth());
   }
 
-  const userHouseholds = useAppSelector((state) => {
-    const loggedInUserId = state.user.currentUser?.uid;
-    const householdsmembers = state.householdmember;
-    const households = state.household.list;
-
-    // Filtrera householdMembers för att hitta alla hushållsid där användaren är medlem
-    const userHouseholdIDs = householdsmembers
-      .filter((member) => member.userId === loggedInUserId)
-      .map((member) => member.householdId);
-    console.log(userHouseholdIDs);
-
-    // Hämta alla hushåll baserat på hushålls-ID:n
-    const userHouseholds = households.filter((household) =>
-      userHouseholdIDs.includes(household.id),
-    );
-
-    return userHouseholds;
-  });
+  const userHouseholds = useAppSelector(selectUserHouseholds);
+  const userId = useAppSelector(selectLoggedInUserId);
+  console.log(userId);
 
   return (
     <>
