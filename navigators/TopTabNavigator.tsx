@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomNavigator from '../components/BottomNavigator';
 import ChoresScreen from '../screens/ChoresScreen';
 import HouseholdScreen from '../screens/HouseholdScreen';
-import StatisticScreen from '../screens/statistics/StatisticScreen';
+import StatisticsScreen from '../screens/StatisticsScreen';
 import { TopTabArrowsBar } from './TopTabArrowsBar';
 
 export type TopTabParamList = {
@@ -35,19 +35,19 @@ export default function TopTabNavigator() {
         />
         <TopTabs.Screen
           name="ThisWeek"
-          component={StatisticScreen}
+          component={StatisticsScreen}
           options={{ title: 'Denna veckan' }}
           initialParams={{ period: 'this-week' }}
         />
         <TopTabs.Screen
           name="PreviousWeek"
-          component={StatisticScreen}
+          component={StatisticsScreen}
           options={{ title: 'Förra veckan' }}
           initialParams={{ period: 'previous-week' }}
         />
         <TopTabs.Screen
           name="PreviousMonth"
-          component={StatisticScreen}
+          component={StatisticsScreen}
           options={{ title: 'Förra månaden' }}
           initialParams={{ period: 'previous-month' }}
         />
