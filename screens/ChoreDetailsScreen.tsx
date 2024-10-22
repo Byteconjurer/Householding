@@ -1,7 +1,7 @@
 import { NavigationProp, RouteProp } from '@react-navigation/native';
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, IconButton, Text } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 
@@ -11,6 +11,7 @@ type ChoreProps = {
 };
 
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
+  const [isChoreDone, setIsChoreDone] = useState(false);
   const chore = mockedChores.find((item) => item.id === route.params.id);
 
   useLayoutEffect(() => {
@@ -30,6 +31,10 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
     );
   }
 
+  const handlePress = () => {
+    setIsChoreDone(!isChoreDone);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -39,13 +44,17 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
           </Card.Content>
         </Card>
         <View>
-          <IconButton
-            icon="check"
-            size={40}
-            iconColor="#4CBC64"
-            style={styles.checkButton}
-            onPress={() => console.log('Sysslan är gjord')}
-          />
+          <Button
+            mode="elevated"
+            icon={isChoreDone ? 'check-circle-outline' : 'circle-outline'}
+            textColor="black"
+            buttonColor={isChoreDone ? '#8BCB7A' : '#fff'}
+            labelStyle={styles.buttonLabelText}
+            contentStyle={styles.buttonContent}
+            onPress={handlePress}
+          >
+            {isChoreDone ? 'Utförd!' : 'Utförd?'}
+          </Button>
         </View>
         <Card style={[styles.basicCard, styles.mt25]}>
           <Card.Content style={styles.flexRowContent}>
@@ -125,13 +134,12 @@ const styles = StyleSheet.create({
   mh5: {
     marginHorizontal: 5,
   },
-  checkButton: {
-    backgroundColor: '#FFFBFB',
-    borderRadius: 20,
-    width: 60,
+  buttonLabelText: {
+    fontSize: 20,
+    padding: 2,
+  },
+  buttonContent: {
     height: 55,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   descriptionText: {
     fontSize: 24,
