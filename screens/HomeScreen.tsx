@@ -3,6 +3,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { selectUserHouseholds } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -12,13 +13,13 @@ export default function HomeScreen({ navigation }: HomeProps) {
     await signOut(getAuth());
   }
 
-  const mockedHouseholds = useAppSelector((state) => state.household.list);
+  const userHouseholds = useAppSelector(selectUserHouseholds);
 
   return (
     <>
       <View style={styles.root}>
         <View style={styles.householdContainer}>
-          {mockedHouseholds.map((household) => (
+          {userHouseholds.map((household) => (
             <Pressable
               key={household.id}
               onPress={() =>
