@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Modal, Portal, Provider } from 'react-native-paper';
+import { Modal, Portal } from 'react-native-paper';
 import JoinByCode from './JoinByCode';
 import NameAndAvatarSelection from './NameAndAvatarSelection';
 
