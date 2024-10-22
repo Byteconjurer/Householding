@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddChoreScreen from '../screens/AddChoreScreen';
 import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
+import UpdateChoreScreen from '../screens/UpdateChoreScreen';
 import TopTabNavigator, { TopTabParamList } from './TopTabNavigator';
 
 export type RootStackParamList = {
