@@ -60,6 +60,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
             );
           })}
         </View>
+      </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
             mode="elevated"
@@ -87,12 +88,13 @@ export default function HomeScreen({ navigation }: HomeProps) {
           addModalVisible={addModalVisible}
           setAddModalVisible={setAddModalVisible}
         />
-      </ScrollView>
       <JoinHouseholdModal
         joinModalVisible={joinModalVisible}
         setJoinModalVisible={setJoinModalVisible}
       />
+      <View>
       <Button onPress={signOutUser}>Logga ut</Button>
+      </View>
     </>
   );
 }
@@ -129,9 +131,14 @@ const styles = StyleSheet.create({
     maxWidth: '30%',
   },
   buttonContainer: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 65,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal: 20,
+
   },
   buttonText: {
     fontSize: 20,

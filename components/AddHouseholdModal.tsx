@@ -8,12 +8,11 @@ import {
   Text,
   TextInput,
 } from 'react-native-paper';
+import { z } from 'zod';
 import { addHousehold } from '../store/household/householdSlice';
 import { useAppDispatch } from '../store/store';
 
-// const registerSchema = z.object({
-//   name: z.string().min(1, 'Name must be at least 1 characters long'),
-// });
+const householdNameSchema = z.string().min(1, 'Hushållet måste ha ett namn');
 
 type AddHouseholdModalProps = {
   addModalVisible: boolean;
@@ -26,7 +25,8 @@ export default function AddHouseholdModal({
 }: AddHouseholdModalProps) {
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
-  const [id, setId] = useState(3);
+  const [error, setError] = useState<string | null>(null);
+  const [id, setId] = useState(1);
   const dispatch = useAppDispatch();
 
   // const currentUserUid = useAppSelector((state) => state.user.currentUser?.uid);
@@ -49,19 +49,25 @@ export default function AddHouseholdModal({
 
   //Tillfällig genererad id, tag bort senare
   function incrementId() {
-    setId(id + 1);
+    setId(1);
     return id;
   }
 
   const handleAddHousehold = () => {
+    const validationResult = householdNameSchema.safeParse(householdName);
+    if (!validationResult.success) {
+      setError(validationResult.error.errors[0].message);
+      return;
+    }
+
     dispatch(
       addHousehold({
-        //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
         id: incrementId().toString(),
         name: householdName,
         code: householdCode,
       }),
     );
+
     setAddModalVisible(false);
     setTimeout(() => {
       setHouseholdName('');
@@ -69,34 +75,6 @@ export default function AddHouseholdModal({
     }, 1000);
     console.log(householdName, householdCode, id);
   };
-
-  //Behövs för Zod?
-
-  // const [errors, setErrors] = useState<{
-  //     name?: string;
-  //     code?: string;
-  //   }>({});
-
-  //   const handleRegister = async () => {
-  //     const validationResult = registerSchema.safeParse({ name, code });
-
-  //     let newErrors: {
-  //       name?: string;
-  //       code?: string;
-  //     } = {};
-
-  //     if (!validationResult.success) {
-  //       const formattedErrors = validationResult.error.format();
-  //       newErrors = {
-  //         name: formattedErrors.name?._errors[0],
-  //         code: formattedErrors.code?._errors[0],
-  //       };
-  //     }
-
-  //     if (Object.keys(newErrors).length > 0) {
-  //       setErrors(newErrors);
-  //       return;
-  //     }
 
   return (
     <Portal>
@@ -110,10 +88,15 @@ export default function AddHouseholdModal({
           <TextInput
             mode="outlined"
             value={householdName}
-            onChangeText={setHouseholdName}
+            onChangeText={(text) => {
+              setHouseholdName(text);
+              setError(null);
+            }}
             style={styles.input}
             theme={{ roundness: 10 }}
+            error={!!error}
           />
+          {error && <Text style={styles.errorText}>{error}</Text>}
           <Text style={styles.inputCaption}>Kod</Text>
           <Card style={styles.card}>
             <Card.Content>
@@ -175,7 +158,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    marginTop: 5,
+    marginBottom: 10,
   },
   codeText: {
     fontSize: 24,
