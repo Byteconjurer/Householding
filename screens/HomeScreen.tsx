@@ -1,7 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import JoinHouseholdModal from '../components/JoinHouseholdModal';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectUserHouseholds } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
@@ -12,6 +14,11 @@ export default function HomeScreen({ navigation }: HomeProps) {
   async function signOutUser() {
     await signOut(getAuth());
   }
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleOnClick = () => {
+    setModalVisible(true);
+  };
 
   const userHouseholds = useAppSelector(selectUserHouseholds);
 
@@ -62,11 +69,15 @@ export default function HomeScreen({ navigation }: HomeProps) {
             buttonColor="#fff"
             labelStyle={styles.buttonText}
             contentStyle={{ flexDirection: 'row-reverse' }}
-            onPress={() => console.log('Tryckt på gå med')}
+            onPress={handleOnClick}
           >
             Gå med
           </Button>
         </View>
+        <JoinHouseholdModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
       <Button onPress={signOutUser}>Logga ut</Button>
     </>
