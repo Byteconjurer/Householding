@@ -6,7 +6,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { onAuthStateChanged } from 'firebase/auth';
 import { User } from './data/types';
 import { auth } from './firebase';
-import LoginStackNavigator from './navigators/LoginStackNavigator';
 import RootStackNavigator from './navigators/RootStackNavigator';
 import { AuthProvider } from './providers/AuthContextProvider';
 import store from './store/store';
@@ -24,7 +23,9 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      {user ? <RootStackNavigator /> : <LoginStackNavigator />}
+      {/* {user ?  */}
+      <RootStackNavigator />
+      {/* : <LoginStackNavigator />} */}
     </NavigationContainer>
   );
 }

@@ -1,7 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import AddHouseholdModal from '../components/AddHouseholdModal';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { useAppSelector } from '../store/store';
 
@@ -13,6 +15,11 @@ export default function HomeScreen({ navigation }: HomeProps) {
   }
 
   const mockedHouseholds = useAppSelector((state) => state.household.list);
+  const [addModalVisible, setAddModalVisible] = useState(false);
+
+  const handleAddHousehold = () => {
+    setAddModalVisible(true);
+  };
 
   return (
     <>
@@ -50,7 +57,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
             textColor="black"
             buttonColor="#fff"
             labelStyle={styles.buttonText}
-            onPress={() => console.log('Tryckt på Lägg till')}
+            onPress={handleAddHousehold}
           >
             Lägg till
           </Button>
@@ -66,6 +73,10 @@ export default function HomeScreen({ navigation }: HomeProps) {
             Gå med
           </Button>
         </View>
+        <AddHouseholdModal
+          addModalVisible={addModalVisible}
+          setAddModalVisible={setAddModalVisible}
+        />
       </View>
       <Button onPress={signOutUser}>Logga ut</Button>
     </>
