@@ -17,7 +17,10 @@ export default function JoinHouseholdModal({
 
   const handleCodeValidated = (id: string) => {
     setHouseholdId(id);
-    setModalVisible(false);
+  };
+
+  const resetHouseholdId = () => {
+    setHouseholdId(null);
   };
 
   return (
@@ -30,7 +33,11 @@ export default function JoinHouseholdModal({
         {householdId === null ? (
           <JoinByCode onCodeValidated={handleCodeValidated} />
         ) : (
-          <NameAndAvatarSelection householdId={householdId} />
+          <NameAndAvatarSelection
+            householdId={householdId}
+            setModalVisible={setModalVisible}
+            resetHouseholdId={resetHouseholdId}
+          />
         )}
       </Modal>
     </Portal>
@@ -45,7 +52,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-//Behöver jag en stänga knapp? Klickar man utanför försvinner den.
-//Blir ett fel när jag skriver in hushållets kod! Förklara
-//Ändra namnet längst upp i skärmen. Skärmen finns inte längre
