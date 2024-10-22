@@ -61,39 +61,39 @@ export default function HomeScreen({ navigation }: HomeProps) {
           })}
         </View>
       </ScrollView>
-        <View style={styles.buttonContainer}>
-          <Button
-            mode="elevated"
-            icon="plus-circle-outline"
-            textColor="black"
-            buttonColor="#fff"
-            labelStyle={styles.buttonText}
-            onPress={handleAddHousehold}
-          >
-            Lägg till
-          </Button>
-          <Button
-            mode="elevated"
-            icon="arrow-right"
-            textColor="black"
-            buttonColor="#fff"
-            labelStyle={styles.buttonText}
-            contentStyle={{ flexDirection: 'row-reverse' }}
-            onPress={handleJoinOnClick}
-          >
-            Gå med
-          </Button>
-        </View>
-        <AddHouseholdModal
-          addModalVisible={addModalVisible}
-          setAddModalVisible={setAddModalVisible}
-        />
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="elevated"
+          icon="plus-circle-outline"
+          textColor="black"
+          buttonColor="#fff"
+          labelStyle={styles.buttonText}
+          onPress={handleAddHousehold}
+        >
+          Lägg till
+        </Button>
+        <Button
+          mode="elevated"
+          icon="arrow-right"
+          textColor="black"
+          buttonColor="#fff"
+          labelStyle={styles.buttonText}
+          contentStyle={{ flexDirection: 'row-reverse' }}
+          onPress={handleJoinOnClick}
+        >
+          Gå med
+        </Button>
+      </View>
+      <AddHouseholdModal
+        addModalVisible={addModalVisible}
+        setAddModalVisible={setAddModalVisible}
+      />
       <JoinHouseholdModal
         joinModalVisible={joinModalVisible}
         setJoinModalVisible={setJoinModalVisible}
       />
       <View>
-      <Button onPress={signOutUser}>Logga ut</Button>
+        <Button onPress={signOutUser}>Logga ut</Button>
       </View>
     </>
   );
@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-
   },
   buttonText: {
     fontSize: 20,
