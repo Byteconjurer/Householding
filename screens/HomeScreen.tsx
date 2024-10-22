@@ -3,10 +3,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import {
-  selectLoggedInUserId,
-  selectUserHouseholds,
-} from '../store/household/householdSelectors';
+import { selectUserHouseholds } from '../store/household/householdSelectors';
 import { useAppSelector } from '../store/store';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -17,8 +14,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
   }
 
   const userHouseholds = useAppSelector(selectUserHouseholds);
-  const userId = useAppSelector(selectLoggedInUserId);
-  console.log(userId);
 
   return (
     <>
