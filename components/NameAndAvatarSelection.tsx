@@ -52,11 +52,11 @@ const avatars: AvatarKeys[] = [
 
 const NameAndAvatarSelection = ({
   householdId,
-  setJoinModalVisible,
+  setModalVisible,
   resetHouseholdId,
 }: {
   householdId: string;
-  setJoinModalVisible: (visible: boolean) => void;
+  setModalVisible: (visible: boolean) => void;
   resetHouseholdId: () => void;
 }) => {
   const [name, setName] = useState('');
@@ -89,7 +89,7 @@ const NameAndAvatarSelection = ({
 
       setTimeout(() => {
         setSaved(false);
-        setJoinModalVisible(false);
+        setModalVisible(false);
         resetHouseholdId();
       }, 2000);
     }

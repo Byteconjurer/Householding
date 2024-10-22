@@ -24,10 +24,13 @@ export default function AddHouseholdModal({
   addModalVisible,
   setAddModalVisible,
 }: AddHouseholdModalProps) {
-  const dispatch = useAppDispatch();
-  const [id, setId] = useState(3);
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
+  const [id, setId] = useState(3);
+  const dispatch = useAppDispatch();
+
+  // const currentUserUid = useAppSelector((state) => state.user.currentUser?.uid);
+  // console.log(currentUserUid);
 
   // Tillfällig genererad cod, tag bort senare
   const generateHouseholdCode = () => {
@@ -64,6 +67,7 @@ export default function AddHouseholdModal({
       setHouseholdName('');
       generateHouseholdCode();
     }, 1000);
+    console.log(householdName, householdCode, id);
   };
 
   //Behövs för Zod?

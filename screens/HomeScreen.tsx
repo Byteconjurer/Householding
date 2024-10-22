@@ -31,30 +31,34 @@ export default function HomeScreen({ navigation }: HomeProps) {
     <>
       <ScrollView contentContainerStyle={styles.root}>
         <View style={styles.householdContainer}>
-          {userHouseholds.map((household) => (
-            <Pressable
-              key={household.id}
-              onPress={() =>
-                navigation.navigate('TopTabNavigator', { screen: 'Household' })
-              }
-            >
-              <Card style={styles.card}>
-                <Card.Content style={styles.content}>
-                  <Text style={styles.text}>{household.name}</Text>
-                  <View style={styles.avatar}>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                    <Text>🐻</Text>
-                  </View>
-                </Card.Content>
-              </Card>
-            </Pressable>
-          ))}
+          {userHouseholds.map((household) => {
+            return (
+              <Pressable
+                key={household.id}
+                onPress={() =>
+                  navigation.navigate('TopTabNavigator', {
+                    screen: 'Household',
+                  })
+                }
+              >
+                <Card style={styles.card}>
+                  <Card.Content style={styles.content}>
+                    <Text style={styles.text}>{household.name}</Text>
+                    <View style={styles.avatar}>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                      <Text>🐻</Text>
+                    </View>
+                  </Card.Content>
+                </Card>
+              </Pressable>
+            );
+          })}
         </View>
         <View style={styles.buttonContainer}>
           <Button
