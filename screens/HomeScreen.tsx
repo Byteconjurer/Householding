@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import AddHouseholdModal from '../components/AddHouseholdModal';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
 
   return (
     <>
-      <View style={styles.root}>
+      <ScrollView contentContainerStyle={styles.root}>
         <View style={styles.householdContainer}>
           {mockedHouseholds.map((household) => (
             <Pressable
@@ -77,7 +77,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
           addModalVisible={addModalVisible}
           setAddModalVisible={setAddModalVisible}
         />
-      </View>
+      </ScrollView>
       <Button onPress={signOutUser}>Logga ut</Button>
     </>
   );
@@ -85,7 +85,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#EAEAEA',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     maxWidth: '30%',
   },
   buttonContainer: {
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

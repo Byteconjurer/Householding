@@ -33,7 +33,7 @@ export default function AddHouseholdModal({
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
 
-  useEffect(() => {
+  const generateHouseholdCode = () => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const charactersLength = characters.length;
@@ -41,6 +41,10 @@ export default function AddHouseholdModal({
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     setHouseholdCode(result);
+  };
+
+  useEffect(() => {
+    generateHouseholdCode();
   }, []);
 
   function incrementId() {
@@ -57,8 +61,12 @@ export default function AddHouseholdModal({
         code: householdCode,
         //Här ska man ändra '2' som nu är hårdkodat till att vara det aktuella hushållet när databasen är uppsatt.
       }),
-      setAddModalVisible(false),
     );
+    setAddModalVisible(false);
+    setTimeout(() => {
+      setHouseholdName('');
+      generateHouseholdCode();
+    }, 1000);
   };
 
   //Behövs för Zod?
