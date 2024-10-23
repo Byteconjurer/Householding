@@ -11,8 +11,8 @@ import { useAppSelector } from '../store/store';
 import { avatarData } from '../utils/avatarDataMap';
 
 type ChoresProps = CompositeScreenProps<
-  NativeStackScreenProps<RootStackParamList>,
-  MaterialTopTabScreenProps<TopTabParamList, 'Chores'>
+  MaterialTopTabScreenProps<TopTabParamList, 'Chores'>,
+  NativeStackScreenProps<RootStackParamList>
 >;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
