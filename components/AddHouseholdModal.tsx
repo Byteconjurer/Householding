@@ -55,7 +55,7 @@ export default function AddHouseholdModal({
 
     dispatch(
       addHousehold({
-        id: Date().toString(),
+        id: Date.now().toString(),
         name: householdName,
         code: householdCode,
       }),
