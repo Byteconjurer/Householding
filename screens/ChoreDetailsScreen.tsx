@@ -1,14 +1,17 @@
-import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useLayoutEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { TopTabParamList } from '../navigators/TopTabNavigator';
 
-type ChoreProps = {
-  route: RouteProp<RootStackParamList, 'ChoreDetails'>;
-  navigation: NavigationProp<RootStackParamList>;
-};
+type ChoreProps = CompositeScreenProps<
+  NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
+  MaterialTopTabScreenProps<TopTabParamList>
+>;
 
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
