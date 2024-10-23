@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export type User = {
   uid: string;
 };
@@ -26,4 +28,16 @@ export type Chore = {
   interval: number;
   energyWeight: number;
   householdId: string;
+};
+
+export type AvatarType = {
+  icon: ImageSourcePropType;
+  color: string;
+};
+
+export type ChoreCompleted = {
+  id: string;
+  choreId: string;
+  householdMemberId: string;
+  choreComplete: Date;
 };
