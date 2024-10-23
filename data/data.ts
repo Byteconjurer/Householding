@@ -10,11 +10,11 @@ export const mockedHouseholds: Household[] = [
 export const mockedHouseholdMembers: HouseholdMember[] = [
   {
     id: '1',
-    userId: '1',
+    userId: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2',
     householdId: '1',
     avatar: '1.png',
     owner: true,
-    name: '',
+    name: 'cathrine',
     isActive: true,
     isRequest: false,
   },

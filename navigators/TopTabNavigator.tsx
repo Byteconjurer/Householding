@@ -7,7 +7,7 @@ import StatisticScreen from '../screens/statistics/StatisticScreen';
 import { TopTabArrowsBar } from './TopTabArrowsBar';
 
 export type TopTabParamList = {
-  Household: undefined;
+  Household: { householdId: string };
   Chores: undefined;
   ThisWeek: { period: string };
   PreviousWeek: { period: string };
