@@ -1,4 +1,11 @@
-import { Chore, Household, HouseholdMember, User } from './types';
+import {
+  AvatarType,
+  Chore,
+  ChoreCompleted,
+  Household,
+  HouseholdMember,
+  User,
+} from './types';
 
 export const mockedUsers: User[] = [
   { uid: 'uUfRsM6E2BY7HllGInuSYklWHz03' },
@@ -10,6 +17,8 @@ export const mockedUsers: User[] = [
 export const mockedHouseholds: Household[] = [
   { id: '1', name: 'ResidentEvil', code: 'RE6666' },
   { id: '2', name: 'Greveholm', code: 'GH1234' },
+  { id: '3', name: 'Kaoscentralen', code: 'HW7777' },
+  { id: '4', name: 'Stjärnhuset', code: 'HP0001' },
 ];
 
 export const mockedHouseholdMembers: HouseholdMember[] = [
@@ -17,7 +26,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     id: '1',
     userId: 'uUfRsM6E2BY7HllGInuSYklWHz03',
     householdId: '1',
-    avatar: '1.png',
+    avatar: 'chicken',
     owner: true,
     name: 'Mamma',
     isActive: true,
@@ -27,7 +36,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     id: '2',
     userId: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2',
     householdId: '1',
-    avatar: '2.png',
+    avatar: 'dolphin',
     owner: false,
     name: 'Mammas nya kille',
     isActive: true,
@@ -37,7 +46,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     id: '3',
     userId: 'MvsOPoLJTVOlKM241KGQG5pwDJB3',
     householdId: '1',
-    avatar: '3.png',
+    avatar: 'fox',
     owner: false,
     name: 'Junior',
     isActive: true,
@@ -47,7 +56,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     id: '4',
     userId: 'hlgPocAGNkR3R16JdIRoNipdmlx2',
     householdId: '2',
-    avatar: '2.png',
+    avatar: 'frog',
     owner: true,
     name: 'Pappa',
     isActive: true,
@@ -57,7 +66,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     id: '5',
     userId: 'MvsOPoLJTVOlKM241KGQG5pwDJB3',
     householdId: '2',
-    avatar: '1.png',
+    avatar: 'owl',
     owner: false,
     name: 'Junior',
     isActive: true,
@@ -88,7 +97,7 @@ export const mockedChores: Chore[] = [
     description: 'Pilla i naveln på alla i hushållet',
     interval: 7,
     energyWeight: 2,
-    householdId: '2',
+    householdId: '1',
   },
   {
     id: '4',
@@ -98,4 +107,86 @@ export const mockedChores: Chore[] = [
     energyWeight: 3,
     householdId: '2',
   },
+  {
+    id: '5',
+    title: 'Städa köket',
+    description: 'Torka av bänkarna och diska',
+    interval: 4,
+    energyWeight: 3,
+    householdId: '2',
+  },
+  {
+    id: '6',
+    title: 'Tvätta kläder',
+    description: 'Samla smutskläder och kör en tvätt',
+    interval: 3,
+    energyWeight: 1,
+    householdId: '2',
+  },
+  {
+    id: '7',
+    title: 'Laga mat',
+    description: 'Laga mat till hela familjen',
+    interval: 1,
+    energyWeight: 2,
+    householdId: '2',
+  },
+  {
+    id: '8',
+    title: 'Ta ut soporna',
+    description: 'Töm sopkorgarna och ta ut soporna till återvinning',
+    interval: 2,
+    energyWeight: 3,
+    householdId: '2',
+  },
 ];
+
+export const mockedChoresCompleted: ChoreCompleted[] = [
+  {
+    id: '1',
+    choreId: '1',
+    householdMemberId: '1',
+    choreComplete: new Date('2024-10-22'),
+  },
+  {
+    id: '2',
+    choreId: '2',
+    householdMemberId: '1',
+    choreComplete: new Date('2024-10-22'),
+  },
+  {
+    id: '3',
+    choreId: '3',
+    householdMemberId: '2',
+    choreComplete: new Date('2024-10-22'),
+  },
+  {
+    id: '4',
+    choreId: '4',
+    householdMemberId: '2',
+    choreComplete: new Date('2024-10-22'),
+  },
+  {
+    id: '5',
+    choreId: '5',
+    householdMemberId: '3',
+    choreComplete: new Date('2024-10-23'),
+  },
+  {
+    id: '6',
+    choreId: '6',
+    householdMemberId: '3',
+    choreComplete: new Date('2024-10-23'),
+  },
+];
+
+export const avatarsMap: { [key: string]: AvatarType } = {
+  chicken: { icon: require('../assets/avatarImages/1.png'), color: '#fff58e' },
+  dolphin: { icon: require('../assets/avatarImages/2.png'), color: '#70fffc' },
+  fox: { icon: require('../assets/avatarImages/3.png'), color: '#ffb260' },
+  frog: { icon: require('../assets/avatarImages/4.png'), color: '#71fc78' },
+  squid: { icon: require('../assets/avatarImages/5.png'), color: '#ff728e' },
+  owl: { icon: require('../assets/avatarImages/6.png'), color: '#937f48' },
+  pig: { icon: require('../assets/avatarImages/7.png'), color: '#e2a69a' },
+  unicorn: { icon: require('../assets/avatarImages/8.png'), color: '#f280ea' },
+};
