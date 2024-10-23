@@ -21,6 +21,11 @@ export const selectLoggedInUserId = (state: RootState) =>
 export const selectUserHouseholds = createSelector(
   [selectLoggedInUserId, selectHouseholds, selectHouseholdMembers],
   (uid, households, householdmembers) => {
+    console.log(
+      'selectUserHouseholds selektorns input resultat: ' + uid,
+      households,
+      householdmembers,
+    );
     // Filtrera householdMembers för att hitta alla hushållsid där användaren är medlem
     const userHouseholdIDs = householdmembers
       .filter((member) => member.userId === uid)

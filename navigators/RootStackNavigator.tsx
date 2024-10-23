@@ -12,7 +12,7 @@ export type RootStackParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
   AddChore: undefined;
-  Chores: undefined;
+  UpdateChore: { id: string };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -42,6 +42,12 @@ export default function RootStackNavigator() {
       <RootStack.Screen
         name="AddChore"
         component={AddChoreScreen}
+        options={{ animation: 'flip' }}
+      />
+
+      <RootStack.Screen
+        name="UpdateChore"
+        component={UpdateChoreScreen}
         options={{ animation: 'flip' }}
       />
     </RootStack.Navigator>
