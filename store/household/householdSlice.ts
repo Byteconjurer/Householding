@@ -28,17 +28,17 @@ const householdSlice = createSlice({
     },
     setCurrentHousehold: (state, action: PayloadAction<string>) => {
       const household = state.list.find(
-        (household) => household.id === action.payload
+        (household) => household.id === action.payload,
       );
       if (household) {
         state.current = household;
       }
-    }
+    },
   },
 });
 
-
 export const householdReducer = householdSlice.reducer;
-export const { addHousehold, updateHousehold, setCurrentHousehold } = householdSlice.actions;
+export const { addHousehold, updateHousehold, setCurrentHousehold } =
+  householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;

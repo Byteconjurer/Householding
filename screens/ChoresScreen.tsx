@@ -30,8 +30,8 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
   const chores = useAppSelector(selectChoresByCurrentHousehold);
   const householdMembers = useAppSelector((state) => state.householdmember);
 
-  const avatars = householdMembers
-    .list.filter((member) => member.householdId === household?.id)
+  const avatars = householdMembers.list
+    .filter((member) => member.householdId === household?.id)
     .map((member) => member.avatar);
 
   return (

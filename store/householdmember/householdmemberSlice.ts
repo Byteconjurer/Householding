@@ -4,12 +4,13 @@ import { HouseholdMember } from '../../data/types';
 import { RootState } from '../store';
 
 type HouseholdMemberState = {
-  list: HouseholdMember[]; 
-  current?: HouseholdMember};
+  list: HouseholdMember[];
+  current?: HouseholdMember;
+};
 
-const initialState: HouseholdMemberState ={
+const initialState: HouseholdMemberState = {
   list: mockedHouseholdMembers,
-  current: mockedHouseholdMembers[0], 
+  current: mockedHouseholdMembers[0],
 };
 
 const householdmemberSlice = createSlice({
@@ -32,7 +33,7 @@ const householdmemberSlice = createSlice({
         state.list[index] = action.payload;
       }
     },
-   setCurrentHouseholdMember: (state, action: PayloadAction<string>) => {
+    setCurrentHouseholdMember: (state, action: PayloadAction<string>) => {
       const householdmember = state.list.find(
         (member) => member.userId === action.payload,
       );
@@ -42,8 +43,13 @@ const householdmemberSlice = createSlice({
     },
   },
 });
-export const selectMembersByHouseholdId = (state: RootState, householdId: string) =>
-  state.householdmember.list.filter((member) => member.householdId === householdId);
+export const selectMembersByHouseholdId = (
+  state: RootState,
+  householdId: string,
+) =>
+  state.householdmember.list.filter(
+    (member) => member.householdId === householdId,
+  );
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
   addHouseholdmember,
