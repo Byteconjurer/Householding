@@ -39,5 +39,5 @@ export type ChoreCompleted = {
   id: string;
   choreId: string;
   householdMemberId: string;
-  choreComplete: Date;
+  choreComplete: string;
 };

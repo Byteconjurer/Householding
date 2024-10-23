@@ -146,37 +146,37 @@ export const mockedChoresCompleted: ChoreCompleted[] = [
     id: '1',
     choreId: '1',
     householdMemberId: '1',
-    choreComplete: new Date('2024-10-22'),
+    choreComplete: '2024-10-22T00:00:00.000Z',
   },
   {
     id: '2',
     choreId: '2',
     householdMemberId: '1',
-    choreComplete: new Date('2024-10-22'),
+    choreComplete: '2024-10-22T00:00:00.000Z',
   },
   {
     id: '3',
     choreId: '3',
     householdMemberId: '2',
-    choreComplete: new Date('2024-10-22'),
+    choreComplete: '2024-10-22T00:00:00.000Z',
   },
   {
     id: '4',
     choreId: '4',
     householdMemberId: '2',
-    choreComplete: new Date('2024-10-22'),
+    choreComplete: '2024-10-22T00:00:00.000Z',
   },
   {
     id: '5',
     choreId: '5',
     householdMemberId: '3',
-    choreComplete: new Date('2024-10-23'),
+    choreComplete: '2024-10-23T00:00:00.000Z',
   },
   {
     id: '6',
     choreId: '6',
     householdMemberId: '3',
-    choreComplete: new Date('2024-10-23'),
+    choreComplete: '2024-10-23T00:00:00.000Z',
   },
 ];
 
