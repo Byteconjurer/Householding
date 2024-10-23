@@ -7,11 +7,13 @@ import AddHouseholdModal from '../components/AddHouseholdModal';
 import JoinHouseholdModal from '../components/JoinHouseholdModal';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectUserHouseholds } from '../store/household/householdSelectors';
-import { useAppSelector } from '../store/store';
+import { setCurrentHousehold } from '../store/household/householdSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: HomeProps) {
+  const dispatch = useAppDispatch();
   const [joinModalVisible, setJoinModalVisible] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
   async function signOutUser() {
@@ -35,11 +37,13 @@ export default function HomeScreen({ navigation }: HomeProps) {
             return (
               <Pressable
                 key={household.id}
-                onPress={() =>
+                onPress={() => {
+                  dispatch(setCurrentHousehold(household.id));
                   navigation.navigate('TopTabNavigator', {
                     screen: 'Household',
-                  })
-                }
+                    params: { householdId: household.id },
+                  });
+                }}
               >
                 <Card style={styles.card}>
                   <Card.Content style={styles.content}>

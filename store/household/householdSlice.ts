@@ -5,7 +5,7 @@ import { Household } from '../../data/types';
 type HouseholdState = { list: Household[]; current?: Household };
 const initialState: HouseholdState = {
   list: mockedHouseholds,
-  current: mockedHouseholds[1],
+  current: mockedHouseholds[0],
 };
 
 const householdSlice = createSlice({
@@ -26,10 +26,19 @@ const householdSlice = createSlice({
         state.list[index] = action.payload;
       }
     },
+    setCurrentHousehold: (state, action: PayloadAction<string>) => {
+      const household = state.list.find(
+        (household) => household.id === action.payload,
+      );
+      if (household) {
+        state.current = household;
+      }
+    },
   },
 });
 
 export const householdReducer = householdSlice.reducer;
-export const { addHousehold, updateHousehold } = householdSlice.actions;
+export const { addHousehold, updateHousehold, setCurrentHousehold } =
+  householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;
