@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 /* import { useAuth } from './hooks/useAuth'; */
@@ -9,22 +9,25 @@ import { auth } from './firebase';
 import LoginStackNavigator from './navigators/LoginStackNavigator';
 import RootStackNavigator from './navigators/RootStackNavigator';
 import { AuthProvider } from './providers/AuthContextProvider';
-import store from './store/store';
+import { selectLoggedInUserId } from './store/household/householdSelectors';
+import store, { useAppDispatch, useAppSelector } from './store/store';
+import { setUser } from './store/user/userSlice';
 
 function AppContent() {
-  const [user, setCurrentUser] = useState<User | null>(null);
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector(selectLoggedInUserId);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setCurrentUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      dispatch(setUser(user?.toJSON() as User));
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
   return (
     <NavigationContainer>
-      {user ? <RootStackNavigator /> : <LoginStackNavigator />}
+      {userId ? <RootStackNavigator /> : <LoginStackNavigator />}
     </NavigationContainer>
   );
 }
