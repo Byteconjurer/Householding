@@ -5,13 +5,13 @@ import JoinByCode from './JoinByCode';
 import NameAndAvatarSelection from './NameAndAvatarSelection';
 
 type JoinHouseholdModalProps = {
-  modalVisible: boolean;
-  setModalVisible: (visible: boolean) => void;
+  joinModalVisible: boolean;
+  setJoinModalVisible: (visible: boolean) => void;
 };
 
 export default function JoinHouseholdModal({
-  modalVisible,
-  setModalVisible,
+  joinModalVisible,
+  setJoinModalVisible,
 }: JoinHouseholdModalProps) {
   const [householdId, setHouseholdId] = useState<string | null>(null);
 
@@ -26,8 +26,8 @@ export default function JoinHouseholdModal({
   return (
     <Portal>
       <Modal
-        visible={modalVisible}
-        onDismiss={() => setModalVisible(false)}
+        visible={joinModalVisible}
+        onDismiss={() => setJoinModalVisible(false)}
         contentContainerStyle={styles.modalContainer}
       >
         {householdId === null ? (
@@ -35,7 +35,7 @@ export default function JoinHouseholdModal({
         ) : (
           <NameAndAvatarSelection
             householdId={householdId}
-            setModalVisible={setModalVisible}
+            setJoinModalVisible={setJoinModalVisible}
             resetHouseholdId={resetHouseholdId}
           />
         )}
