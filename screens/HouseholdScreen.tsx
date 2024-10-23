@@ -1,15 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
-import {
-  ImageSourcePropType,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Avatar, Card, Text } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-
 import {
   selectMembersByHouseholdId,
   setCurrentHouseholdMember,
@@ -20,16 +15,6 @@ type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
 export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
-  const avatarImages: { [key: string]: ImageSourcePropType } = {
-    '1.png': require('../assets/avatarImages/1.png'),
-    '2.png': require('../assets/avatarImages/2.png'),
-    '3.png': require('../assets/avatarImages/3.png'),
-    '4.png': require('../assets/avatarImages/4.png'),
-    '5.png': require('../assets/avatarImages/5.png'),
-    '6.png': require('../assets/avatarImages/6.png'),
-    '7.png': require('../assets/avatarImages/7.png'),
-    '8.png': require('../assets/avatarImages/8.png'),
-  };
 
   const currentUserId = useAppSelector((state) => state.user.currentUser?.uid);
 
@@ -50,7 +35,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const currentUser = householdMembers.list.find(
     (member) => member.userId === currentUserId,
   );
-  console.log('Current User:', currentUser);
 
   if (!currentUser) {
     return (
@@ -89,7 +73,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image size={60} source={avatarImages[currentUser.avatar]} />
+      <Avatar.Image size={60} source={avatarsMap[currentUser.avatar].icon} />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentUser.name || 'användarnamn'}
@@ -111,7 +95,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
             <View key={member.id} style={styles.memberItem}>
               <Avatar.Image
                 size={30}
-                source={avatarImages[member.avatar]}
+                source={avatarsMap[member.avatar].icon}
                 style={styles.avatar}
               />
               <Text style={styles.memberName}>
