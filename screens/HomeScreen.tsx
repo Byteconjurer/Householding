@@ -26,6 +26,9 @@ export default function HomeScreen({ navigation }: HomeProps) {
   };
 
   const userHouseholds = useAppSelector(selectUserHouseholds);
+  userHouseholds.forEach((element) => {
+    console.log(element);
+  });
 
   return (
     <>

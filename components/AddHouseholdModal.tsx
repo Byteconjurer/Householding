@@ -26,7 +26,6 @@ export default function AddHouseholdModal({
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [id, setId] = useState(1);
   const dispatch = useAppDispatch();
 
   // const currentUserUid = useAppSelector((state) => state.user.currentUser?.uid);
@@ -47,12 +46,6 @@ export default function AddHouseholdModal({
     generateHouseholdCode();
   }, []);
 
-  //Tillfällig genererad id, tag bort senare
-  function incrementId() {
-    setId(1);
-    return id;
-  }
-
   const handleAddHousehold = () => {
     const validationResult = householdNameSchema.safeParse(householdName);
     if (!validationResult.success) {
@@ -62,7 +55,7 @@ export default function AddHouseholdModal({
 
     dispatch(
       addHousehold({
-        id: incrementId().toString(),
+        id: Date().toString(),
         name: householdName,
         code: householdCode,
       }),
@@ -73,7 +66,6 @@ export default function AddHouseholdModal({
       setHouseholdName('');
       generateHouseholdCode();
     }, 1000);
-    console.log(householdName, householdCode, id);
   };
 
   return (
