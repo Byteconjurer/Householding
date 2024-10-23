@@ -1,26 +1,57 @@
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { updateChore } from '../store/chore/choresSlice';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
-import { useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
-// Behöver göra en kombinerad för att kunna välja vilken screen att navigera till från stäng-knappen.
-type UpdateChoreProps = NativeStackScreenProps<
-  RootStackParamList,
-  'UpdateChore'
+type UpdateChoreProps = CompositeScreenProps<
+  NativeStackScreenProps<RootStackParamList, 'UpdateChore'>,
+  MaterialTopTabScreenProps<TopTabParamList>
 >;
-
 export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
   //Hämtar alla chores för ett visst hushåll
   const chores = useAppSelector(selectChoresByCurrentHousehold);
   //Hårdkodat vilken syssla som visas.
   const chore = chores[0];
 
-  const [title, setTitel] = useState(chore.title);
-  const [description, setDescription] = useState(chore.description);
+  const [newChoreTitle, setNewChoreTitle] = useState(chore.title);
+  const [newChoreDescription, setNewChoreDescription] = useState(
+    chore.description,
+  );
+  const [newChoreInterval, setNewChoreInterval] = useState(chore.interval);
+  const [newChoreEnergyWeight, setNewChoreEnergyWeight] = useState(
+    chore.energyWeight,
+  );
+  const [showIntervalPicker, setShowIntervalPicker] = useState(false);
+  const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
+  const dispatch = useAppDispatch();
 
+  const handleUpdateChore = () => {
+    dispatch(
+      updateChore({
+        id: chore.id,
+        title: newChoreTitle,
+        description: newChoreDescription,
+        interval: newChoreInterval,
+        energyWeight: newChoreEnergyWeight,
+        householdId: chore.householdId,
+      }),
+    );
+    navigation.navigate('Chores');
+  };
   return (
     <>
       <View style={styles.root}>
@@ -29,9 +60,9 @@ export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
             <TextInput
               placeholder="Titel"
               style={styles.input}
-              value={title}
+              value={newChoreTitle}
               multiline={true}
-              onChangeText={(text) => setTitel(text)}
+              onChangeText={(text) => setNewChoreTitle(text)}
             />
           </Card.Content>
         </Card>
@@ -40,55 +71,142 @@ export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
             <TextInput
               placeholder="Beskrivning"
               style={styles.input}
-              value={description}
+              value={newChoreDescription}
               multiline={true}
-              onChangeText={(description) => setDescription(description)}
+              onChangeText={(description) =>
+                setNewChoreDescription(description)
+              }
             />
           </Card.Content>
         </Card>
 
-        <Card style={styles.white}>
-          <Card.Content style={styles.recurrentContainer}>
-            <Text style={styles.boldText}>Återkommer:</Text>
-            <Text>var {chore.interval} dag</Text>
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.white}>
-          <Card.Content style={styles.energiWeightContainer}>
-            <View>
-              <Text style={styles.boldText}>Värde:</Text>
-              <Text style={styles.grey}>Hur energikrävande är sysslan?</Text>
-            </View>
-            <View style={styles.circle}>
-              <Text>{chore.energyWeight}</Text>
-            </View>
-          </Card.Content>
-        </Card>
+        <View style={styles.intervalEnergyButtons}>
+          {showIntervalPicker ? (
+            <Card>
+              <Pressable style={styles.intervalPicker}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalPickerContent}
+                >
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      style={[
+                        styles.intervalPickerItem,
+                        newChoreInterval === num && styles.selectedPickerItem,
+                      ]}
+                      onPress={() => {
+                        setNewChoreInterval(num);
+                        setShowIntervalPicker(false);
+                      }}
+                    >
+                      <Text style={styles.intervalPickerItemText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Pressable>
+            </Card>
+          ) : (
+            <Card style={styles.intervalCard}>
+              <Pressable
+                onPress={() => setShowIntervalPicker(true)}
+                style={styles.intervalButton}
+              >
+                <View style={styles.textView}>
+                  <Text style={styles.intervalWeightText}>Återkommer: </Text>
+                  <View style={styles.inlineText}>
+                    <Text style={{ fontSize: 20 }}>var </Text>
+                    <View style={styles.circle}>
+                      <Text style={styles.circleText}>{newChoreInterval}</Text>
+                    </View>
+                    <Text style={{ fontSize: 20 }}> dag</Text>
+                  </View>
+                </View>
+              </Pressable>
+            </Card>
+          )}
+        </View>
+        <View style={styles.intervalEnergyButtons}>
+          {showEnergyWeightPicker ? (
+            <Card>
+              <Pressable style={styles.energyPicker}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalPickerContent}
+                >
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      style={[
+                        styles.energyPickerItem,
+                        newChoreEnergyWeight === num &&
+                          styles.selectedPickerItem,
+                      ]}
+                      onPress={() => {
+                        setNewChoreEnergyWeight(num);
+                        setShowEnergyWeightPicker(false);
+                      }}
+                    >
+                      <Text style={styles.energyPickerItemText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Pressable>
+            </Card>
+          ) : (
+            <Card style={styles.energyCard}>
+              <Pressable
+                onPress={() => setShowEnergyWeightPicker(true)}
+                style={styles.energyButton}
+              >
+                <View style={styles.textView}>
+                  <View>
+                    <Text style={styles.intervalWeightText}>Värde: </Text>
+                    <Text style={{ color: 'grey' }}>
+                      Hur energikrävande är sysslan?
+                    </Text>
+                  </View>
+                  <View style={styles.circle}>
+                    <Text style={styles.circleText}>
+                      {newChoreEnergyWeight}
+                    </Text>
+                  </View>
+                </View>
+              </Pressable>
+            </Card>
+          )}
+        </View>
       </View>
-
       <View style={styles.buttonContainer}>
         <Button
-          style={[styles.button, { marginRight: 0.5 }]}
           icon="plus-circle-outline"
           textColor="black"
           buttonColor="#fff"
-          labelStyle={{ fontSize: 18 }}
-          onPress={() => console.log('klickat på spara')}
+          labelStyle={styles.addButtonText}
+          style={{
+            width: '50%',
+            height: '100%',
+            borderRadius: 0,
+            justifyContent: 'center',
+          }}
+          onPress={handleUpdateChore}
         >
           Spara
         </Button>
         <Button
-          style={[styles.button, { marginLeft: 0.5 }]}
           icon="close-circle-outline"
           textColor="black"
           buttonColor="#fff"
-          labelStyle={{ fontSize: 18 }}
-          onPress={() =>
-            console.log(
-              'klickat på stäng. Här måste nog navigatorerna slås ihop så att man kan navigera till rätt',
-            )
-          }
+          labelStyle={styles.cancelButtonText}
+          style={{
+            width: '50%',
+            height: '100%',
+            borderRadius: 0,
+            justifyContent: 'center',
+          }}
+          onPress={() => navigation.navigate('Chores')}
         >
           Stäng
         </Button>
@@ -107,44 +225,115 @@ const styles = StyleSheet.create({
   white: {
     backgroundColor: '#fff',
   },
-  grey: {
-    color: '#828282',
-  },
   input: {
     padding: 2,
     fontSize: 20,
   },
-  boldText: {
-    fontSize: 20,
-    fontWeight: 700,
-  },
   descriptionContainer: {
     minHeight: 150,
   },
-  recurrentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+
+  //ny tillagd Styling
+  intervalEnergyButtons: {
+    gap: 16,
   },
-  energiWeightContainer: {
+  intervalCard: {
+    backgroundColor: 'white',
+    height: 60,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+  },
+  energyCard: {
+    backgroundColor: 'white',
+    height: 80,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+  },
+  intervalPicker: {
+    backgroundColor: '#fff',
+    height: 60,
+    borderRadius: 12,
+  },
+  intervalPickerItem: {
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+    marginHorizontal: 8,
+    alignItems: 'center',
+    borderRadius: 15,
+    width: 30,
+  },
+  intervalPickerItemText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  intervalButton: {
+    height: 60,
+    borderRadius: 12,
+  },
+  inlineText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  energyPicker: {
+    backgroundColor: '#fff',
+    height: 80,
+    borderRadius: 12,
+  },
+  horizontalPickerContent: {
+    alignItems: 'center',
+  },
+  energyPickerItem: {
+    padding: 8,
+    marginHorizontal: 8,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+  },
+  selectedPickerItem: {
+    backgroundColor: '#d0d0d0',
+  },
+  energyPickerItemText: {
+    fontSize: 18,
+  },
+  energyButton: {
+    height: 80,
+    borderRadius: 12,
+  },
+  textView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  intervalWeightText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   circle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EAEAEA',
-    height: 25,
-    width: 25,
-    borderRadius: 12.5,
+  },
+  circleText: {
+    fontSize: 18,
   },
   buttonContainer: {
     flexDirection: 'row',
-    height: 75,
+    height: 80,
   },
-  button: {
-    flex: 1,
+  addButtonText: {
+    fontSize: 20,
+    padding: 2,
+  },
+  cancelButtonText: {
+    fontSize: 20,
+    padding: 2,
     justifyContent: 'center',
-    borderRadius: 0,
   },
 });
