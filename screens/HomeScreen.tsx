@@ -38,12 +38,10 @@ export default function HomeScreen({ navigation }: HomeProps) {
               <Pressable
                 key={household.id}
                 onPress={() => {
-                dispatch(setCurrentHousehold(household.id));
+                  dispatch(setCurrentHousehold(household.id));
                   navigation.navigate('TopTabNavigator', {
-                 
                     screen: 'Household',
-                  params: { householdId: household.id },
-               ,
+                    params: { householdId: household.id },
                   });
                 }}
               >

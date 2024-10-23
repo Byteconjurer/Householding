@@ -27,7 +27,7 @@ export const selectUserHouseholds = createSelector(
       householdmembers,
     );
     // Filtrera householdMembers för att hitta alla hushållsid där användaren är medlem
-    const userHouseholdIDs = householdmembers
+    const userHouseholdIDs = householdmembers.list
       .filter((member) => member.userId === uid)
       .map((member) => member.householdId);
     console.log(userHouseholdIDs);
