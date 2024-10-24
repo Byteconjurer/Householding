@@ -33,6 +33,7 @@ export default function AddHouseholdModal({
   const [userName, setUserName] = useState('');
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [mockedHouseholdId, setMockedHouseholdId] = useState('');
+  const [mockedHouseholdMemberId, setMockedHouseholdMemberId] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
@@ -42,6 +43,10 @@ export default function AddHouseholdModal({
   const generateMockedHouseholdId = () => {
     const mockedId = Date.now().toString();
     setMockedHouseholdId(mockedId);
+  };
+  const generateMockedHouseholdMemberId = () => {
+    const mockedId = Date.now().toString();
+    setMockedHouseholdMemberId(mockedId);
   };
 
   const generateHouseholdCode = () => {
@@ -56,6 +61,7 @@ export default function AddHouseholdModal({
 
   useEffect(() => {
     //Byt ut till autoIncrementerat ID från databasen senare
+    generateMockedHouseholdMemberId();
     generateMockedHouseholdId();
     generateHouseholdCode();
   }, []);
@@ -83,7 +89,7 @@ export default function AddHouseholdModal({
       }),
       addHouseholdmember({
         //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
-        id: Date.now().toString(),
+        id: mockedHouseholdMemberId,
         userId: currentUserId,
         //Byt ut till autoIncrementerat ID från databasen senare
         householdId: mockedHouseholdId,
