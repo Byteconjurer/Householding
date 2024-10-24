@@ -7,6 +7,7 @@ import { avatarsMap } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectGroupedCompletedChoresByCurrentHousehold } from '../store/choreCompleted/choreCompletedSelectors';
+import { selectCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { useAppSelector } from '../store/store';
 
 type ChoresProps = CompositeScreenProps<
@@ -18,6 +19,8 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
   const groupedCompletedChores = useAppSelector(
     selectGroupedCompletedChoresByCurrentHousehold,
   );
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+  const isOwner = currentHouseholdMember?.owner ?? false;
 
   return (
     <View style={styles.container}>
@@ -58,6 +61,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           buttonColor="#fff"
           labelStyle={styles.buttonText}
           onPress={() => navigation.navigate('AddChore')}
+          disabled={!isOwner}
         >
           Lägg till
         </Button>
