@@ -15,6 +15,8 @@ export type HouseholdMember = {
   isRequest: boolean;
 };
 
+export type HouseholdmemberCreate = Omit<HouseholdMember, 'id' | 'userId'>;
+
 export type Household = {
   id: string;
   name: string;
