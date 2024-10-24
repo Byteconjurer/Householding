@@ -65,7 +65,7 @@ const NameAndAvatarSelection = ({
   const [saved, setSaved] = useState(false);
 
   const householdMembers = useAppSelector((state) =>
-    state.householdmember.filter(
+    state.householdmember.list.filter(
       (member) => member.householdId === householdId,
     ),
   );
