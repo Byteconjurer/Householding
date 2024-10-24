@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
+  Avatar,
   Button,
   Card,
   Modal,
@@ -9,8 +10,12 @@ import {
   TextInput,
 } from 'react-native-paper';
 import { z } from 'zod';
+import { avatarsMap } from '../data/data';
+import { selectLoggedInUserId } from '../store/household/householdSelectors';
 import { addHousehold } from '../store/household/householdSlice';
-import { useAppDispatch } from '../store/store';
+import { addHouseholdmember } from '../store/householdmember/householdmemberSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import AvatarModal from './AvatarModal';
 
 const householdNameSchema = z.string().min(1, 'Hushållet måste ha ett namn');
 
@@ -25,13 +30,20 @@ export default function AddHouseholdModal({
 }: AddHouseholdModalProps) {
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [avatarModalVisible, setAvatarModalVisible] = useState(false);
+  const [mockedHouseholdId, setMockedHouseholdId] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-
-  // const currentUserUid = useAppSelector((state) => state.user.currentUser?.uid);
-  // console.log(currentUserUid);
+  const currentUserId = useAppSelector(selectLoggedInUserId);
 
   // Tillfällig genererad cod, tag bort senare
+  const generateMockedHouseholdId = () => {
+    const mockedId = Date.now().toString();
+    setMockedHouseholdId(mockedId);
+  };
+
   const generateHouseholdCode = () => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -43,6 +55,8 @@ export default function AddHouseholdModal({
   };
 
   useEffect(() => {
+    //Byt ut till autoIncrementerat ID från databasen senare
+    generateMockedHouseholdId();
     generateHouseholdCode();
   }, []);
 
@@ -52,15 +66,34 @@ export default function AddHouseholdModal({
       setError(validationResult.error.errors[0].message);
       return;
     }
-
+    if (!currentUserId) {
+      console.error('User ID is not available');
+      return;
+    }
+    if (!selectedAvatar) {
+      console.error('Avatar is of value null');
+      return;
+    }
     dispatch(
       addHousehold({
-        id: Date.now().toString(),
+        //Byt ut till autoIncrementerat ID från databasen senare
+        id: mockedHouseholdId,
         name: householdName,
         code: householdCode,
       }),
+      addHouseholdmember({
+        //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
+        id: Date.now().toString(),
+        userId: currentUserId,
+        //Byt ut till autoIncrementerat ID från databasen senare
+        householdId: mockedHouseholdId,
+        avatar: selectedAvatar,
+        name: userName,
+        owner: true,
+        isActive: true,
+        isRequest: false,
+      }),
     );
-
     setAddHouseholdModalVisible(false);
     setTimeout(() => {
       setHouseholdName('');
@@ -76,20 +109,27 @@ export default function AddHouseholdModal({
         contentContainerStyle={styles.modalContainer}
       >
         <View style={styles.container}>
-        <TouchableOpacity
+          <TouchableOpacity
             style={styles.avatarCircle}
             onPress={() => setAvatarModalVisible(true)}
           >
             {selectedAvatar ? (
-              <AvatarModal
+              <Avatar.Image
                 size={80}
-                source={avatarImages[selectedAvatar]}
-                style={{ backgroundColor: '#EAEAEA' }}
+                source={avatarsMap[selectedAvatar].icon}
+                style={{ backgroundColor: avatarsMap[selectedAvatar].color }}
               />
             ) : (
               <Text style={styles.circleText}>Välj Avatar</Text>
             )}
-            </TouchableOpacity>
+          </TouchableOpacity>
+          <Text style={styles.inputCaption}>Namn</Text>
+          <TextInput
+            value={userName}
+            onChangeText={setUserName}
+            mode="outlined"
+            style={styles.input}
+          />
           <Text style={styles.inputCaption}>Hushållsnamn</Text>
           <TextInput
             mode="outlined"
@@ -124,6 +164,12 @@ export default function AddHouseholdModal({
             </Button>
           </View>
         </View>
+        <AvatarModal
+          avatarModalVisible={avatarModalVisible}
+          setAvatarModalVisible={setAvatarModalVisible}
+          mockedHouseholdId={mockedHouseholdId}
+          onAvatarSelect={setSelectedAvatar}
+        />
       </Modal>
     </Portal>
   );
