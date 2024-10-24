@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, Card, Modal } from 'react-native-paper';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Card, Modal } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { useAppSelector } from '../store/store';
 
@@ -39,14 +39,19 @@ export default function AvatarModal({
               key={item}
               onPress={() => handleAvatarSelect(item)}
             >
-                <Card style={[styles.avatarCard, {
-                      backgroundColor: avatarsMap[item].color,
-                    }]}>
-                  <Avatar.Image
-                    source={avatarsMap[item].icon}
-                    style={styles.avatarImage}
-                  />
-                </Card>
+              <Card
+                style={[
+                  styles.avatarCard,
+                  {
+                    backgroundColor: avatarsMap[item].color,
+                  },
+                ]}
+              >
+                <Image
+                  source={avatarsMap[item].icon}
+                  style={styles.avatarImage}
+                />
+              </Card>
             </TouchableOpacity>
           ))}
         </View>
@@ -66,7 +71,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
   },
-  
   avatarCard: {
     margin: 10,
     alignItems: 'center',

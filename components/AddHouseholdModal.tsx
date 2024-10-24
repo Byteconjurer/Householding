@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
-  Avatar,
   Button,
   Card,
   Modal,
@@ -18,6 +17,8 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import AvatarModal from './AvatarModal';
 
 const householdNameSchema = z.string().min(1, 'Hushållet måste ha ett namn');
+const userNameSchema = z.string().min(1, 'Användarnamn måste anges');
+const userAvatar = z.string().min(1, 'Användarnamn måste anges');
 
 type AddHouseholdModalProps = {
   addHouseholdModalVisible: boolean;
@@ -60,9 +61,21 @@ export default function AddHouseholdModal({
   };
 
   const handleAddHousehold = () => {
-    const validationResult = householdNameSchema.safeParse(householdName);
-    if (!validationResult.success) {
-      setError(validationResult.error.errors[0].message);
+    const householdNameValidation =
+      householdNameSchema.safeParse(householdName);
+    const userNameValidation = userNameSchema.safeParse(userName);
+    const userAvatarValidation = userNameSchema.safeParse(userName);
+
+    if (!householdNameValidation.success) {
+      setError(householdNameValidation.error.errors[0].message);
+      return;
+    }
+    if (!userNameValidation.success) {
+      setError(userNameValidation.error.errors[0].message);
+      return;
+    }
+    if (!userAvatarValidation.success) {
+      setError(userAvatarValidation.error.errors[0].message);
       return;
     }
     if (!currentUserId) {
@@ -96,8 +109,10 @@ export default function AddHouseholdModal({
     setAddHouseholdModalVisible(false);
     setTimeout(() => {
       setHouseholdName('');
+      setUserName('');
+      setSelectedAvatar(null);
       generateHouseholdCode();
-    }, 1000);
+    }, 100);
   };
 
   useEffect(() => {
@@ -119,7 +134,6 @@ export default function AddHouseholdModal({
             style={styles.avatarCircle}
             onPress={() => {
               setAvatarModalVisible(true);
-              console.log(avatarModalVisible);
             }}
           >
             {selectedAvatar ? (
@@ -129,10 +143,10 @@ export default function AddHouseholdModal({
                   { backgroundColor: avatarsMap[selectedAvatar].color },
                 ]}
               >
-                <Avatar.Image
-                  size={80}
+                <Image
                   source={avatarsMap[selectedAvatar].icon}
-                  style={{ backgroundColor: 'transparent' }}
+                  style={styles.avatarImage}
+                  onError={() => setError('Du måste välja en avatar')}
                 />
               </View>
             ) : (
@@ -142,9 +156,13 @@ export default function AddHouseholdModal({
           <Text style={styles.inputCaption}>Namn</Text>
           <TextInput
             value={userName}
-            onChangeText={setUserName}
+            onChangeText={(text) => {
+              setUserName(text);
+              setError(null);
+            }}
             mode="outlined"
             style={styles.input}
+            theme={{ roundness: 10 }}
           />
           <Text style={styles.inputCaption}>Hushållsnamn</Text>
           <TextInput
@@ -206,8 +224,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 40,
-    borderWidth: 2,
-    borderColor: '#EAEAEA',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 15,
@@ -220,6 +236,11 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatarImage: {
+    width: 80,
+    height: 80,
+    backgroundColor: 'transparent',
   },
   circleText: {
     color: 'black',
