@@ -17,38 +17,41 @@ export default function ChooseChoresScreen({ navigation }: ChooseChoreProps) {
   const chores = useAppSelector(selectChoresByCurrentHousehold);
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {chores.map((chore) => (
-          <Pressable style={styles.chorePressable} key={chore.id}>
-            <Card
-              style={styles.choreCard}
-              onPress={() =>
-                navigation.navigate('UpdateChore', { id: chore.id })
-              }
-            >
-              <View style={styles.choreContainer}>
-                <View style={styles.widthTitle}>
-                  <Text style={styles.choreTitle}>{chore.title}</Text>
+    <>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {chores.map((chore) => (
+            <Pressable style={styles.chorePressable} key={chore.id}>
+              <Card
+                style={styles.choreCard}
+                onPress={() =>
+                  navigation.navigate('UpdateChore', { id: chore.id })
+                }
+              >
+                <View style={styles.choreContainer}>
+                  <View style={styles.widthTitle}>
+                    <Text style={styles.choreTitle}>{chore.title}</Text>
+                  </View>
                 </View>
-              </View>
-            </Card>
-          </Pressable>
-        ))}
-      </ScrollView>
-      <View style={styles.buttonContainer}>
+              </Card>
+            </Pressable>
+          ))}
+        </ScrollView>
+      </View>
+      <View>
         <Button
           mode="elevated"
           icon="close-circle-outline"
           textColor="black"
           buttonColor="#fff"
           labelStyle={styles.buttonText}
+          style={styles.button}
           onPress={() => navigation.navigate('Chores')}
         >
           Stäng
         </Button>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -89,12 +92,10 @@ const styles = StyleSheet.create({
     height: 25,
     marginLeft: 3,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: 10,
-    marginBottom: 80,
+  button: {
+    height: 80,
+    justifyContent: 'center',
+    borderRadius: 0,
   },
   buttonText: {
     fontSize: 20,
