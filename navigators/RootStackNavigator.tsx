@@ -13,7 +13,7 @@ export type RootStackParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
   AddChore: undefined;
-  UpdateChore: undefined;
+  UpdateChore: { id: string };
   ChooseChore: undefined;
 };
 
@@ -21,7 +21,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
   return (
-    <RootStack.Navigator initialRouteName="ChooseChore">
+    <RootStack.Navigator initialRouteName="Home">
       <RootStack.Screen
         name="Home"
         component={HomeScreen}
@@ -50,7 +50,7 @@ export default function RootStackNavigator() {
       <RootStack.Screen
         name="UpdateChore"
         component={UpdateChoreScreen}
-        options={{ animation: 'flip' }}
+        options={{ animation: 'slide_from_right' }}
       />
       <RootStack.Screen
         name="ChooseChore"
@@ -58,6 +58,7 @@ export default function RootStackNavigator() {
         options={{
           title: 'Välj syssla att ändra',
           headerTitleAlign: 'center', // Centrerar titeln.
+          animation: 'slide_from_right',
         }}
       />
     </RootStack.Navigator>
