@@ -24,7 +24,7 @@ export default function UpdateChoreScreen({
   navigation,
   route,
 }: UpdateChoreProps) {
-  const chore = useAppSelector(selectChoreById(route.params.id));
+  const chore = useAppSelector(selectChoreById(route.params.choreId));
 
   const [newChoreTitle, setNewChoreTitle] = useState(chore!.title);
   const [newChoreDescription, setNewChoreDescription] = useState(
