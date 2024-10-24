@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
 import { RootState } from '../store';
-import { mockedHouseholdMembers } from '../../data/data';
 
 type HouseholdMemberState = {
   list: HouseholdMember[];
@@ -43,13 +43,8 @@ const householdmemberSlice = createSlice({
     },
   },
 });
-export const selectMembersByHouseholdId = (
-  state: RootState,
-  householdId: string,
-) =>
-  state.householdmember.list.filter(
-    (member) => member.householdId === householdId,
-  );
+
+// REDUCER AND ACTIONS
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
   addHouseholdmember,
@@ -59,5 +54,13 @@ export const {
 } = householdmemberSlice.actions;
 
 // SELECTORS
+export const selectMembersByHouseholdId = (
+  state: RootState,
+  householdId: string,
+) =>
+  state.householdmember.list.filter(
+    (member) => member.householdId === householdId,
+  );
+
 export const selectHouseholdMembers = (state: RootState) =>
   state.householdmember;
