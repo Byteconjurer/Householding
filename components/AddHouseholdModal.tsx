@@ -59,13 +59,6 @@ export default function AddHouseholdModal({
     setHouseholdCode(result);
   };
 
-  useEffect(() => {
-    //Byt ut till autoIncrementerat ID från databasen senare
-    generateMockedHouseholdMemberId();
-    generateMockedHouseholdId();
-    generateHouseholdCode();
-  }, []);
-
   const handleAddHousehold = () => {
     const validationResult = householdNameSchema.safeParse(householdName);
     if (!validationResult.success) {
@@ -107,6 +100,13 @@ export default function AddHouseholdModal({
     }, 1000);
   };
 
+  useEffect(() => {
+    //Byt ut till autoIncrementerat ID från databasen senare
+    generateMockedHouseholdMemberId();
+    generateMockedHouseholdId();
+    generateHouseholdCode();
+  }, []);
+
   return (
     <Portal>
       <Modal
@@ -123,11 +123,18 @@ export default function AddHouseholdModal({
             }}
           >
             {selectedAvatar ? (
-              <Avatar.Image
-                size={80}
-                source={avatarsMap[selectedAvatar].icon}
-                style={{ backgroundColor: avatarsMap[selectedAvatar].color }}
-              />
+              <View
+                style={[
+                  styles.avatarBackground,
+                  { backgroundColor: avatarsMap[selectedAvatar].color },
+                ]}
+              >
+                <Avatar.Image
+                  size={80}
+                  source={avatarsMap[selectedAvatar].icon}
+                  style={{ backgroundColor: 'transparent' }}
+                />
+              </View>
             ) : (
               <Text style={styles.circleText}>Välj Avatar</Text>
             )}
@@ -205,6 +212,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 15,
     backgroundColor: '#EAEAEA',
+  },
+  avatarBackground: {
+    flex: 1,
+    borderRadius: 40,
+    height: 100,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   circleText: {
     color: 'black',
