@@ -5,7 +5,11 @@ import { useAppSelector } from '../store/store';
 import { Household } from '../data/types';
 import { selectHouseholds } from '../store/household/householdSelectors';
 
-const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: string) => void }) => {
+const JoinByCode = ({
+  onCodeValidated,
+}: {
+  onCodeValidated: (householdId: string) => void;
+}) => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
@@ -13,7 +17,7 @@ const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: string
 
   const validateCode = () => {
     const foundHousehold = households.find(
-      (household: Household) => household.code === code
+      (household: Household) => household.code === code,
     );
     if (foundHousehold) {
       setError('');

@@ -16,10 +16,15 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
-import { selectLoggedInUserId, selectHouseholdById } from '../store/household/householdSelectors';
-import { addHouseholdmember, selectMembersByHouseholdId } from '../store/householdmember/householdmemberSlice';
+import {
+  selectLoggedInUserId,
+  selectHouseholdById,
+} from '../store/household/householdSelectors';
+import {
+  addHouseholdmember,
+  selectMembersByHouseholdId,
+} from '../store/householdmember/householdmemberSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
-
 
 const NameAndAvatarSelection = ({
   householdId,
@@ -40,7 +45,7 @@ const NameAndAvatarSelection = ({
   const currentUserId = useAppSelector(selectLoggedInUserId);
 
   const householdMembers = useAppSelector((state) =>
-    selectMembersByHouseholdId(state, householdId)
+    selectMembersByHouseholdId(state, householdId),
   );
 
   const { colors } = useTheme();
@@ -52,7 +57,7 @@ const NameAndAvatarSelection = ({
   };
 
   const household = useAppSelector((state) =>
-    selectHouseholdById(state, householdId)
+    selectHouseholdById(state, householdId),
   );
   useEffect(() => {
     //Byt ut till autoIncrementerat ID från databasen senare

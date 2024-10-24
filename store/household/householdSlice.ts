@@ -43,5 +43,3 @@ export const { addHousehold, updateHousehold, setCurrentHousehold } =
   householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;
-
-
