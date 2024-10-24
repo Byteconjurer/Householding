@@ -1,6 +1,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddChoreScreen from '../screens/AddChoreScreen';
+import ChooseChoreScreen from '../screens/ChooseChoreScreen';
 import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UpdateChoreScreen from '../screens/UpdateChoreScreen';
@@ -13,6 +14,7 @@ export type RootStackParamList = {
   ChoreDetails: { id: string };
   AddChore: undefined;
   UpdateChore: undefined;
+  ChooseChore: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -48,6 +50,11 @@ export default function RootStackNavigator() {
       <RootStack.Screen
         name="UpdateChore"
         component={UpdateChoreScreen}
+        options={{ animation: 'flip' }}
+      />
+      <RootStack.Screen
+        name="ChooseChore"
+        component={ChooseChoreScreen}
         options={{ animation: 'flip' }}
       />
     </RootStack.Navigator>
