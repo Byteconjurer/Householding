@@ -15,13 +15,13 @@ import { useAppDispatch } from '../store/store';
 const householdNameSchema = z.string().min(1, 'Hushållet måste ha ett namn');
 
 type AddHouseholdModalProps = {
-  addModalVisible: boolean;
-  setAddModalVisible: (visible: boolean) => void;
+  addHouseholdModalVisible: boolean;
+  setAddHouseholdModalVisible: (visible: boolean) => void;
 };
 
 export default function AddHouseholdModal({
-  addModalVisible,
-  setAddModalVisible,
+  addHouseholdModalVisible: addHouseholdModalVisible,
+  setAddHouseholdModalVisible: setAddHouseholdModalVisible,
 }: AddHouseholdModalProps) {
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
@@ -61,7 +61,7 @@ export default function AddHouseholdModal({
       }),
     );
 
-    setAddModalVisible(false);
+    setAddHouseholdModalVisible(false);
     setTimeout(() => {
       setHouseholdName('');
       generateHouseholdCode();
@@ -71,11 +71,25 @@ export default function AddHouseholdModal({
   return (
     <Portal>
       <Modal
-        visible={addModalVisible}
-        onDismiss={() => setAddModalVisible(false)}
+        visible={addHouseholdModalVisible}
+        onDismiss={() => setAddHouseholdModalVisible(false)}
         contentContainerStyle={styles.modalContainer}
       >
         <View style={styles.container}>
+        <TouchableOpacity
+            style={styles.avatarCircle}
+            onPress={() => setAvatarModalVisible(true)}
+          >
+            {selectedAvatar ? (
+              <AvatarModal
+                size={80}
+                source={avatarImages[selectedAvatar]}
+                style={{ backgroundColor: '#EAEAEA' }}
+              />
+            ) : (
+              <Text style={styles.circleText}>Välj Avatar</Text>
+            )}
+            </TouchableOpacity>
           <Text style={styles.inputCaption}>Hushållsnamn</Text>
           <TextInput
             mode="outlined"
@@ -125,6 +139,21 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#fff',
+  },
+  avatarCircle: {
+    width: 100,
+    height: 100,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: '#EAEAEA',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+    backgroundColor: '#EAEAEA',
+  },
+  circleText: {
+    color: 'black',
+    fontWeight: 'bold',
   },
   inputCaption: {
     fontSize: 20,
