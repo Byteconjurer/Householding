@@ -45,6 +45,7 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
           choreId: chore.id,
           householdMemberId: newChoreDescription,
           choreComplete: newChoreInterval,
+          //Påbörjat
         }),
       );
     }
