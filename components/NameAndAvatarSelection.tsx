@@ -15,8 +15,10 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import { useAppSelector } from '../store/store';
 import { avatarsMap } from '../data/data';
+import { selectLoggedInUserId } from '../store/household/householdSelectors';
+import { addHouseholdmember } from '../store/householdmember/householdmemberSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 const NameAndAvatarSelection = ({
   householdId,
@@ -31,6 +33,12 @@ const NameAndAvatarSelection = ({
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const currentUserId = useAppSelector(selectLoggedInUserId);
+
+  //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
+  const mockedId = '1';
 
   const householdMembers = useAppSelector((state) =>
     state.householdmember.list.filter(
@@ -51,10 +59,34 @@ const NameAndAvatarSelection = ({
   );
 
   const handleSubmit = () => {
+    if (!currentUserId) {
+      console.error('User ID is not available');
+      return;
+    }
     if (name && selectedAvatar) {
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
+      dispatch(
+        addHouseholdmember({
+          //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
+          id: Date.now().toString(),
+          userId: currentUserId,
+          householdId: householdId,
+          avatar: selectedAvatar,
+          name: name,
+          owner: false,
+          isActive: true,
+          isRequest: false,
+        }),
+        console.log(
+          'READ THIS THIS THIS THIS:::: ==== ',
+          mockedId,
+          currentUserId,
+          householdId,
+          selectedAvatar,
+          name,
+        ),
+      );
       setSaved(true);
-
       setTimeout(() => {
         setSaved(false);
         setJoinModalVisible(false);
