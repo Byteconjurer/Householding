@@ -1,13 +1,5 @@
-import { useState } from 'react';
-import {
-  FlatList,
-  Image,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Card } from 'react-native-paper';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Card, Modal } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { useAppSelector } from '../store/store';
 
@@ -21,9 +13,9 @@ type AvatarModalProps = {
 export default function AvatarModal({
   mockedHouseholdId: mockedHouseholdId,
   onAvatarSelect,
+  avatarModalVisible,
+  setAvatarModalVisible,
 }: AvatarModalProps) {
-  const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-
   const householdMembers = useAppSelector((state) =>
     state.householdmember.list.filter(
       (member) => member.householdId === mockedHouseholdId,
@@ -37,51 +29,56 @@ export default function AvatarModal({
   };
   return (
     <Modal
-      animationType="slide"
       onDismiss={() => setAvatarModalVisible(false)}
-      transparent={true}
       visible={avatarModalVisible}
+      contentContainerStyle={styles.modalContainer}
     >
       <View style={styles.chooseAvatarContainer}>
-        <FlatList
-          data={Object.keys(avatarsMap)}
-          keyExtractor={(item) => item}
-          numColumns={4}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity onPress={() => handleAvatarSelect(item)}>
-                <View style={styles.avatarWrapper}>
-                  <Card style={[styles.avatarCard]}>
-                    <Card.Content>
-                      <Image
-                        source={avatarsMap[item].icon}
-                        style={styles.avatarImage}
-                        resizeMode="contain"
-                      />
-                    </Card.Content>
-                  </Card>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
+        <View style={styles.avatarGrid}>
+          {Object.keys(avatarsMap).map((item) => (
+            <TouchableOpacity
+              key={item}
+              onPress={() => handleAvatarSelect(item)}
+            >
+              <View style={styles.avatarWrapper}>
+                <Card style={styles.avatarCard}>
+                  <Card.Content>
+                    <Image
+                      source={avatarsMap[item].icon}
+                      style={styles.avatarImage}
+                      resizeMode="contain"
+                    />
+                  </Card.Content>
+                </Card>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    margin: 20,
+    borderRadius: 10,
+  },
+  chooseAvatarContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   avatarWrapper: {
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  chooseAvatarContainer: {
-    paddingTop: 300,
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    paddingBottom: 20,
   },
   avatarCard: {
     margin: 15,
@@ -93,21 +90,5 @@ const styles = StyleSheet.create({
     height: 60,
     margin: 5,
     backgroundColor: 'transparent',
-  },
-  takenText: {
-    position: 'absolute',
-    color: 'red',
-    fontSize: 12,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    top: '80%',
-    left: '30%',
-    transform: [{ translateX: -15 }, { translateY: -6 }],
-  },
-  closeButton: {
-    marginTop: 20,
-    paddingVertical: 5,
-    alignSelf: 'center',
-    backgroundColor: 'white',
   },
 });

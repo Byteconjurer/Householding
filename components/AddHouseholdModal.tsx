@@ -117,7 +117,10 @@ export default function AddHouseholdModal({
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.avatarCircle}
-            onPress={() => setAvatarModalVisible(true)}
+            onPress={() => {
+              setAvatarModalVisible(true);
+              console.log(avatarModalVisible);
+            }}
           >
             {selectedAvatar ? (
               <Avatar.Image
@@ -170,13 +173,13 @@ export default function AddHouseholdModal({
             </Button>
           </View>
         </View>
-        <AvatarModal
-          avatarModalVisible={avatarModalVisible}
-          setAvatarModalVisible={setAvatarModalVisible}
-          mockedHouseholdId={mockedHouseholdId}
-          onAvatarSelect={setSelectedAvatar}
-        />
       </Modal>
+      <AvatarModal
+        avatarModalVisible={avatarModalVisible}
+        setAvatarModalVisible={setAvatarModalVisible}
+        mockedHouseholdId={mockedHouseholdId}
+        onAvatarSelect={setSelectedAvatar}
+      />
     </Portal>
   );
 }
