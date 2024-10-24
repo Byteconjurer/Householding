@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FlatList,
   Image,
@@ -16,10 +16,9 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
-import { selectLoggedInUserId } from '../store/household/householdSelectors';
+import { selectLoggedInUserId, selectHouseholdById } from '../store/household/householdSelectors';
 import { addHouseholdmember, selectMembersByHouseholdId } from '../store/householdmember/householdmemberSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { selectHouseholdById } from '../store/household/householdSlice';
 
 
 const NameAndAvatarSelection = ({
@@ -35,12 +34,10 @@ const NameAndAvatarSelection = ({
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [mockedHouseholdMemberId, setMockedHouseholdMemberId] = useState('');
   const dispatch = useAppDispatch();
 
   const currentUserId = useAppSelector(selectLoggedInUserId);
-
-  //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
-  const mockedId = '1';
 
   const householdMembers = useAppSelector((state) =>
     selectMembersByHouseholdId(state, householdId)
@@ -57,6 +54,15 @@ const NameAndAvatarSelection = ({
   const household = useAppSelector((state) =>
     selectHouseholdById(state, householdId)
   );
+  useEffect(() => {
+    //Byt ut till autoIncrementerat ID från databasen senare
+    generateMockedHouseholdMemberId();
+  }, []);
+
+  const generateMockedHouseholdMemberId = () => {
+    const mockedId = Date.now().toString();
+    setMockedHouseholdMemberId(mockedId);
+  };
 
   const handleSubmit = () => {
     if (!currentUserId) {
@@ -68,7 +74,7 @@ const NameAndAvatarSelection = ({
       dispatch(
         addHouseholdmember({
           //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
-          id: Date.now().toString(),
+          id: mockedHouseholdMemberId,
           userId: currentUserId,
           householdId: householdId,
           avatar: selectedAvatar,
@@ -77,14 +83,6 @@ const NameAndAvatarSelection = ({
           isActive: true,
           isRequest: false,
         }),
-        console.log(
-          'READ THIS THIS THIS THIS:::: ==== ',
-          mockedId,
-          currentUserId,
-          householdId,
-          selectedAvatar,
-          name,
-        ),
       );
       setSaved(true);
       setTimeout(() => {

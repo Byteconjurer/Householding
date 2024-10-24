@@ -18,6 +18,9 @@ export const selectHouseholds = (state: RootState) => state.household.list;
 export const selectLoggedInUserId = (state: RootState) =>
   state.user.currentUser?.uid;
 
+export const selectHouseholdById = (state: RootState, householdId: string) =>
+  state.household.list.find((household) => household.id === householdId);
+
 export const selectUserHouseholds = createSelector(
   [selectLoggedInUserId, selectHouseholds, selectHouseholdMembers],
   (uid, households, householdmembers) => {
