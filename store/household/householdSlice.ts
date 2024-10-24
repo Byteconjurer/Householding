@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedHouseholds } from '../../data/data';
 import { Household } from '../../data/types';
+import { RootState } from '../store';
 
 type HouseholdState = { list: Household[]; current?: Household };
 const initialState: HouseholdState = {
@@ -42,3 +43,6 @@ export const { addHousehold, updateHousehold, setCurrentHousehold } =
   householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;
+export const selectHouseholdById = (state: RootState, householdId: string) =>
+  state.household.list.find((household) => household.id === householdId);
+export const selectHouseholds = (state: RootState) => state.household.list;

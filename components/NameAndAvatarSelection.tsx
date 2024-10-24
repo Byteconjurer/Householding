@@ -17,8 +17,10 @@ import {
 } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { selectLoggedInUserId } from '../store/household/householdSelectors';
-import { addHouseholdmember } from '../store/householdmember/householdmemberSlice';
+import { addHouseholdmember, selectMembersByHouseholdId } from '../store/householdmember/householdmemberSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
+import { selectHouseholdById } from '../store/household/householdSlice';
+
 
 const NameAndAvatarSelection = ({
   householdId,
@@ -41,9 +43,7 @@ const NameAndAvatarSelection = ({
   const mockedId = '1';
 
   const householdMembers = useAppSelector((state) =>
-    state.householdmember.list.filter(
-      (member) => member.householdId === householdId,
-    ),
+    selectMembersByHouseholdId(state, householdId)
   );
 
   const { colors } = useTheme();
@@ -55,7 +55,7 @@ const NameAndAvatarSelection = ({
   };
 
   const household = useAppSelector((state) =>
-    state.household.list.find((household) => household.id === householdId),
+    selectHouseholdById(state, householdId)
   );
 
   const handleSubmit = () => {
@@ -247,11 +247,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EAEAEA',
     borderRadius: 10,
     elevation: 5,
-  },
-  modalContainer: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   chooseAvatarContainer: {
     paddingTop: 300,

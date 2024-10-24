@@ -3,19 +3,17 @@ import { View, StyleSheet, Text } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { useAppSelector } from '../store/store';
 import { Household } from '../data/types';
+import { selectHouseholds } from '../store/household/householdSelectors';
 
-const JoinByCode = ({
-  onCodeValidated,
-}: {
-  onCodeValidated: (householdId: string) => void;
-}) => {
+const JoinByCode = ({ onCodeValidated }: { onCodeValidated: (householdId: string) => void }) => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
-  const households = useAppSelector((state) => state.household.list);
+
+  const households = useAppSelector(selectHouseholds);
 
   const validateCode = () => {
     const foundHousehold = households.find(
-      (household: Household) => household.code === code,
+      (household: Household) => household.code === code
     );
     if (foundHousehold) {
       setError('');
