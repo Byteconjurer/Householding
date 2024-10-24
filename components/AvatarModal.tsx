@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, FlatList, Modal, TouchableOpacity, View } from 'react-native';
 import { Card } from 'react-native-paper';
+import { avatarsMap } from '../data/data';
 
 export default function AvatarModal() {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
@@ -14,10 +15,10 @@ export default function AvatarModal() {
       >
         <View style={styles.chooseAvatarContainer}>
           <FlatList
-            data={avatars}
+            data={Object.keys(avatarsMap)}
             keyExtractor={(item) => item}
             numColumns={4}
-            renderItem={({ item }: { item: AvatarKeys }) => {
+            renderItem={({ item }) => {
               const isTaken = householdMembers.some(
                 (member) => member.avatar === item,
               );
@@ -34,7 +35,7 @@ export default function AvatarModal() {
                       ]}
                     >
                       <Image
-                        source={avatarImages[item]}
+                        source={avatarsMap[item].icon}
                         style={styles.avatarImage}
                         resizeMode="contain"
                       />
