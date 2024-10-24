@@ -21,7 +21,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
   return (
-    <RootStack.Navigator initialRouteName="Home">
+    <RootStack.Navigator initialRouteName="ChooseChore">
       <RootStack.Screen
         name="Home"
         component={HomeScreen}
@@ -55,7 +55,10 @@ export default function RootStackNavigator() {
       <RootStack.Screen
         name="ChooseChore"
         component={ChooseChoreScreen}
-        options={{ animation: 'flip' }}
+        options={{
+          title: 'Välj syssla att ändra',
+          headerTitleAlign: 'center', // Centrerar titeln.
+        }}
       />
     </RootStack.Navigator>
   );
