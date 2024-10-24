@@ -36,8 +36,20 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
 
   const handlePress = () => {
     setIsChoreDone(!isChoreDone);
+    if (isChoreDone) {
+      //dispatch action to add chore to completed chores
+      dispatch(
+        addChore({
+          //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
+          id: incrementId().toString(),
+          choreId: chore.id,
+          householdMemberId: newChoreDescription,
+          choreComplete: newChoreInterval,
+        }),
+      );
+    }
   };
-
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
