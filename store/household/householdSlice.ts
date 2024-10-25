@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedHouseholds } from '../../data/data';
 import { Household } from '../../data/types';
+import { RootState } from '../store';
 
 type HouseholdState = { list: Household[]; current?: Household };
 const initialState: HouseholdState = {
