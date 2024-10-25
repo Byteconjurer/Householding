@@ -130,29 +130,31 @@ export default function AddHouseholdModal({
         contentContainerStyle={styles.modalContainer}
       >
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.avatarCircle}
-            onPress={() => {
-              setAvatarModalVisible(true);
-            }}
-          >
-            {selectedAvatar ? (
-              <View
-                style={[
-                  styles.avatarBackground,
-                  { backgroundColor: avatarsMap[selectedAvatar].color },
-                ]}
-              >
-                <Image
-                  source={avatarsMap[selectedAvatar].icon}
-                  style={styles.avatarImage}
-                  onError={() => setError('Du måste välja en avatar')}
-                />
-              </View>
-            ) : (
-              <Text style={styles.circleText}>Välj Avatar</Text>
-            )}
-          </TouchableOpacity>
+          <View style={{ alignItems: 'center' }}>
+            <TouchableOpacity
+              style={styles.avatarCircle}
+              onPress={() => {
+                setAvatarModalVisible(true);
+              }}
+            >
+              {selectedAvatar ? (
+                <View
+                  style={[
+                    styles.avatarBackground,
+                    { backgroundColor: avatarsMap[selectedAvatar].color },
+                  ]}
+                >
+                  <Image
+                    source={avatarsMap[selectedAvatar].icon}
+                    style={styles.avatarImage}
+                    onError={() => setError('Du måste välja en avatar')}
+                  />
+                </View>
+              ) : (
+                <Text style={styles.circleText}>Välj Avatar</Text>
+              )}
+            </TouchableOpacity>
+          </View>
           <Text style={styles.inputCaption}>Namn</Text>
           <TextInput
             value={userName}
@@ -243,12 +245,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   circleText: {
-    color: 'black',
     fontWeight: 'bold',
   },
   inputCaption: {
     fontSize: 20,
-    color: 'black',
     paddingBottom: 5,
     fontWeight: 'bold',
   },
@@ -266,7 +266,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     padding: 2,
-    color: 'black',
   },
   errorText: {
     color: 'red',
@@ -274,7 +273,6 @@ const styles = StyleSheet.create({
   },
   codeText: {
     fontSize: 24,
-    color: 'black',
     paddingBottom: 5,
   },
   card: {
