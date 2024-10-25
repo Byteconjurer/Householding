@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
   Image,
@@ -17,8 +17,8 @@ import {
 } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import {
-  selectLoggedInUserId,
   selectHouseholdById,
+  selectLoggedInUserId,
 } from '../store/household/householdSelectors';
 import {
   addHouseholdmember,
@@ -39,7 +39,6 @@ const NameAndAvatarSelection = ({
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [mockedHouseholdMemberId, setMockedHouseholdMemberId] = useState('');
   const dispatch = useAppDispatch();
 
   const currentUserId = useAppSelector(selectLoggedInUserId);
@@ -59,15 +58,6 @@ const NameAndAvatarSelection = ({
   const household = useAppSelector((state) =>
     selectHouseholdById(state, householdId),
   );
-  useEffect(() => {
-    //Byt ut till autoIncrementerat ID från databasen senare
-    generateMockedHouseholdMemberId();
-  }, []);
-
-  const generateMockedHouseholdMemberId = () => {
-    const mockedId = Date.now().toString();
-    setMockedHouseholdMemberId(mockedId);
-  };
 
   const handleSubmit = () => {
     if (!currentUserId) {
@@ -78,8 +68,7 @@ const NameAndAvatarSelection = ({
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
       dispatch(
         addHouseholdmember({
-          //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
-          id: mockedHouseholdMemberId,
+          id: Date.now().toString(),
           userId: currentUserId,
           householdId: householdId,
           avatar: selectedAvatar,
