@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
 import { RootState } from '../store';
-import { mockedHouseholdMembers } from '../../data/data';
 
 type HouseholdMemberState = {
   list: HouseholdMember[];
@@ -60,4 +60,4 @@ export const {
 
 // SELECTORS
 export const selectHouseholdMembers = (state: RootState) =>
-  state.householdmember;
+  state.householdmember.list;
