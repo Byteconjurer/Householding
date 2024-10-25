@@ -25,7 +25,7 @@ export default function ChooseChoresScreen({ navigation }: ChooseChoreProps) {
               <Card
                 style={styles.choreCard}
                 onPress={() =>
-                  navigation.navigate('UpdateChore', { id: chore.id })
+                  navigation.navigate('UpdateChore', { choreId: chore.id })
                 }
               >
                 <View style={styles.choreContainer}>
