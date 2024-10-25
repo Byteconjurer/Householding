@@ -13,7 +13,7 @@ export type RootStackParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
   AddChore: undefined;
-  UpdateChore: { id: string };
+  UpdateChore: { choreId: string };
   ChooseChore: undefined;
 };
 
