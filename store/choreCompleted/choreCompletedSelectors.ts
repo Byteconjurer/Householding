@@ -15,7 +15,7 @@ export const selectCompletedChoresByCurrentHousehold = createSelector(
     selectChores,
   ],
   (completedChores, householdMembers, household, chores) => {
-    // Get list of household members in the current household
+    // Filter household members by the current household
     const householdMembersInCurrentHousehold = householdMembers.filter(
       (member) => member.householdId === household?.id,
     );
@@ -26,14 +26,17 @@ export const selectCompletedChoresByCurrentHousehold = createSelector(
     );
 
     // Filter completed chores by household members in the current household
-    return completedChores
-      .filter((chore) => householdMemberIds.includes(chore.householdMemberId))
-      .map((completedChore) => ({
-        ...completedChore,
-        title:
-          chores.find((chore) => chore.id === completedChore.choreId)?.title ||
-          'Untitled',
-      }));
+    const filteredCompletedChores = completedChores.filter((chore) =>
+      householdMemberIds.includes(chore.householdMemberId),
+    );
+
+    // Map the filtered completed chores to include the chore title
+    return filteredCompletedChores.map((completedChore) => ({
+      ...completedChore,
+      title:
+        chores.find((chore) => chore.id === completedChore.choreId)?.title ||
+        'Untitled',
+    }));
   },
 );
 
