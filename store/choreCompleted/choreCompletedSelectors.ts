@@ -16,7 +16,7 @@ export const selectCompletedChoresByCurrentHousehold = createSelector(
   ],
   (completedChores, householdMembers, household, chores) => {
     // Get list of household members in the current household
-    const householdMembersInCurrentHousehold = householdMembers.list.filter(
+    const householdMembersInCurrentHousehold = householdMembers.filter(
       (member) => member.householdId === household?.id,
     );
 
@@ -70,7 +70,7 @@ export const selectGroupedCompletedChoresByCurrentHousehold = createSelector(
           groupedChores[choreId].householdMemberIds.push(householdMemberId);
         }
 
-        const householdMember = householdMembers.list.find(
+        const householdMember = householdMembers.find(
           (member) => member.id === householdMemberId,
         );
 
