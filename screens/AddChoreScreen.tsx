@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { generateNextId } from '../store/chore/choresSelectors';
 import { addChore } from '../store/chore/choresSlice';
-import { useAppDispatch } from '../store/store';
+import { selectCurrentHousehold } from '../store/household/householdSelectors';
+import store, { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<TopTabParamList>;
 
@@ -16,30 +18,35 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   const [showIntervalPicker, setShowIntervalPicker] = useState(false);
   const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
   const dispatch = useAppDispatch();
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const nextChoreId = useAppSelector(generateNextId);
 
   const handleAddChore = () => {
-    dispatch(
-      addChore({
-        //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
-        id: incrementId().toString(),
-        title: newChoreTitle,
-        description: newChoreDescription,
-        interval: newChoreInterval,
-        energyWeight: newChoreEnergyWeight,
-        householdId: '2',
-        //Här ska man ändra '2' som nu är hårdkodat till att vara det aktuella hushållet när databasen är uppsatt.
-      }),
-    );
+    if (!currentHousehold) {
+      console.error('No current household set');
+      return;
+    }
+
+    // Remove the log when done with testing
+    console.log('Adding chore with ID:', nextChoreId);
+
+    const newChore = {
+      id: nextChoreId,
+      title: newChoreTitle,
+      description: newChoreDescription,
+      interval: newChoreInterval,
+      energyWeight: newChoreEnergyWeight,
+      householdId: currentHousehold.id,
+    };
+
+    dispatch(addChore(newChore));
+
+    // Remove the logs when done with testing
+    console.log('New chore added:', newChore);
+    console.log('Updated state:', store.getState().chore);
+
     navigation.navigate('Chores');
   };
-
-  const [id, setId] = useState(3);
-
-  function incrementId() {
-    setId(id + 1);
-    return id;
-  }
-  //mockad id inkrementering. Kan tas bort när vi uppdaterar senare
 
   return (
     <View style={styles.root}>

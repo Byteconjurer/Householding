@@ -61,3 +61,6 @@ export const {
 // SELECTORS
 export const selectHouseholdMembers = (state: RootState) =>
   state.householdmember.list;
+
+export const selectCurrentHouseholdMember = (state: RootState) =>
+  state.householdmember.current;
