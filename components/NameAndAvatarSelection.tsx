@@ -39,7 +39,9 @@ const NameAndAvatarSelection = ({
 
   const currentUserId = useAppSelector(selectCurrentUser)?.uid;
 
-  const householdMembers = useAppSelector( selectMembersByHouseholdId(householdId));
+  const householdMembers = useAppSelector(
+    selectMembersByHouseholdId(householdId),
+  );
 
   const { colors } = useTheme();
 
@@ -49,9 +51,7 @@ const NameAndAvatarSelection = ({
     setAvatarModalVisible(false);
   };
 
-  const household = useAppSelector((state) =>
-    selectHouseholdById(householdId),
-  );
+  const household = useAppSelector((state) => selectHouseholdById(householdId));
 
   const handleSubmit = () => {
     if (!currentUserId) {

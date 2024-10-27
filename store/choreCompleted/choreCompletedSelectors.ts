@@ -37,10 +37,7 @@ export const selectCompletedChoresByCurrentHousehold = createSelector(
 );
 
 export const selectGroupedCompletedChoresByCurrentHousehold = createSelector(
-  [
-   selectCompletedChoresByCurrentHousehold,
-   selectHouseholdMembersList,
-],
+  [selectCompletedChoresByCurrentHousehold, selectHouseholdMembersList],
   (completedChores, householdMembers) => {
     const groupedChores: Record<
       string,

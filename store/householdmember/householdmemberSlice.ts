@@ -50,4 +50,3 @@ export const {
   updateHouseholdmember,
   setCurrentHouseholdMember,
 } = householdmemberSlice.actions;
-

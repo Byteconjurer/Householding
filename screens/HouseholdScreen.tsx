@@ -6,12 +6,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
-import { setCurrentHouseholdMember,
-} from '../store/householdmember/householdmemberSlice';
+import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { selectMembersinCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
 import { selectHouseholdMembersList } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { selectCurrentHousehold, selectCurrentUser } from '../store/sharedSelectors';
+import {
+  selectCurrentHousehold,
+  selectCurrentUser,
+} from '../store/sharedSelectors';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
@@ -20,7 +22,9 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
   const householdMembers = useAppSelector(selectHouseholdMembersList);
-  const membersInCurrentHousehold = useAppSelector(selectMembersinCurrentHousehold);
+  const membersInCurrentHousehold = useAppSelector(
+    selectMembersinCurrentHousehold,
+  );
 
   useEffect(() => {
     if (currentUser?.uid) {
@@ -95,7 +99,9 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const HouseholdCode = () => (
     <Card style={styles.codeCard}>
       <Card.Content>
-        <Text variant="titleLarge">{currentHousehold!.code || 'Ingen kod'}</Text>
+        <Text variant="titleLarge">
+          {currentHousehold!.code || 'Ingen kod'}
+        </Text>
       </Card.Content>
     </Card>
   );

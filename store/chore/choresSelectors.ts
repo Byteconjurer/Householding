@@ -19,8 +19,7 @@ export const generateNextId = createSelector(
   },
 );
 
-export const selectChoreById = (choreId: string) => createSelector(
-  [selectChores], 
-  (chores) =>
-    chores.find((chore) => chore.id === choreId)
+export const selectChoreById = (choreId: string) =>
+  createSelector([selectChores], (chores) =>
+    chores.find((chore) => chore.id === choreId),
   );

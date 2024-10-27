@@ -1,19 +1,26 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectHouseholdsList, selectHouseholdMembersList } from '../sharedSelectors';
-import { 
-  selectChores, 
+import {
+  selectHouseholdsList,
+  selectHouseholdMembersList,
+} from '../sharedSelectors';
+import {
+  selectChores,
   selectCurrentHousehold,
   selectCurrentUser,
- } from '../sharedSelectors';
+} from '../sharedSelectors';
 
-export const selectHouseholdById = (householdId: string) => createSelector(
-  [selectHouseholdsList],
-  (householdList) => householdList.find((household) => household.id === householdId) || undefined
-);
+export const selectHouseholdById = (householdId: string) =>
+  createSelector(
+    [selectHouseholdsList],
+    (householdList) =>
+      householdList.find((household) => household.id === householdId) ||
+      undefined,
+  );
 
 export const selectChoresByCurrentHousehold = createSelector(
   [selectChores, selectCurrentHousehold],
-  (chores, household) => chores.filter((chore) => chore.householdId === household?.id)
+  (chores, household) =>
+    chores.filter((chore) => chore.householdId === household?.id),
 );
 
 export const selectUserHouseholds = createSelector(
@@ -24,15 +31,15 @@ export const selectUserHouseholds = createSelector(
       .map((member) => member.householdId);
 
     return households.filter((household) =>
-      userHouseholdIDs.includes(household.id)
+      userHouseholdIDs.includes(household.id),
     );
-  }
+  },
 );
 
 export const selectCurrentHouseholdAvatars = createSelector(
-  [selectHouseholdMembersList, selectCurrentHousehold], 
-  (householdMembers, household) => householdMembers
-    .filter((member) => member.householdId === household?.id)
-    .map((member) => member.avatar)
+  [selectHouseholdMembersList, selectCurrentHousehold],
+  (householdMembers, household) =>
+    householdMembers
+      .filter((member) => member.householdId === household?.id)
+      .map((member) => member.avatar),
 );
-
