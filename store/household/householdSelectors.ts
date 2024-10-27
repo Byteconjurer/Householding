@@ -1,45 +1,38 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectHouseholdMembers } from '../householdmember/householdmemberSlice';
-import { RootState } from '../store';
+import { selectHouseholdsList, selectHouseholdMembersList } from '../sharedSelectors';
+import { 
+  selectChores, 
+  selectCurrentHousehold,
+  selectCurrentUser,
+ } from '../sharedSelectors';
 
-export const selectChores = (state: RootState) => state.chore;
-export const selectCurrentHousehold = (state: RootState) =>
-  state.household.current;
+export const selectHouseholdById = (householdId: string) => createSelector(
+  [selectHouseholdsList],
+  (householdList) => householdList.find((household) => household.id === householdId) || undefined
+);
 
 export const selectChoresByCurrentHousehold = createSelector(
   [selectChores, selectCurrentHousehold],
-  (chores, household) => {
-    return chores.filter((chore) => chore.householdId === household?.id);
-  },
+  (chores, household) => chores.filter((chore) => chore.householdId === household?.id)
 );
-
-export const selectHouseholds = (state: RootState) => state.household.list;
-
-export const selectLoggedInUserId = (state: RootState) =>
-  state.user.currentUser?.uid;
-
-export const selectHouseholdById = (state: RootState, householdId: string) =>
-  state.household.list.find((household) => household.id === householdId);
 
 export const selectUserHouseholds = createSelector(
-  [selectLoggedInUserId, selectHouseholds, selectHouseholdMembers],
-  (uid, households, householdmembers) => {
-    console.log(
-      'selectUserHouseholds selektorns input resultat: ' + uid,
-      households,
-      householdmembers,
-    );
-    // Filtrera householdMembers för att hitta alla hushållsid där användaren är medlem
+  [selectCurrentUser, selectHouseholdsList, selectHouseholdMembersList],
+  (user, households, householdmembers) => {
     const userHouseholdIDs = householdmembers
-      .filter((member) => member.userId === uid)
+      .filter((member) => member.userId === user?.uid)
       .map((member) => member.householdId);
-    console.log(userHouseholdIDs);
 
-    // Hämta alla hushåll baserat på hushålls-ID:n
-    const userHouseholds = households.filter((household) =>
-      userHouseholdIDs.includes(household.id),
+    return households.filter((household) =>
+      userHouseholdIDs.includes(household.id)
     );
-
-    return userHouseholds;
-  },
+  }
 );
+
+export const selectCurrentHouseholdAvatars = createSelector(
+  [selectHouseholdMembersList, selectCurrentHousehold], 
+  (householdMembers, household) => householdMembers
+    .filter((member) => member.householdId === household?.id)
+    .map((member) => member.avatar)
+);
+

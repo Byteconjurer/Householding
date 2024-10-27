@@ -1,12 +1,11 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { mockedChores } from '../../data/data';
-import { RootState } from '../store';
+import { selectChores } from '../sharedSelectors';
 
 const mockedChoresIds = mockedChores.map((chore) => parseInt(chore.id, 10));
 export const selectMockedChoresIds = () => mockedChoresIds;
 
-const reduxChores = (state: RootState) => state.chore;
-export const selectReduxChoresIds = createSelector([reduxChores], (chores) =>
+export const selectReduxChoresIds = createSelector([selectChores], (chores) =>
   chores.map((chore) => parseInt(chore.id, 10)),
 );
 
@@ -19,3 +18,9 @@ export const generateNextId = createSelector(
     return (highestId + 1).toString();
   },
 );
+
+export const selectChoreById = (choreId: string) => createSelector(
+  [selectChores], 
+  (chores) =>
+    chores.find((chore) => chore.id === choreId)
+  );

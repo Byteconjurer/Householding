@@ -13,7 +13,8 @@ import {
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { selectChoreById, updateChore } from '../store/chore/choresSlice';
+import { selectChoreById } from '../store/chore/choresSelectors';
+import { updateChore } from '../store/chore/choresSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 type UpdateChoreProps = CompositeScreenProps<

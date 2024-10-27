@@ -16,14 +16,10 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
-import {
-  selectHouseholdById,
-  selectLoggedInUserId,
-} from '../store/household/householdSelectors';
-import {
-  addHouseholdmember,
-  selectMembersByHouseholdId,
-} from '../store/householdmember/householdmemberSlice';
+import { selectHouseholdById } from '../store/household/householdSelectors';
+import { selectCurrentUser } from '../store/sharedSelectors';
+import { selectMembersByHouseholdId } from '../store/householdmember/householdmemberSelectors';
+import { addHouseholdmember } from '../store/householdmember/householdmemberSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 const NameAndAvatarSelection = ({
@@ -41,11 +37,9 @@ const NameAndAvatarSelection = ({
   const [saved, setSaved] = useState(false);
   const dispatch = useAppDispatch();
 
-  const currentUserId = useAppSelector(selectLoggedInUserId);
+  const currentUserId = useAppSelector(selectCurrentUser)?.uid;
 
-  const householdMembers = useAppSelector((state) =>
-    selectMembersByHouseholdId(state, householdId),
-  );
+  const householdMembers = useAppSelector( selectMembersByHouseholdId(householdId));
 
   const { colors } = useTheme();
 
@@ -56,7 +50,7 @@ const NameAndAvatarSelection = ({
   };
 
   const household = useAppSelector((state) =>
-    selectHouseholdById(state, householdId),
+    selectHouseholdById(householdId),
   );
 
   const handleSubmit = () => {
