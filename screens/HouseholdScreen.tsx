@@ -7,7 +7,7 @@ import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
 import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
-import { selectMembersinCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
+import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
 import { selectHouseholdMembersList } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
@@ -23,7 +23,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const currentHousehold = useAppSelector(selectCurrentHousehold);
   const householdMembers = useAppSelector(selectHouseholdMembersList);
   const membersInCurrentHousehold = useAppSelector(
-    selectMembersinCurrentHousehold,
+    selectMembersInCurrentHousehold,
   );
 
   useEffect(() => {
@@ -49,9 +49,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [newHouseholdName, setNewHouseholdName] = useState('');
 
-    const currentHouseholdName = useAppSelector(
-      (state) => state.household.current?.name,
-    );
+    const currentHouseholdName = useAppSelector(selectCurrentHousehold)?.name;
 
     const handleSave = () => {
       dispatch(setHouseholdName(newHouseholdName));

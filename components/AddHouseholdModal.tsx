@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   Button,
   Card,
@@ -9,29 +9,35 @@ import {
   TextInput,
 } from 'react-native-paper';
 import { z } from 'zod';
+import { avatarsMap } from '../data/data';
+import { selectCurrentUser } from '../store/sharedSelectors';
 import { addHousehold } from '../store/household/householdSlice';
-import { useAppDispatch } from '../store/store';
+import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import AvatarModal from './AvatarModal';
 
 const householdNameSchema = z.string().min(1, 'Hushållet måste ha ett namn');
+const userNameSchema = z.string().min(1, 'Användarnamn måste anges');
+/* const userAvatar = z.string().min(1, 'Användarnamn måste anges'); */
 
 type AddHouseholdModalProps = {
-  addModalVisible: boolean;
-  setAddModalVisible: (visible: boolean) => void;
+  addHouseholdModalVisible: boolean;
+  setAddHouseholdModalVisible: (visible: boolean) => void;
 };
 
 export default function AddHouseholdModal({
-  addModalVisible,
-  setAddModalVisible,
+  addHouseholdModalVisible: addHouseholdModalVisible,
+  setAddHouseholdModalVisible: setAddHouseholdModalVisible,
 }: AddHouseholdModalProps) {
   const [householdCode, setHouseholdCode] = useState('');
   const [householdName, setHouseholdName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [avatarModalVisible, setAvatarModalVisible] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectCurrentUser);
 
-  // const currentUserUid = useAppSelector((state) => state.user.currentUser?.uid);
-  // console.log(currentUserUid);
-
-  // Tillfällig genererad cod, tag bort senare
   const generateHouseholdCode = () => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -42,40 +48,111 @@ export default function AddHouseholdModal({
     setHouseholdCode(result);
   };
 
-  useEffect(() => {
-    generateHouseholdCode();
-  }, []);
-
+  const newHouseholdId = Date.now().toString();
   const handleAddHousehold = () => {
-    const validationResult = householdNameSchema.safeParse(householdName);
-    if (!validationResult.success) {
-      setError(validationResult.error.errors[0].message);
+    const householdNameValidation =
+      householdNameSchema.safeParse(householdName);
+    const userNameValidation = userNameSchema.safeParse(userName);
+    const userAvatarValidation = userNameSchema.safeParse(userName);
+
+    if (!householdNameValidation.success) {
+      setError(householdNameValidation.error.errors[0].message);
+      return;
+    }
+    if (!userNameValidation.success) {
+      setError(userNameValidation.error.errors[0].message);
+      return;
+    }
+    if (!userAvatarValidation.success) {
+      setError(userAvatarValidation.error.errors[0].message);
+      return;
+    }
+    if (!currentUser) {
+      console.error('User ID is not available');
+      return;
+    }
+    if (!selectedAvatar) {
+      console.error('Avatar is of value null');
       return;
     }
 
     dispatch(
       addHousehold({
-        id: Date.now().toString(),
+        id: newHouseholdId,
         name: householdName,
         code: householdCode,
       }),
     );
 
-    setAddModalVisible(false);
+    dispatch(
+      addHouseholdMember({
+        id: Date.now().toString() + '1',
+        userId: currentUser.uid,
+        householdId: newHouseholdId,
+        avatar: selectedAvatar,
+        name: userName,
+        owner: true,
+        isActive: true,
+        isRequest: false,
+      }),
+    );
+
+    setAddHouseholdModalVisible(false);
     setTimeout(() => {
       setHouseholdName('');
-      generateHouseholdCode();
-    }, 1000);
+      setUserName('');
+      setSelectedAvatar(null);
+    }, 100);
   };
+
+  useEffect(() => {
+    generateHouseholdCode();
+  }, []);
 
   return (
     <Portal>
       <Modal
-        visible={addModalVisible}
-        onDismiss={() => setAddModalVisible(false)}
+        visible={addHouseholdModalVisible}
+        onDismiss={() => setAddHouseholdModalVisible(false)}
         contentContainerStyle={styles.modalContainer}
       >
         <View style={styles.container}>
+          <View style={{ alignItems: 'center' }}>
+            <TouchableOpacity
+              style={styles.avatarCircle}
+              onPress={() => {
+                setAvatarModalVisible(true);
+              }}
+            >
+              {selectedAvatar ? (
+                <View
+                  style={[
+                    styles.avatarBackground,
+                    { backgroundColor: avatarsMap[selectedAvatar].color },
+                  ]}
+                >
+                  <Image
+                    source={avatarsMap[selectedAvatar].icon}
+                    style={styles.avatarImage}
+                    onError={() => setError('Du måste välja en avatar')}
+                  />
+                </View>
+              ) : (
+                <Text style={styles.circleText}>Välj Avatar</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.inputCaption}>Namn</Text>
+          <TextInput
+            value={userName}
+            onChangeText={(text) => {
+              setUserName(text);
+              setError(null);
+            }}
+            mode="outlined"
+            style={styles.input}
+            theme={{ roundness: 10 }}
+          />
           <Text style={styles.inputCaption}>Hushållsnamn</Text>
           <TextInput
             mode="outlined"
@@ -111,6 +188,11 @@ export default function AddHouseholdModal({
           </View>
         </View>
       </Modal>
+      <AvatarModal
+        avatarModalVisible={avatarModalVisible}
+        setAvatarModalVisible={setAvatarModalVisible}
+        onAvatarSelect={setSelectedAvatar}
+      />
     </Portal>
   );
 }
@@ -126,9 +208,33 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
   },
+  avatarCircle: {
+    width: 100,
+    height: 100,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+    backgroundColor: '#EAEAEA',
+  },
+  avatarBackground: {
+    flex: 1,
+    borderRadius: 40,
+    height: 100,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarImage: {
+    width: 80,
+    height: 80,
+    backgroundColor: 'transparent',
+  },
+  circleText: {
+    fontWeight: 'bold',
+  },
   inputCaption: {
     fontSize: 20,
-    color: 'black',
     paddingBottom: 5,
     fontWeight: 'bold',
   },
@@ -146,7 +252,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     padding: 2,
-    color: 'black',
   },
   errorText: {
     color: 'red',
@@ -154,7 +259,6 @@ const styles = StyleSheet.create({
   },
   codeText: {
     fontSize: 24,
-    color: 'black',
     paddingBottom: 5,
   },
   card: {
