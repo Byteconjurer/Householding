@@ -89,8 +89,8 @@ export default function HomeScreen({ navigation }: HomeProps) {
         </Button>
       </View>
       <AddHouseholdModal
-        addModalVisible={addModalVisible}
-        setAddModalVisible={setAddModalVisible}
+        addHouseholdModalVisible={addModalVisible}
+        setAddHouseholdModalVisible={setAddModalVisible}
       />
       <JoinHouseholdModal
         joinModalVisible={joinModalVisible}
