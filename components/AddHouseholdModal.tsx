@@ -33,22 +33,10 @@ export default function AddHouseholdModal({
   const [householdName, setHouseholdName] = useState('');
   const [userName, setUserName] = useState('');
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-  const [mockedHouseholdId, setMockedHouseholdId] = useState('');
-  const [mockedHouseholdMemberId, setMockedHouseholdMemberId] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const currentUserId = useAppSelector(selectLoggedInUserId);
-
-  // Tillfällig genererad cod, tag bort senare
-  const generateMockedHouseholdId = () => {
-    const mockedId = Date.now().toString();
-    setMockedHouseholdId(mockedId);
-  };
-  const generateMockedHouseholdMemberId = () => {
-    const mockedId = Date.now().toString();
-    setMockedHouseholdMemberId(mockedId);
-  };
 
   const generateHouseholdCode = () => {
     let result = '';
@@ -60,6 +48,7 @@ export default function AddHouseholdModal({
     setHouseholdCode(result);
   };
 
+  const newHouseholdId = Date.now().toString();
   const handleAddHousehold = () => {
     const householdNameValidation =
       householdNameSchema.safeParse(householdName);
@@ -86,19 +75,20 @@ export default function AddHouseholdModal({
       console.error('Avatar is of value null');
       return;
     }
+
     dispatch(
       addHousehold({
-        //Byt ut till autoIncrementerat ID från databasen senare
-        id: mockedHouseholdId,
+        id: newHouseholdId,
         name: householdName,
         code: householdCode,
       }),
+    );
+
+    dispatch(
       addHouseholdmember({
-        //Behöver ersätta detta ID med autoIncrementerat ID från databasen senare
-        id: mockedHouseholdMemberId,
+        id: Date.now().toString() + '1',
         userId: currentUserId,
-        //Byt ut till autoIncrementerat ID från databasen senare
-        householdId: mockedHouseholdId,
+        householdId: newHouseholdId,
         avatar: selectedAvatar,
         name: userName,
         owner: true,
@@ -106,6 +96,7 @@ export default function AddHouseholdModal({
         isRequest: false,
       }),
     );
+
     setAddHouseholdModalVisible(false);
     setTimeout(() => {
       setHouseholdName('');
@@ -116,9 +107,6 @@ export default function AddHouseholdModal({
   };
 
   useEffect(() => {
-    //Byt ut till autoIncrementerat ID från databasen senare
-    generateMockedHouseholdMemberId();
-    generateMockedHouseholdId();
     generateHouseholdCode();
   }, []);
 
@@ -204,7 +192,7 @@ export default function AddHouseholdModal({
       <AvatarModal
         avatarModalVisible={avatarModalVisible}
         setAvatarModalVisible={setAvatarModalVisible}
-        mockedHouseholdId={mockedHouseholdId}
+        mockedHouseholdId={newHouseholdId}
         onAvatarSelect={setSelectedAvatar}
       />
     </Portal>
