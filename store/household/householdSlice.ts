@@ -34,11 +34,20 @@ const householdSlice = createSlice({
         state.current = household;
       }
     },
+    setHouseholdName: (state, action: PayloadAction<string>) => {
+      if (state.current) {
+        state.current.name = action.payload;
+      }
+    },
   },
 });
 
 export const householdReducer = householdSlice.reducer;
-export const { addHousehold, updateHousehold, setCurrentHousehold } =
-  householdSlice.actions;
+export const {
+  addHousehold,
+  updateHousehold,
+  setCurrentHousehold,
+  setHouseholdName,
+} = householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;

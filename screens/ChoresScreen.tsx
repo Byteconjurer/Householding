@@ -6,7 +6,8 @@ import { Button, Card, Text } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
+import { selectGroupedCompletedChoresByCurrentHousehold } from '../store/choreCompleted/choreCompletedSelectors';
+import { selectCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { useAppSelector } from '../store/store';
 
 type ChoresProps = CompositeScreenProps<
@@ -15,18 +16,16 @@ type ChoresProps = CompositeScreenProps<
 >;
 
 export default function ChoresScreen({ navigation }: ChoresProps) {
-  const household = useAppSelector((state) => state.household.current);
-  const chores = useAppSelector(selectChoresByCurrentHousehold);
-  const householdMembers = useAppSelector((state) => state.householdmember);
-
-  const avatars = householdMembers.list
-    .filter((member) => member.householdId === household?.id)
-    .map((member) => member.avatar);
+  const groupedCompletedChores = useAppSelector(
+    selectGroupedCompletedChoresByCurrentHousehold,
+  );
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+  const isOwner = currentHouseholdMember?.owner ?? false;
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {chores.map((chore) => (
+        {groupedCompletedChores.map((chore) => (
           <Pressable style={styles.chorePressable} key={chore.id}>
             <Card
               style={styles.choreCard}
@@ -39,13 +38,15 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
                   <Text style={styles.choreTitle}>{chore.title}</Text>
                 </View>
                 <View style={styles.avatarContainer}>
-                  {avatars.map((avatar, index) => (
-                    <Image
-                      key={index}
-                      source={avatarsMap[avatar].icon}
-                      style={styles.avatar}
-                    />
-                  ))}
+                  {chore.avatars.map((avatarKey, index) => {
+                    return (
+                      <Image
+                        key={`${chore.id}-${avatarKey}-${index}`}
+                        source={avatarsMap[avatarKey].icon}
+                        style={styles.avatar}
+                      />
+                    );
+                  })}
                 </View>
               </View>
             </Card>
@@ -60,6 +61,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           buttonColor="#fff"
           labelStyle={styles.buttonText}
           onPress={() => navigation.navigate('AddChore')}
+          disabled={!isOwner}
         >
           Lägg till
         </Button>
@@ -69,7 +71,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           textColor="black"
           buttonColor="#fff"
           labelStyle={styles.buttonText}
-          onPress={() => navigation.navigate('UpdateChore')}
+          onPress={() => navigation.navigate('ChooseChore')}
         >
           Ändra
         </Button>

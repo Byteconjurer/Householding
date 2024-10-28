@@ -18,6 +18,9 @@ export const selectHouseholds = (state: RootState) => state.household.list;
 export const selectLoggedInUserId = (state: RootState) =>
   state.user.currentUser?.uid;
 
+export const selectHouseholdById = (state: RootState, householdId: string) =>
+  state.household.list.find((household) => household.id === householdId);
+
 export const selectUserHouseholds = createSelector(
   [selectLoggedInUserId, selectHouseholds, selectHouseholdMembers],
   (uid, households, householdmembers) => {
@@ -27,7 +30,7 @@ export const selectUserHouseholds = createSelector(
       householdmembers,
     );
     // Filtrera householdMembers för att hitta alla hushållsid där användaren är medlem
-    const userHouseholdIDs = householdmembers.list
+    const userHouseholdIDs = householdmembers
       .filter((member) => member.userId === uid)
       .map((member) => member.householdId);
     console.log(userHouseholdIDs);

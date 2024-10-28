@@ -1,10 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, Card, Text } from 'react-native-paper';
+import { Avatar, Card, Text, TextInput } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { setHouseholdName } from '../store/household/householdSlice';
 import {
   selectMembersByHouseholdId,
   setCurrentHouseholdMember,
@@ -52,16 +53,57 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     );
   }
 
-  const CurrentHousehold = () => (
-    <View style={styles.householdContainer}>
-      <Text style={styles.statisticsTextHouseHold}>
-        {currentHousehold.name || 'Hushåll'}
-      </Text>
-      <TouchableOpacity onPress={() => console.log('Ändra hushållsnamn')}>
-        <MaterialIcons name="edit" size={30} color="#777" />
-      </TouchableOpacity>
-    </View>
-  );
+  const CurrentHousehold = () => {
+    const dispatch = useAppDispatch();
+    const [isEditing, setIsEditing] = useState(false);
+    const [newHouseholdName, setNewHouseholdName] = useState('');
+
+    const currentHouseholdName = useAppSelector(
+      (state) => state.household.current?.name,
+    );
+
+    const handleSave = () => {
+      dispatch(setHouseholdName(newHouseholdName));
+      setIsEditing(false);
+    };
+
+    useEffect(() => {
+      if (isEditing) {
+        setNewHouseholdName(currentHouseholdName || '');
+      }
+    }, [isEditing, currentHouseholdName]);
+
+    return (
+      <View style={styles.householdContainer}>
+        {isEditing ? (
+          <TextInput
+            mode="outlined"
+            value={newHouseholdName}
+            onChangeText={setNewHouseholdName}
+            style={styles.input}
+          />
+        ) : (
+          <Text style={styles.statisticsTextHouseHold}>
+            {currentHouseholdName || 'Hushåll'}
+          </Text>
+        )}
+        <TouchableOpacity
+          onPress={() => {
+            if (isEditing) {
+              handleSave();
+            }
+            setIsEditing(!isEditing);
+          }}
+        >
+          <MaterialIcons
+            name={isEditing ? 'save' : 'edit'}
+            size={30}
+            color="#777"
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const HouseholdCode = () => (
     <Card style={styles.codeCard}>
@@ -144,6 +186,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     marginRight: 10,
+  },
+  input: {
+    width: 200,
+    marginRight: 10,
+    fontSize: 18,
   },
   avatarContainer: {
     alignItems: 'center',

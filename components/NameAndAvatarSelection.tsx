@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   FlatList,
   Image,
@@ -15,40 +15,16 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import { useAppSelector } from '../store/store';
-
-const avatar1 = require('../assets/avatarImages/1.png');
-const avatar2 = require('../assets/avatarImages/2.png');
-const avatar3 = require('../assets/avatarImages/3.png');
-const avatar4 = require('../assets/avatarImages/4.png');
-const avatar5 = require('../assets/avatarImages/5.png');
-const avatar6 = require('../assets/avatarImages/6.png');
-const avatar7 = require('../assets/avatarImages/7.png');
-const avatar8 = require('../assets/avatarImages/8.png');
-
-const avatarImages = {
-  '1.png': avatar1,
-  '2.png': avatar2,
-  '3.png': avatar3,
-  '4.png': avatar4,
-  '5.png': avatar5,
-  '6.png': avatar6,
-  '7.png': avatar7,
-  '8.png': avatar8,
-};
-
-type AvatarKeys = keyof typeof avatarImages;
-
-const avatars: AvatarKeys[] = [
-  '1.png',
-  '2.png',
-  '3.png',
-  '4.png',
-  '5.png',
-  '6.png',
-  '7.png',
-  '8.png',
-];
+import { avatarsMap } from '../data/data';
+import {
+  selectHouseholdById,
+  selectLoggedInUserId,
+} from '../store/household/householdSelectors';
+import {
+  addHouseholdmember,
+  selectMembersByHouseholdId,
+} from '../store/householdmember/householdmemberSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 const NameAndAvatarSelection = ({
   householdId,
@@ -60,33 +36,49 @@ const NameAndAvatarSelection = ({
   resetHouseholdId: () => void;
 }) => {
   const [name, setName] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState<AvatarKeys | null>(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const currentUserId = useAppSelector(selectLoggedInUserId);
 
   const householdMembers = useAppSelector((state) =>
-    state.householdmember.list.filter(
-      (member) => member.householdId === householdId,
-    ),
+    selectMembersByHouseholdId(state, householdId),
   );
 
   const { colors } = useTheme();
 
-  const handleAvatarSelect = (avatar: AvatarKeys) => {
-    if (householdMembers.some((member) => member.avatar === avatar)) return;
-    setSelectedAvatar(avatar);
+  const handleAvatarSelect = (avatarKey: string) => {
+    if (householdMembers.some((member) => member.avatar === avatarKey)) return;
+    setSelectedAvatar(avatarKey);
     setAvatarModalVisible(false);
   };
 
   const household = useAppSelector((state) =>
-    state.household.list.find((household) => household.id === householdId),
+    selectHouseholdById(state, householdId),
   );
 
   const handleSubmit = () => {
+    if (!currentUserId) {
+      console.error('User ID is not available');
+      return;
+    }
     if (name && selectedAvatar) {
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
+      dispatch(
+        addHouseholdmember({
+          id: Date.now().toString(),
+          userId: currentUserId,
+          householdId: householdId,
+          avatar: selectedAvatar,
+          name: name,
+          owner: false,
+          isActive: true,
+          isRequest: false,
+        }),
+      );
       setSaved(true);
-
       setTimeout(() => {
         setSaved(false);
         setJoinModalVisible(false);
@@ -106,8 +98,8 @@ const NameAndAvatarSelection = ({
             {selectedAvatar ? (
               <Avatar.Image
                 size={80}
-                source={avatarImages[selectedAvatar]}
-                style={{ backgroundColor: '#EAEAEA' }}
+                source={avatarsMap[selectedAvatar].icon}
+                style={{ backgroundColor: avatarsMap[selectedAvatar].color }}
               />
             ) : (
               <Text style={styles.circleText}>Välj Avatar</Text>
@@ -135,10 +127,10 @@ const NameAndAvatarSelection = ({
       >
         <View style={styles.chooseAvatarContainer}>
           <FlatList
-            data={avatars}
+            data={Object.keys(avatarsMap)}
             keyExtractor={(item) => item}
             numColumns={4}
-            renderItem={({ item }: { item: AvatarKeys }) => {
+            renderItem={({ item }) => {
               const isTaken = householdMembers.some(
                 (member) => member.avatar === item,
               );
@@ -155,7 +147,7 @@ const NameAndAvatarSelection = ({
                       ]}
                     >
                       <Image
-                        source={avatarImages[item]}
+                        source={avatarsMap[item].icon}
                         style={styles.avatarImage}
                         resizeMode="contain"
                       />
@@ -247,11 +239,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EAEAEA',
     borderRadius: 10,
     elevation: 5,
-  },
-  modalContainer: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   chooseAvatarContainer: {
     paddingTop: 300,
