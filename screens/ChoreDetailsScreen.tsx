@@ -7,8 +7,13 @@ import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { generateNextId } from '../store/chore/choresSelectors';
 import { addChoreCompleted } from '../store/choreCompleted/choreCompletedSlice';
-import { useAppDispatch } from '../store/store';
+import {
+  selectCurrentHousehold,
+  selectCurrentHouseholdMember,
+} from '../store/sharedSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
@@ -18,6 +23,10 @@ type ChoreProps = CompositeScreenProps<
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
   const chore = mockedChores.find((item) => item.id === route.params.id);
+  const nextCompletedChoreId = useAppSelector(generateNextId);
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
@@ -38,20 +47,35 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   }
 
   const handlePress = () => {
-    setIsChoreDone(!isChoreDone);
+    setIsChoreDone((prevIsChoreDone) => !prevIsChoreDone);
     if (isChoreDone) {
-      //dispatch action to add chore to completed chores
+    if (!currentHousehold) {
+      console.error('No current household set');
+      return;
+    }
+    if (!currentHouseholdMember) {
+      console.error('No current household member set');
+      return;
+    }
       dispatch(
         addChoreCompleted({
           //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
-          id: Date.now.toString() + '1',
+          id: nextCompletedChoreId,
           choreId: chore.id,
-          householdMemberId: ,
-          choreComplete: true,
-          //Påbörjat
+          householdMemberId: currentHouseholdMember.id,
+          choreComplete: Date.now().toString(),
+          householdId: currentHousehold.id,
         }),
+        console.log(
+          'Chore dispatched! Details = ',
+          nextCompletedChoreId,
+          chore.id,
+          currentHouseholdMember.id,
+          currentHousehold.id,
+        ),
       );
     }
+    console.log('isChoreDone =', isChoreDone);
   };
 
   return (

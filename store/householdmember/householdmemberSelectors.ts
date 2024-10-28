@@ -14,13 +14,3 @@ export const selectMembersByHouseholdId = (householdId: string) =>
   createSelector([selectHouseholdMembersList], (householdMembers) =>
     householdMembers.filter((member) => member.householdId === householdId),
   );
-
-export const selectCurrentHouseholdMemberId = createSelector(
-  [selectHouseholdMembersList, selectCurrentHousehold],
-  (householdMembers, household) => {
-    const currentMember = householdMembers.find(
-      (member) => member.householdId === household?.id && member.isCurrent,
-    );
-    return currentMember ? currentMember.id : null;
-  },
-);
