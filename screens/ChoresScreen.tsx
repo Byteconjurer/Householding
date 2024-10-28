@@ -7,7 +7,7 @@ import { avatarsMap } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectGroupedCompletedChoresByCurrentHousehold } from '../store/choreCompleted/choreCompletedSelectors';
-import { selectCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import { selectCurrentHouseholdMember } from '../store/sharedSelectors';
 import { useAppSelector } from '../store/store';
 
 type ChoresProps = CompositeScreenProps<

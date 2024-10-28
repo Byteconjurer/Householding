@@ -1,26 +1,20 @@
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { Card, Modal } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
-import { useAppSelector } from '../store/store';
+import { HouseholdMember } from '../data/types';
 
 type AvatarModalProps = {
-  mockedHouseholdId: string;
   onAvatarSelect: (avatar: string) => void;
   avatarModalVisible: boolean;
   setAvatarModalVisible: (visible: boolean) => void;
 };
 
 export default function AvatarModal({
-  mockedHouseholdId: mockedHouseholdId,
   onAvatarSelect,
   avatarModalVisible,
   setAvatarModalVisible,
 }: AvatarModalProps) {
-  const householdMembers = useAppSelector((state) =>
-    state.householdmember.list.filter(
-      (member) => member.householdId === mockedHouseholdId,
-    ),
-  );
+  const householdMembers = [] as HouseholdMember[];
 
   const handleAvatarSelect = (avatarKey: string) => {
     if (householdMembers.some((member) => member.avatar === avatarKey)) return;

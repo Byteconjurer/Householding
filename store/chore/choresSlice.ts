@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedChores } from '../../data/data';
 import { Chore } from '../../data/types';
-import { RootState } from '../store';
 
 const choreSlice = createSlice({
   name: 'chore',
@@ -25,8 +24,3 @@ const choreSlice = createSlice({
 export const choreReducer = choreSlice.reducer;
 export const { addChore, updateChore } = choreSlice.actions;
 // export const { addChore, deleteChore, updateChore } = choreSlice.actions;
-
-// SELECTORS
-
-export const selectChoreById = (ChoreId: string) => (state: RootState) =>
-  state.chore.find((chore) => chore.id === ChoreId);

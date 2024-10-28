@@ -5,7 +5,7 @@ import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { generateNextId } from '../store/chore/choresSelectors';
 import { addChore } from '../store/chore/choresSlice';
-import { selectCurrentHousehold } from '../store/household/householdSelectors';
+import { selectCurrentHousehold } from '../store/sharedSelectors';
 import store, { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<TopTabParamList>;

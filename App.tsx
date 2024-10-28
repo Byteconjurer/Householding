@@ -9,13 +9,13 @@ import { auth } from './firebase';
 import LoginStackNavigator from './navigators/LoginStackNavigator';
 import RootStackNavigator from './navigators/RootStackNavigator';
 import { AuthProvider } from './providers/AuthContextProvider';
-import { selectLoggedInUserId } from './store/household/householdSelectors';
+import { selectCurrentUser } from './store/sharedSelectors';
 import store, { useAppDispatch, useAppSelector } from './store/store';
 import { setUser } from './store/user/userSlice';
 
 function AppContent() {
   const dispatch = useAppDispatch();
-  const userId = useAppSelector(selectLoggedInUserId);
+  const user = useAppSelector(selectCurrentUser);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -27,7 +27,7 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      {userId ? <RootStackNavigator /> : <LoginStackNavigator />}
+      {user?.uid ? <RootStackNavigator /> : <LoginStackNavigator />}
     </NavigationContainer>
   );
 }
