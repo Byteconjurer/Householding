@@ -1,6 +1,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddChoreScreen from '../screens/AddChoreScreen';
+import ChooseChoreScreen from '../screens/ChooseChoreScreen';
 import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UpdateChoreScreen from '../screens/UpdateChoreScreen';
@@ -12,7 +13,8 @@ export type RootStackParamList = {
   TopTabNavigator: NavigatorScreenParams<TopTabParamList>;
   ChoreDetails: { id: string };
   AddChore: undefined;
-  UpdateChore: undefined;
+  UpdateChore: { choreId: string };
+  ChooseChore: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -48,7 +50,16 @@ export default function RootStackNavigator() {
       <RootStack.Screen
         name="UpdateChore"
         component={UpdateChoreScreen}
-        options={{ animation: 'flip' }}
+        options={{ animation: 'slide_from_right' }}
+      />
+      <RootStack.Screen
+        name="ChooseChore"
+        component={ChooseChoreScreen}
+        options={{
+          title: 'Välj syssla att ändra',
+          headerTitleAlign: 'center', // Centrerar titeln.
+          animation: 'slide_from_right',
+        }}
       />
     </RootStack.Navigator>
   );

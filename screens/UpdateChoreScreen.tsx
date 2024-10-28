@@ -13,27 +13,27 @@ import {
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { selectChoreById } from '../store/chore/choresSelectors';
 import { updateChore } from '../store/chore/choresSlice';
-import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 type UpdateChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'UpdateChore'>,
   MaterialTopTabScreenProps<TopTabParamList>
 >;
-export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
-  //Hämtar alla chores för ett visst hushåll
-  const chores = useAppSelector(selectChoresByCurrentHousehold);
-  //Hårdkodat vilken syssla som visas.
-  const chore = chores[0];
+export default function UpdateChoreScreen({
+  navigation,
+  route,
+}: UpdateChoreProps) {
+  const chore = useAppSelector(selectChoreById(route.params.choreId));
 
-  const [newChoreTitle, setNewChoreTitle] = useState(chore.title);
+  const [newChoreTitle, setNewChoreTitle] = useState(chore!.title);
   const [newChoreDescription, setNewChoreDescription] = useState(
-    chore.description,
+    chore!.description,
   );
-  const [newChoreInterval, setNewChoreInterval] = useState(chore.interval);
+  const [newChoreInterval, setNewChoreInterval] = useState(chore!.interval);
   const [newChoreEnergyWeight, setNewChoreEnergyWeight] = useState(
-    chore.energyWeight,
+    chore!.energyWeight,
   );
   const [showIntervalPicker, setShowIntervalPicker] = useState(false);
   const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
@@ -42,12 +42,12 @@ export default function UpdateChoreScreen({ navigation }: UpdateChoreProps) {
   const handleUpdateChore = () => {
     dispatch(
       updateChore({
-        id: chore.id,
+        id: chore!.id,
         title: newChoreTitle,
         description: newChoreDescription,
         interval: newChoreInterval,
         energyWeight: newChoreEnergyWeight,
-        householdId: chore.householdId,
+        householdId: chore!.householdId,
       }),
     );
     navigation.navigate('Chores');

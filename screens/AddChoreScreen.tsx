@@ -1,10 +1,18 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { generateNextId } from '../store/chore/choresSelectors';
 import { addChore } from '../store/chore/choresSlice';
-import { useAppDispatch } from '../store/store';
+import { selectCurrentHousehold } from '../store/sharedSelectors';
+import store, { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<TopTabParamList>;
 
@@ -16,30 +24,35 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   const [showIntervalPicker, setShowIntervalPicker] = useState(false);
   const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
   const dispatch = useAppDispatch();
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const nextChoreId = useAppSelector(generateNextId);
 
   const handleAddChore = () => {
-    dispatch(
-      addChore({
-        //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
-        id: incrementId().toString(),
-        title: newChoreTitle,
-        description: newChoreDescription,
-        interval: newChoreInterval,
-        energyWeight: newChoreEnergyWeight,
-        householdId: '2',
-        //Här ska man ändra '2' som nu är hårdkodat till att vara det aktuella hushållet när databasen är uppsatt.
-      }),
-    );
+    if (!currentHousehold) {
+      console.error('No current household set');
+      return;
+    }
+
+    // Remove the log when done with testing
+    console.log('Adding chore with ID:', nextChoreId);
+
+    const newChore = {
+      id: nextChoreId,
+      title: newChoreTitle,
+      description: newChoreDescription,
+      interval: newChoreInterval,
+      energyWeight: newChoreEnergyWeight,
+      householdId: currentHousehold.id,
+    };
+
+    dispatch(addChore(newChore));
+
+    // Remove the logs when done with testing
+    console.log('New chore added:', newChore);
+    console.log('Updated state:', store.getState().chore);
+
     navigation.navigate('Chores');
   };
-
-  const [id, setId] = useState(3);
-
-  function incrementId() {
-    setId(id + 1);
-    return id;
-  }
-  //mockad id inkrementering. Kan tas bort när vi uppdaterar senare
 
   return (
     <View style={styles.root}>
@@ -71,93 +84,98 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
         </Card>
         <View style={styles.intervalEnergyButtons}>
           {showIntervalPicker ? (
-            <Button style={styles.intervalPicker}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.horizontalPickerContent}
-              >
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
-                  <TouchableOpacity
-                    key={num}
-                    style={[
-                      styles.intervalPickerItem,
-                      newChoreInterval === num && styles.selectedPickerItem,
-                    ]}
-                    onPress={() => {
-                      setNewChoreInterval(num);
-                      setShowIntervalPicker(false);
-                    }}
-                  >
-                    <Text style={styles.intervalPickerItemText}>{num}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Button>
+            <Card>
+              <Pressable style={styles.intervalPicker}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalPickerContent}
+                >
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      style={[
+                        styles.intervalPickerItem,
+                        newChoreInterval === num && styles.selectedPickerItem,
+                      ]}
+                      onPress={() => {
+                        setNewChoreInterval(num);
+                        setShowIntervalPicker(false);
+                      }}
+                    >
+                      <Text style={styles.intervalPickerItemText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Pressable>
+            </Card>
           ) : (
-            <Button
-              mode="elevated"
-              textColor="black"
-              buttonColor="#fff"
-              onPress={() => setShowIntervalPicker(true)}
-              style={styles.intervalButton}
-            >
-              <View style={styles.textView}>
-                <Text style={styles.intervalWeightText}>Återkommer: </Text>
-                <View style={styles.inlineText}>
-                  <Text style={{ fontSize: 20 }}>var </Text>
-                  <View style={styles.circle}>
-                    <Text style={styles.circleText}>{newChoreInterval}</Text>
+            <Card style={styles.intervalCard}>
+              <Pressable
+                onPress={() => setShowIntervalPicker(true)}
+                style={styles.intervalButton}
+              >
+                <View style={styles.textView}>
+                  <Text style={styles.intervalWeightText}>Återkommer: </Text>
+                  <View style={styles.inlineText}>
+                    <Text style={{ fontSize: 20 }}>var </Text>
+                    <View style={styles.circle}>
+                      <Text style={styles.circleText}>{newChoreInterval}</Text>
+                    </View>
+                    <Text style={{ fontSize: 20 }}> dag</Text>
                   </View>
-                  <Text style={{ fontSize: 20 }}> dag</Text>
                 </View>
-              </View>
-            </Button>
+              </Pressable>
+            </Card>
           )}
           {showEnergyWeightPicker ? (
-            <Button style={styles.energyPicker}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.horizontalPickerContent}
-              >
-                {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-                  <TouchableOpacity
-                    key={num}
-                    style={[
-                      styles.energyPickerItem,
-                      newChoreEnergyWeight === num && styles.selectedPickerItem,
-                    ]}
-                    onPress={() => {
-                      setNewChoreEnergyWeight(num);
-                      setShowEnergyWeightPicker(false);
-                    }}
-                  >
-                    <Text style={styles.energyPickerItemText}>{num}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Button>
+            <Card>
+              <Pressable style={styles.energyPicker}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalPickerContent}
+                >
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      style={[
+                        styles.energyPickerItem,
+                        newChoreEnergyWeight === num &&
+                          styles.selectedPickerItem,
+                      ]}
+                      onPress={() => {
+                        setNewChoreEnergyWeight(num);
+                        setShowEnergyWeightPicker(false);
+                      }}
+                    >
+                      <Text style={styles.energyPickerItemText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Pressable>
+            </Card>
           ) : (
-            <Button
-              mode="elevated"
-              textColor="black"
-              buttonColor="#fff"
-              onPress={() => setShowEnergyWeightPicker(true)}
-              style={styles.energyButton}
-            >
-              <View style={styles.textView}>
-                <View>
-                  <Text style={styles.intervalWeightText}>Värde: </Text>
-                  <Text style={{ color: 'grey' }}>
-                    Hur energikrävande är sysslan?
-                  </Text>
+            <Card style={styles.energyCard}>
+              <Pressable
+                onPress={() => setShowEnergyWeightPicker(true)}
+                style={styles.energyButton}
+              >
+                <View style={styles.textView}>
+                  <View>
+                    <Text style={styles.intervalWeightText}>Värde: </Text>
+                    <Text style={{ color: 'grey' }}>
+                      Hur energikrävande är sysslan?
+                    </Text>
+                  </View>
+                  <View style={styles.circle}>
+                    <Text style={styles.circleText}>
+                      {newChoreEnergyWeight}
+                    </Text>
+                  </View>
                 </View>
-                <View style={styles.circle}>
-                  <Text style={styles.circleText}>{newChoreEnergyWeight}</Text>
-                </View>
-              </View>
-            </Button>
+              </Pressable>
+            </Card>
           )}
         </View>
       </View>
@@ -232,11 +250,7 @@ const styles = StyleSheet.create({
   energyPicker: {
     backgroundColor: '#fff',
     height: 80,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    borderRadius: 12,
   },
   intervalEnergyButtons: {
     gap: 16,
@@ -251,7 +265,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   energyPickerItem: {
-    padding: 10,
+    padding: 8,
     marginHorizontal: 8,
     backgroundColor: '#f0f0f0',
     borderRadius: 20,
@@ -271,10 +285,6 @@ const styles = StyleSheet.create({
   },
   intervalButton: {
     height: 60,
-    borderRadius: 12,
-  },
-  energyButton: {
-    height: 80,
     borderRadius: 12,
   },
   textView: {
@@ -317,5 +327,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     height: 80,
+  },
+  intervalCard: {
+    backgroundColor: 'white',
+    height: 60,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+  },
+  energyCard: {
+    backgroundColor: 'white',
+    height: 80,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+  },
+  energyButton: {
+    height: 80,
+    borderRadius: 12,
   },
 });
