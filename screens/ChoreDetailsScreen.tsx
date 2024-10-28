@@ -7,6 +7,8 @@ import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { addChore } from '../store/chore/choresSlice';
+import { useAppDispatch } from '../store/store';
 
 type ChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
@@ -16,6 +18,7 @@ type ChoreProps = CompositeScreenProps<
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
   const chore = mockedChores.find((item) => item.id === route.params.id);
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     if (chore) {
@@ -39,18 +42,18 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
     if (isChoreDone) {
       //dispatch action to add chore to completed chores
       dispatch(
-        addChore({
+        addChoreCompleted({
           //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
-          id: incrementId().toString(),
+          id: Date.now.toString(),
           choreId: chore.id,
           householdMemberId: newChoreDescription,
-          choreComplete: newChoreInterval,
+          choreComplete: true,
           //Påbörjat
         }),
       );
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>

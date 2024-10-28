@@ -14,11 +14,11 @@ const choreCompletedSlice = createSlice({
   name: 'choreCompleted',
   initialState: initialState,
   reducers: {
-    addHousehold: (state, action: PayloadAction<ChoreCompleted>) => {
+    addChoreCompleted: (state, action: PayloadAction<ChoreCompleted>) => {
       state.list.push(action.payload);
     },
   },
 });
 
 export const choreCompletedReducer = choreCompletedSlice.reducer;
-export const { addHousehold } = choreCompletedSlice.actions;
+export const { addChoreCompleted } = choreCompletedSlice.actions;
