@@ -43,13 +43,8 @@ const householdmemberSlice = createSlice({
     },
   },
 });
-export const selectMembersByHouseholdId = (
-  state: RootState,
-  householdId: string,
-) =>
-  state.householdmember.list.filter(
-    (member) => member.householdId === householdId,
-  );
+
+// REDUCER AND ACTIONS
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
   addHouseholdmember,
@@ -59,6 +54,14 @@ export const {
 } = householdmemberSlice.actions;
 
 // SELECTORS
+export const selectMembersByHouseholdId = (
+  state: RootState,
+  householdId: string,
+) =>
+  state.householdmember.list.filter(
+    (member) => member.householdId === householdId,
+  );
+
 export const selectHouseholdMembers = (state: RootState) =>
   state.householdmember.list;
 
