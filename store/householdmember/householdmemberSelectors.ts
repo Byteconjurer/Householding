@@ -4,7 +4,7 @@ import {
   selectHouseholdMembersList,
 } from '../sharedSelectors';
 
-export const selectMembersinCurrentHousehold = createSelector(
+export const selectMembersInCurrentHousehold = createSelector(
   [selectHouseholdMembersList, selectCurrentHousehold],
   (householdMembers, household) =>
     householdMembers.filter((member) => member.householdId === household?.id),

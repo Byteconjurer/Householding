@@ -16,7 +16,7 @@ const householdmemberSlice = createSlice({
   name: 'householdmember',
   initialState: initialState,
   reducers: {
-    addHouseholdmember: (state, action: PayloadAction<HouseholdMember>) => {
+    addHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
       state.list.push(action.payload);
     },
     // deleteHouseholdmember: (state, action: PayloadAction<number>) => {
@@ -24,7 +24,7 @@ const householdmemberSlice = createSlice({
     //     (householdmember) => householdmember.id !== action.payload,
     //   );
     // },
-    updateHouseholdmember: (state, action: PayloadAction<HouseholdMember>) => {
+    updateHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
       const index = state.list.findIndex(
         (householdmember) => householdmember.id === action.payload.id,
       );
@@ -45,8 +45,8 @@ const householdmemberSlice = createSlice({
 
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
-  addHouseholdmember,
+  addHouseholdMember,
   // deleteHouseholdmember,
-  updateHouseholdmember,
+  updateHouseholdMember,
   setCurrentHouseholdMember,
 } = householdmemberSlice.actions;

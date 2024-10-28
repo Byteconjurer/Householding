@@ -12,13 +12,13 @@ import { z } from 'zod';
 import { avatarsMap } from '../data/data';
 import { selectCurrentUser } from '../store/sharedSelectors';
 import { addHousehold } from '../store/household/householdSlice';
-import { addHouseholdmember } from '../store/householdmember/householdmemberSlice';
+import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import AvatarModal from './AvatarModal';
 
 const householdNameSchema = z.string().min(1, 'Hushållet måste ha ett namn');
 const userNameSchema = z.string().min(1, 'Användarnamn måste anges');
-const userAvatar = z.string().min(1, 'Användarnamn måste anges');
+/* const userAvatar = z.string().min(1, 'Användarnamn måste anges'); */
 
 type AddHouseholdModalProps = {
   addHouseholdModalVisible: boolean;
@@ -36,7 +36,7 @@ export default function AddHouseholdModal({
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const currentUserId = useAppSelector(selectCurrentUser);
+  const currentUser = useAppSelector(selectCurrentUser);
 
   const generateHouseholdCode = () => {
     let result = '';
@@ -67,7 +67,7 @@ export default function AddHouseholdModal({
       setError(userAvatarValidation.error.errors[0].message);
       return;
     }
-    if (!currentUserId) {
+    if (!currentUser) {
       console.error('User ID is not available');
       return;
     }
@@ -85,9 +85,9 @@ export default function AddHouseholdModal({
     );
 
     dispatch(
-      addHouseholdmember({
+      addHouseholdMember({
         id: Date.now().toString() + '1',
-        userId: currentUserId.uid,
+        userId: currentUser.uid,
         householdId: newHouseholdId,
         avatar: selectedAvatar,
         name: userName,
