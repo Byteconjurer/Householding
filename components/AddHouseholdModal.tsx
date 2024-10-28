@@ -191,7 +191,6 @@ export default function AddHouseholdModal({
       <AvatarModal
         avatarModalVisible={avatarModalVisible}
         setAvatarModalVisible={setAvatarModalVisible}
-        mockedHouseholdId={newHouseholdId}
         onAvatarSelect={setSelectedAvatar}
       />
     </Portal>
