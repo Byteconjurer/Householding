@@ -102,6 +102,7 @@ export default function AddHouseholdModal({
       setHouseholdName('');
       setUserName('');
       setSelectedAvatar(null);
+      generateHouseholdCode();
     }, 100);
   };
 
