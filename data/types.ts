@@ -40,4 +40,5 @@ export type ChoreCompleted = {
   choreId: string;
   householdMemberId: string;
   choreComplete: string;
+  householdId: string;
 };
