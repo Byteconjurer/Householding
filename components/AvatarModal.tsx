@@ -14,7 +14,6 @@ export default function AvatarModal({
   avatarModalVisible,
   setAvatarModalVisible,
 }: AvatarModalProps) {
-
   const householdMembers = [] as HouseholdMember[];
 
   const handleAvatarSelect = (avatarKey: string) => {
