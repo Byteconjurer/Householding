@@ -7,8 +7,8 @@ import ChoreCardItem from '../components/ChoreCardItem';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
-import { useAppSelector } from '../store/store';
 import { selectCurrentHouseholdMember } from '../store/sharedSelectors';
+import { useAppSelector } from '../store/store';
 
 type ChoresProps = CompositeScreenProps<
   MaterialTopTabScreenProps<TopTabParamList, 'Chores'>,
@@ -25,6 +25,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {chores.map((chore) => (
           <ChoreCardItem
+            key={chore.id}
             chore={chore}
             onPress={() =>
               navigation.navigate('ChoreDetails', { id: chore.id })
