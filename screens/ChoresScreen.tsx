@@ -7,8 +7,8 @@ import ChoreCardItem from '../components/ChoreCardItem';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
-import { selectCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { useAppSelector } from '../store/store';
+import { selectCurrentHouseholdMember } from '../store/sharedSelectors';
 
 type ChoresProps = CompositeScreenProps<
   MaterialTopTabScreenProps<TopTabParamList, 'Chores'>,
