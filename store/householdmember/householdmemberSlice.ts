@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
-import { RootState } from '../store';
 
 type HouseholdMemberState = {
   list: HouseholdMember[];
@@ -17,7 +16,7 @@ const householdmemberSlice = createSlice({
   name: 'householdmember',
   initialState: initialState,
   reducers: {
-    addHouseholdmember: (state, action: PayloadAction<HouseholdMember>) => {
+    addHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
       state.list.push(action.payload);
     },
     // deleteHouseholdmember: (state, action: PayloadAction<number>) => {
@@ -25,7 +24,7 @@ const householdmemberSlice = createSlice({
     //     (householdmember) => householdmember.id !== action.payload,
     //   );
     // },
-    updateHouseholdmember: (state, action: PayloadAction<HouseholdMember>) => {
+    updateHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
       const index = state.list.findIndex(
         (householdmember) => householdmember.id === action.payload.id,
       );
@@ -43,24 +42,11 @@ const householdmemberSlice = createSlice({
     },
   },
 });
-export const selectMembersByHouseholdId = (
-  state: RootState,
-  householdId: string,
-) =>
-  state.householdmember.list.filter(
-    (member) => member.householdId === householdId,
-  );
+
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
-  addHouseholdmember,
+  addHouseholdMember,
   // deleteHouseholdmember,
-  updateHouseholdmember,
+  updateHouseholdMember,
   setCurrentHouseholdMember,
 } = householdmemberSlice.actions;
-
-// SELECTORS
-export const selectHouseholdMembers = (state: RootState) =>
-  state.householdmember.list;
-
-export const selectCurrentHouseholdMember = (state: RootState) =>
-  state.householdmember.current;

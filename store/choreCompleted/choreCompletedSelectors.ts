@@ -1,16 +1,12 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectCurrentHousehold } from '../household/householdSelectors';
-import { selectHouseholdMembers } from '../householdmember/householdmemberSlice';
-import { RootState } from '../store';
-
-export const selectChores = (state: RootState) => state.chore;
-export const selectCompletedChores = (state: RootState) =>
-  state.choreCompleted.list;
+import { selectCurrentHousehold } from '../sharedSelectors';
+import { selectHouseholdMembersList } from '../sharedSelectors';
+import { selectChores, selectCompletedChoresList } from '../sharedSelectors';
 
 export const selectCompletedChoresByCurrentHousehold = createSelector(
   [
-    selectCompletedChores,
-    selectHouseholdMembers,
+    selectCompletedChoresList,
+    selectHouseholdMembersList,
     selectCurrentHousehold,
     selectChores,
   ],
@@ -54,7 +50,7 @@ export const selectCompletedChoresByCurrentHousehold = createSelector(
 );
 
 export const selectGroupedCompletedChoresByCurrentHousehold = createSelector(
-  [selectCompletedChoresByCurrentHousehold, selectHouseholdMembers],
+  [selectCompletedChoresByCurrentHousehold, selectHouseholdMembersList],
   (completedChores, householdMembers) => {
     const groupedChores: Record<
       string,

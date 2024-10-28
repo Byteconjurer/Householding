@@ -6,49 +6,40 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
+import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
+import { selectHouseholdMembersList } from '../store/sharedSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import {
-  selectMembersByHouseholdId,
-  setCurrentHouseholdMember,
-} from '../store/householdmember/householdmemberSlice';
-import { RootState, useAppDispatch, useAppSelector } from '../store/store';
+  selectCurrentHousehold,
+  selectCurrentUser,
+} from '../store/sharedSelectors';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
 export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
-
-  const currentUserId = useAppSelector((state) => state.user.currentUser?.uid);
-
-  const currentHousehold = useAppSelector((state) => state.household.current);
-
-  const householdMembers = useAppSelector((state) => state.householdmember);
-
-  const membersInCurrentHousehold = useAppSelector((state: RootState) =>
-    selectMembersByHouseholdId(state, route.params.householdId),
+  const currentUser = useAppSelector(selectCurrentUser);
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const householdMembers = useAppSelector(selectHouseholdMembersList);
+  const membersInCurrentHousehold = useAppSelector(
+    selectMembersInCurrentHousehold,
   );
 
   useEffect(() => {
-    if (currentUserId) {
-      dispatch(setCurrentHouseholdMember(currentUserId));
+    if (currentUser?.uid) {
+      dispatch(setCurrentHouseholdMember(currentUser.uid));
     }
-  }, [currentUserId, dispatch]);
+  }, [currentUser, dispatch]);
 
-  const currentUser = householdMembers.list.find(
-    (member) => member.userId === currentUserId,
+  const currentMember = householdMembers.find(
+    (member) => member.userId === currentUser?.uid,
   );
 
-  if (!currentUser) {
+  if (!currentMember) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Användaren kunde inte hittas.</Text>
-      </View>
-    );
-  }
-
-  if (!currentHousehold) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Hushållet kunde inte hittas.</Text>
       </View>
     );
   }
@@ -58,9 +49,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [newHouseholdName, setNewHouseholdName] = useState('');
 
-    const currentHouseholdName = useAppSelector(
-      (state) => state.household.current?.name,
-    );
+    const currentHouseholdName = useAppSelector(selectCurrentHousehold)?.name;
 
     const handleSave = () => {
       dispatch(setHouseholdName(newHouseholdName));
@@ -108,17 +97,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const HouseholdCode = () => (
     <Card style={styles.codeCard}>
       <Card.Content>
-        <Text variant="titleLarge">{currentHousehold.code || 'Ingen kod'}</Text>
+        <Text variant="titleLarge">
+          {currentHousehold!.code || 'Ingen kod'}
+        </Text>
       </Card.Content>
     </Card>
   );
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image size={60} source={avatarsMap[currentUser.avatar].icon} />
+      <Avatar.Image size={60} source={avatarsMap[currentMember!.avatar].icon} />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
-          {currentUser.name || 'användarnamn'}
+          {currentMember!.name || 'användarnamn'}
         </Text>
         <TouchableOpacity
           onPress={() => console.log('Ändra avatar eller namn')}

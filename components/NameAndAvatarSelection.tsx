@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   FlatList,
   Image,
@@ -16,14 +16,10 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
-import {
-  selectHouseholdById,
-  selectLoggedInUserId,
-} from '../store/household/householdSelectors';
-import {
-  addHouseholdmember,
-  selectMembersByHouseholdId,
-} from '../store/householdmember/householdmemberSlice';
+import { selectHouseholdById } from '../store/household/householdSelectors';
+import { selectCurrentUser } from '../store/sharedSelectors';
+import { selectMembersByHouseholdId } from '../store/householdmember/householdmemberSelectors';
+import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 const NameAndAvatarSelection = ({
@@ -41,10 +37,10 @@ const NameAndAvatarSelection = ({
   const [saved, setSaved] = useState(false);
   const dispatch = useAppDispatch();
 
-  const currentUserId = useAppSelector(selectLoggedInUserId);
+  const currentUserId = useAppSelector(selectCurrentUser)?.uid;
 
-  const householdMembers = useAppSelector((state) =>
-    selectMembersByHouseholdId(state, householdId),
+  const householdMembers = useAppSelector(
+    selectMembersByHouseholdId(householdId),
   );
 
   const { colors } = useTheme();
@@ -55,9 +51,7 @@ const NameAndAvatarSelection = ({
     setAvatarModalVisible(false);
   };
 
-  const household = useAppSelector((state) =>
-    selectHouseholdById(state, householdId),
-  );
+  const household = useAppSelector(selectHouseholdById(householdId));
 
   const handleSubmit = () => {
     if (!currentUserId) {
@@ -67,7 +61,7 @@ const NameAndAvatarSelection = ({
     if (name && selectedAvatar) {
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
       dispatch(
-        addHouseholdmember({
+        addHouseholdMember({
           id: Date.now().toString(),
           userId: currentUserId,
           householdId: householdId,
