@@ -7,7 +7,7 @@ import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { addChore } from '../store/chore/choresSlice';
+import { addChoreCompleted } from '../store/choreCompleted/choreCompletedSlice';
 import { useAppDispatch } from '../store/store';
 
 type ChoreProps = CompositeScreenProps<
@@ -44,9 +44,9 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
       dispatch(
         addChoreCompleted({
           //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
-          id: Date.now.toString(),
+          id: Date.now.toString() + '1',
           choreId: chore.id,
-          householdMemberId: newChoreDescription,
+          householdMemberId: ,
           choreComplete: true,
           //Påbörjat
         }),
