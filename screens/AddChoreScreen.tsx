@@ -1,6 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { generateNextId } from '../store/chore/choresSelectors';
@@ -78,93 +84,98 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
         </Card>
         <View style={styles.intervalEnergyButtons}>
           {showIntervalPicker ? (
-            <Button style={styles.intervalPicker}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.horizontalPickerContent}
-              >
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
-                  <TouchableOpacity
-                    key={num}
-                    style={[
-                      styles.intervalPickerItem,
-                      newChoreInterval === num && styles.selectedPickerItem,
-                    ]}
-                    onPress={() => {
-                      setNewChoreInterval(num);
-                      setShowIntervalPicker(false);
-                    }}
-                  >
-                    <Text style={styles.intervalPickerItemText}>{num}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Button>
+            <Card>
+              <Pressable style={styles.intervalPicker}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalPickerContent}
+                >
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      style={[
+                        styles.intervalPickerItem,
+                        newChoreInterval === num && styles.selectedPickerItem,
+                      ]}
+                      onPress={() => {
+                        setNewChoreInterval(num);
+                        setShowIntervalPicker(false);
+                      }}
+                    >
+                      <Text style={styles.intervalPickerItemText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Pressable>
+            </Card>
           ) : (
-            <Button
-              mode="elevated"
-              textColor="black"
-              buttonColor="#fff"
-              onPress={() => setShowIntervalPicker(true)}
-              style={styles.intervalButton}
-            >
-              <View style={styles.textView}>
-                <Text style={styles.intervalWeightText}>Återkommer: </Text>
-                <View style={styles.inlineText}>
-                  <Text style={{ fontSize: 20 }}>var </Text>
-                  <View style={styles.circle}>
-                    <Text style={styles.circleText}>{newChoreInterval}</Text>
+            <Card style={styles.intervalCard}>
+              <Pressable
+                onPress={() => setShowIntervalPicker(true)}
+                style={styles.intervalButton}
+              >
+                <View style={styles.textView}>
+                  <Text style={styles.intervalWeightText}>Återkommer: </Text>
+                  <View style={styles.inlineText}>
+                    <Text style={{ fontSize: 20 }}>var </Text>
+                    <View style={styles.circle}>
+                      <Text style={styles.circleText}>{newChoreInterval}</Text>
+                    </View>
+                    <Text style={{ fontSize: 20 }}> dag</Text>
                   </View>
-                  <Text style={{ fontSize: 20 }}> dag</Text>
                 </View>
-              </View>
-            </Button>
+              </Pressable>
+            </Card>
           )}
           {showEnergyWeightPicker ? (
-            <Button style={styles.energyPicker}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.horizontalPickerContent}
-              >
-                {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-                  <TouchableOpacity
-                    key={num}
-                    style={[
-                      styles.energyPickerItem,
-                      newChoreEnergyWeight === num && styles.selectedPickerItem,
-                    ]}
-                    onPress={() => {
-                      setNewChoreEnergyWeight(num);
-                      setShowEnergyWeightPicker(false);
-                    }}
-                  >
-                    <Text style={styles.energyPickerItemText}>{num}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </Button>
+            <Card>
+              <Pressable style={styles.energyPicker}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalPickerContent}
+                >
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                    <TouchableOpacity
+                      key={num}
+                      style={[
+                        styles.energyPickerItem,
+                        newChoreEnergyWeight === num &&
+                          styles.selectedPickerItem,
+                      ]}
+                      onPress={() => {
+                        setNewChoreEnergyWeight(num);
+                        setShowEnergyWeightPicker(false);
+                      }}
+                    >
+                      <Text style={styles.energyPickerItemText}>{num}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </Pressable>
+            </Card>
           ) : (
-            <Button
-              mode="elevated"
-              textColor="black"
-              buttonColor="#fff"
-              onPress={() => setShowEnergyWeightPicker(true)}
-              style={styles.energyButton}
-            >
-              <View style={styles.textView}>
-                <View>
-                  <Text style={styles.intervalWeightText}>Värde: </Text>
-                  <Text style={{ color: 'grey' }}>
-                    Hur energikrävande är sysslan?
-                  </Text>
+            <Card style={styles.energyCard}>
+              <Pressable
+                onPress={() => setShowEnergyWeightPicker(true)}
+                style={styles.energyButton}
+              >
+                <View style={styles.textView}>
+                  <View>
+                    <Text style={styles.intervalWeightText}>Värde: </Text>
+                    <Text style={{ color: 'grey' }}>
+                      Hur energikrävande är sysslan?
+                    </Text>
+                  </View>
+                  <View style={styles.circle}>
+                    <Text style={styles.circleText}>
+                      {newChoreEnergyWeight}
+                    </Text>
+                  </View>
                 </View>
-                <View style={styles.circle}>
-                  <Text style={styles.circleText}>{newChoreEnergyWeight}</Text>
-                </View>
-              </View>
-            </Button>
+              </Pressable>
+            </Card>
           )}
         </View>
       </View>
@@ -239,11 +250,7 @@ const styles = StyleSheet.create({
   energyPicker: {
     backgroundColor: '#fff',
     height: 80,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    borderRadius: 12,
   },
   intervalEnergyButtons: {
     gap: 16,
@@ -258,7 +265,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   energyPickerItem: {
-    padding: 10,
+    padding: 8,
     marginHorizontal: 8,
     backgroundColor: '#f0f0f0',
     borderRadius: 20,
@@ -278,10 +285,6 @@ const styles = StyleSheet.create({
   },
   intervalButton: {
     height: 60,
-    borderRadius: 12,
-  },
-  energyButton: {
-    height: 80,
     borderRadius: 12,
   },
   textView: {
@@ -324,5 +327,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     height: 80,
+  },
+  intervalCard: {
+    backgroundColor: 'white',
+    height: 60,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+  },
+  energyCard: {
+    backgroundColor: 'white',
+    height: 80,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+  },
+  energyButton: {
+    height: 80,
+    borderRadius: 12,
   },
 });
