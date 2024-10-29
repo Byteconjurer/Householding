@@ -1,12 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit';
 import {
-  selectHouseholdsList,
-  selectHouseholdMembersList,
-} from '../sharedSelectors';
-import {
   selectChores,
   selectCurrentHousehold,
   selectCurrentUser,
+  selectHouseholdMembersList,
+  selectHouseholdsList,
 } from '../sharedSelectors';
 
 export const selectHouseholdById = (householdId: string) =>
