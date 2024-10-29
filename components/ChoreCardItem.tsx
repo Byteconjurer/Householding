@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
+import { avatarsMap } from '../data/data';
 import { Chore } from '../data/types';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
 import { selectCompletedChoresTodayByChoreId } from '../store/sharedSelectors';
@@ -13,23 +14,27 @@ interface Props {
 export default function ChoreCardItem({ chore, onPress }: Props) {
   const members = useAppSelector(selectMembersInCurrentHousehold);
 
+  // Lista av objekt (completedChores) som är filtrerat mot idag och en syssla
   const completedToday = useAppSelector(
     selectCompletedChoresTodayByChoreId(chore.id),
   );
+
   const isCompletedToday = completedToday.length !== 0;
 
+  // Ta reda på om det ska visas en/flera avatar eller en siffra.
+
+  // Plockar ut alla medlemsID för varje objekt och sparar i lista.
   const memberIdList = completedToday.map((ct) => ct.householdMemberId);
 
+  // Bygger ett objekt där id från en medlem mappas mot avatar.
   const idToAvatarMap = Object.fromEntries(
     members.map((member) => [member.id, member.avatar]),
   );
-
+  // översätter id listan till avatarer
   const avatars = memberIdList.map((id) => idToAvatarMap[id]);
 
   console.log(memberIdList);
   console.log(avatars);
-
-  // Ta reda på om det ska visas en/flera avatar eller en siffra.
 
   return (
     <Pressable style={styles.chorePressable}>
@@ -40,19 +45,16 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
           </View>
           <View style={styles.avatarContainer}>
             {isCompletedToday ? (
-              avatars.map((a) => <Text>{a}</Text>)
+              avatars.map((a, index) => (
+                <Image
+                  key={index}
+                  source={avatarsMap[a].icon}
+                  style={styles.avatar}
+                />
+              ))
             ) : (
               <Text style={styles.choreTitle}>{chore.interval}</Text>
             )}
-            {/* {chore.avatars.map((avatarKey, index) => {
-              return (
-                <Image
-                  key={`${chore.id}-${avatarKey}-${index}`}
-                  source={avatarsMap[avatarKey].icon}
-                  style={styles.avatar}
-                />
-              );
-            })} */}
           </View>
         </View>
       </Card>
