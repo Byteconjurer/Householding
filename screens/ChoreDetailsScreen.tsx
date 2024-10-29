@@ -47,6 +47,9 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
 
   const handlePress = () => {
     setIsChoreDone(true);
+    // gjorde en const av completed time så man kan se den i console.log för att testa.
+    // kan sätta date.now direkt i dispatch på choreComplete om man vill ha det så.
+    const choreCompletedTime = Date.now().toString();
 
     if (!currentHousehold) {
       console.error('No current household set');
@@ -61,13 +64,15 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
         id: nextCompletedChoreId,
         choreId: chore.id,
         householdMemberId: currentHouseholdMember.id,
-        choreComplete: Date.now().toString(),
+        choreComplete: choreCompletedTime,
         householdId: currentHousehold.id,
       }),
+      // bara för att se att det funkar. Kan tas bort.
       console.log(
-        'Chore dispatched! Details = ',
+        'Chore dispatched! ChoreCompletedDetails = ',
         nextCompletedChoreId,
         chore.id,
+        choreCompletedTime,
         currentHouseholdMember.id,
         currentHousehold.id,
       ),
