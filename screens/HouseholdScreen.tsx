@@ -129,8 +129,10 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   );
   const AllHouseholdMembers = () => {
     const handleMakeOwner = (member: HouseholdMember) => {
-      if (!member) return;
-
+      if (!member) {
+        console.error('No member to update!');
+        return;
+      }
       const updateMember = {
         id: member.id.toString(),
         userId: member.userId.toString(),
@@ -156,7 +158,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                   style={styles.avatar}
                 />
                 {isOwner && (
-                  <View>
+                  <View style={{ paddingRight: 3 }}>
                     <Pressable onPress={() => handleMakeOwner(member)}>
                       <MaterialIcons
                         name="face"
@@ -166,7 +168,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                     </Pressable>
                   </View>
                 )}
-
                 <Text style={styles.memberName}>
                   {member.name || 'Medlemsnamn'}
                 </Text>
@@ -177,49 +178,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       </Card>
     );
   };
-  // const AllHouseholdMembers = ({ membersInCurrentHousehold, isOwner }) => {
-  //   const [members, setMembers] = useState(membersInCurrentHousehold);
-
-  //   const handlePress = (memberId) => {
-  //     setMembers((prevMembers) =>
-  //       prevMembers.map((member) =>
-  //         member.id === memberId ? { ...member, isOwner: true } : member,
-  //       ),
-  //     );
-  //   };
-  //   return (
-  //     <Card style={styles.card}>
-  //       <Card.Content>
-  //         <Text variant="titleLarge">Hushållsmedlemmar</Text>
-  //         <View style={styles.membersContainer}>
-  //           {members.map((member) => (
-  //             <View key={member.id} style={styles.memberItem}>
-  //               <Avatar.Image
-  //                 size={30}
-  //                 source={avatarsMap[member.avatar].icon}
-  //                 style={styles.avatar}
-  //               />
-  //               {isOwner && (
-  //                 <View>
-  //                   <Pressable onPress={() => handlePress(member.id)}>
-  //                     <MaterialIcons
-  //                       name="face"
-  //                       size={20}
-  //                       color={member.isOwner ? 'green' : '#777'}
-  //                     />
-  //                   </Pressable>
-  //                 </View>
-  //               )}
-  //               <Text style={styles.memberName}>
-  //                 {member.name || 'Medlemsnamn'}
-  //               </Text>
-  //             </View>
-  //           ))}
-  //         </View>
-  //       </Card.Content>
-  //     </Card>
-  //   );
-  // };
 
   const RemoveHousehold = () => (
     <View style={styles.binIcon}>
@@ -321,7 +279,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   memberName: {
+    maxWidth: 100,
+    padding: 2,
     fontSize: 16,
+    flexWrap: 'wrap',
   },
   errorText: {
     fontSize: 18,
