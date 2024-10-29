@@ -14,8 +14,8 @@ import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectChoreById } from '../store/chore/choresSelectors';
-import { updateChore } from '../store/chore/choresSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
+import { modifyChoreInCurrentHousehold } from '../store/chore/choreThunks';
 
 type UpdateChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'UpdateChore'>,
@@ -41,7 +41,7 @@ export default function UpdateChoreScreen({
 
   const handleUpdateChore = () => {
     dispatch(
-      updateChore({
+      modifyChoreInCurrentHousehold({
         id: chore!.id,
         title: newChoreTitle,
         description: newChoreDescription,

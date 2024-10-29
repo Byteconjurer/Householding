@@ -14,6 +14,7 @@ import {
   selectCurrentHousehold,
   selectCurrentUser,
 } from '../store/sharedSelectors';
+import { fetchChoresForCurrentHousehold } from '../store/chore/choreThunks';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
@@ -29,6 +30,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   useEffect(() => {
     if (currentUser?.uid) {
       dispatch(setCurrentHouseholdMember(currentUser.uid));
+      dispatch(fetchChoresForCurrentHousehold());
     }
   }, [currentUser, dispatch]);
 
