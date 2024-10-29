@@ -52,6 +52,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           buttonColor="#fff"
           labelStyle={styles.buttonText}
           onPress={() => navigation.navigate('ChooseChore')}
+          disabled={!isOwner}
         >
           Ändra
         </Button>
