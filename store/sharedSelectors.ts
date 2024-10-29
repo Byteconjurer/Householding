@@ -9,6 +9,18 @@ export const selectCompletedChoresList = createSelector(
   (choreCompleted) => choreCompleted.list,
 );
 
+export const selectCompletedChoresTodayByChoreId =
+  (choreId: string) => (state: RootState) => {
+    const time = Date.now();
+    const today = new Date(time).toISOString().split('T')[0];
+
+    const listOfDoneChoresByChoreIdForToday = selectCompletedChoresList(
+      state,
+    ).filter((cc) => cc.choreComplete === today && cc.choreId === choreId);
+
+    return listOfDoneChoresByChoreIdForToday;
+  };
+
 export const selectHousehold = (state: RootState) => state.household;
 export const selectHouseholdsList = createSelector(
   [selectHousehold],

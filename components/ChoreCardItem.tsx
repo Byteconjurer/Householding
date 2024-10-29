@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { Chore } from '../data/types';
+import { selectCompletedChoresTodayByChoreId } from '../store/sharedSelectors';
+import { useAppSelector } from '../store/store';
 
 interface Props {
   chore: Chore;
@@ -9,19 +11,25 @@ interface Props {
 
 export default function ChoreCardItem({ chore, onPress }: Props) {
   // const members = useAppSelector(selectMembersInCurrentHousehold);
-  // const completedToday = useAppSelector(selectCompletedChoresTodayById(chore.id))
+
+  const completedToday = useAppSelector(
+    selectCompletedChoresTodayByChoreId(chore.id),
+  );
+  const isCompletedToday = completedToday.length !== 0;
+
+  console.log(completedToday);
 
   // Ta reda på om det ska visas en/flera avatar eller en siffra.
 
   return (
-    <Pressable style={styles.chorePressable} key={chore.id}>
+    <Pressable style={styles.chorePressable}>
       <Card style={styles.choreCard} onPress={onPress}>
         <View style={styles.choreContainer}>
           <View style={styles.widthTitle}>
             <Text style={styles.choreTitle}>{chore.title}</Text>
           </View>
           <View style={styles.avatarContainer}>
-            <Text style={styles.choreTitle}>4</Text>
+            {isCompletedToday && <Text style={styles.choreTitle}>4</Text>}
             {/* {chore.avatars.map((avatarKey, index) => {
               return (
                 <Image
