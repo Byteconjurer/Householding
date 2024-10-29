@@ -7,6 +7,13 @@ import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
+import { generateCompletedChoreId } from '../store/chore/choresSelectors';
+import { addChoreCompleted } from '../store/choreCompleted/choreCompletedSlice';
+import {
+  selectCurrentHousehold,
+  selectCurrentHouseholdMember,
+} from '../store/sharedSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
@@ -16,6 +23,10 @@ type ChoreProps = CompositeScreenProps<
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
   const chore = mockedChores.find((item) => item.id === route.params.id);
+  const completedChoreId = useAppSelector(generateCompletedChoreId);
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     if (chore) {
@@ -35,7 +46,32 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   }
 
   const handlePress = () => {
-    setIsChoreDone(!isChoreDone);
+    setIsChoreDone(true);
+    const choreCompletedTime = Date.now();
+    const choreCompletedDate = new Date(choreCompletedTime)
+      .toISOString()
+      .split('T')[0];
+
+    if (!currentHousehold) {
+      console.error('No current household set');
+      return;
+    }
+    if (!currentHouseholdMember) {
+      console.error('No current household member set');
+      return;
+    }
+    dispatch(
+      addChoreCompleted({
+        id: completedChoreId,
+        choreId: chore.id,
+        householdMemberId: currentHouseholdMember.id,
+        choreComplete: choreCompletedDate,
+        householdId: currentHousehold.id,
+      }),
+    );
+    setTimeout(() => {
+      navigation.navigate('Chores');
+    }, 150);
   };
 
   return (
