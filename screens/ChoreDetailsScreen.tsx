@@ -4,11 +4,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useLayoutEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
-import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { generateCompletedChoreId } from '../store/chore/choresSelectors';
 import { addChoreCompleted } from '../store/choreCompleted/choreCompletedSlice';
+import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
 import {
   selectCurrentHousehold,
   selectCurrentHouseholdMember,
@@ -22,10 +22,11 @@ type ChoreProps = CompositeScreenProps<
 
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
-  const chore = mockedChores.find((item) => item.id === route.params.id);
   const completedChoreId = useAppSelector(generateCompletedChoreId);
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const chores = useAppSelector(selectChoresByCurrentHousehold);
+  const chore = chores.find((item) => item.id === route.params.id);
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
