@@ -146,7 +146,7 @@ export const mockedChoresCompleted: ChoreCompleted[] = [
   {
     id: '1',
     choreId: '1',
-    householdMemberId: '4',
+    householdMemberId: '2',
     choreComplete: '2024-10-29',
     householdId: '1',
   },
@@ -173,8 +173,8 @@ export const mockedChoresCompleted: ChoreCompleted[] = [
   },
   {
     id: '5',
-    choreId: '6',
-    householdMemberId: '5',
+    choreId: '5',
+    householdMemberId: '1',
     choreComplete: '2024-10-29',
     householdId: '2',
   },
