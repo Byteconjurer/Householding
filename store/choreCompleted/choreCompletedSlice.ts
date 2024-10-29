@@ -23,4 +23,4 @@ const choreCompletedSlice = createSlice({
 });
 
 export const choreCompletedReducer = choreCompletedSlice.reducer;
-export const { addChoreCompleted } = choreCompletedSlice.actions;
+/* export const { } = choreCompletedSlice.actions; */

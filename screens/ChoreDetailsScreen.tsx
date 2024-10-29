@@ -1,13 +1,15 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { selectChoreById } from '../store/chore/choresSelectors';
+import { selectCurrentHousehold, selectCurrentHouseholdMember } from '../store/sharedSelectors';
+import { addChoreCompleted } from '../store/choreCompleted/chorecompletedThunks';
 
 type ChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
@@ -16,8 +18,9 @@ type ChoreProps = CompositeScreenProps<
 
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
-  const dispatch = useAppDispatch(); // Dispatcha thunk för att markera en chore som utförd
-  
+  const dispatch = useAppDispatch();
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
   const choreId = route.params.id;
   const chore = useAppSelector(selectChoreById(choreId));
     
@@ -56,7 +59,6 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
     }
     dispatch(
       addChoreCompleted({
-        id: completedChoreId,
         choreId: chore.id,
         householdMemberId: currentHouseholdMember.id,
         choreComplete: choreCompletedDate,

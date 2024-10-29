@@ -8,7 +8,7 @@ export const addChoreCompleted = createAsyncThunk<
   ChoreCompleted,
   ChoreCompletedData
 >('chorecompleted/addChoreCompleted', async (data, { rejectWithValue }) =>
-  addDoc(collection(db, `Household/${data.householdId}/ChoreCompleted`), data)
+  addDoc(collection(db, `Householdmember/${data.householdMemberId}/ChoreCompleted`), data)
     .then((choreCompletedRef) => ({ id: choreCompletedRef.id, ...data }))
     .catch((error) => {
       console.error('Error adding chorecompleted:', error);
