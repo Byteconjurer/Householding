@@ -26,7 +26,6 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const nextCompletedChoreId = useAppSelector(generateNextId);
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
@@ -47,8 +46,8 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   }
 
   const handlePress = () => {
-    setIsChoreDone((prevIsChoreDone) => !prevIsChoreDone);
-    if (isChoreDone) {
+    setIsChoreDone(true);
+
     if (!currentHousehold) {
       console.error('No current household set');
       return;
@@ -57,25 +56,25 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
       console.error('No current household member set');
       return;
     }
-      dispatch(
-        addChoreCompleted({
-          //mockad id inkrementering. Ska bytas ut när vi uppdaterar senare
-          id: nextCompletedChoreId,
-          choreId: chore.id,
-          householdMemberId: currentHouseholdMember.id,
-          choreComplete: Date.now().toString(),
-          householdId: currentHousehold.id,
-        }),
-        console.log(
-          'Chore dispatched! Details = ',
-          nextCompletedChoreId,
-          chore.id,
-          currentHouseholdMember.id,
-          currentHousehold.id,
-        ),
-      );
-    }
-    console.log('isChoreDone =', isChoreDone);
+    dispatch(
+      addChoreCompleted({
+        id: nextCompletedChoreId,
+        choreId: chore.id,
+        householdMemberId: currentHouseholdMember.id,
+        choreComplete: Date.now().toString(),
+        householdId: currentHousehold.id,
+      }),
+      console.log(
+        'Chore dispatched! Details = ',
+        nextCompletedChoreId,
+        chore.id,
+        currentHouseholdMember.id,
+        currentHousehold.id,
+      ),
+    );
+    setTimeout(() => {
+      navigation.navigate('Chores');
+    }, 150);
   };
 
   return (
