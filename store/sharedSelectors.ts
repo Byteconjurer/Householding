@@ -18,6 +18,9 @@ export const selectCurrentHousehold = createSelector(
   selectHousehold,
   (household) => household.current,
 );
+export const selectHouseholdLoading = (state: RootState) =>
+  state.household.loading;
+export const selectHouseholdError = (state: RootState) => state.household.error;
 
 export const selectUser = (state: RootState) => state.user;
 export const selectCurrentUser = createSelector(

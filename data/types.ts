@@ -42,3 +42,8 @@ export type ChoreCompleted = {
   choreComplete: string;
   householdId: string;
 };
+
+export type HouseholdData = Omit<Household, 'id'>;
+export type HouseholdMemberData = Omit<HouseholdMember, 'id'>;
+export type ChoreData = Omit<Chore, 'id'>;
+export type ChoreCompletedData = Omit<ChoreCompleted, 'id'>;

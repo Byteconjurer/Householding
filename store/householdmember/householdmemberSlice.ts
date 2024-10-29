@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
+import {
+  addHouseholdMember,
+  fetchUserHouseholdMembers,
+} from './householdmemberThunks';
 
 type HouseholdMemberState = {
   list: HouseholdMember[];
@@ -9,7 +13,7 @@ type HouseholdMemberState = {
 
 const initialState: HouseholdMemberState = {
   list: mockedHouseholdMembers,
-  current: mockedHouseholdMembers[0],
+  current: mockedHouseholdMembers[1],
 };
 
 const householdmemberSlice = createSlice({
@@ -41,11 +45,18 @@ const householdmemberSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(addHouseholdMember.fulfilled, (state, action) => {
+      state.list.push(action.payload);
+    });
+    builder.addCase(fetchUserHouseholdMembers.fulfilled, (state, action) => {
+      state.list = action.payload;
+    });
+  },
 });
 
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
-  addHouseholdMember,
   // deleteHouseholdmember,
   updateHouseholdMember,
   setCurrentHouseholdMember,

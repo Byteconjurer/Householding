@@ -4,8 +4,10 @@ import { TextInput, Button } from 'react-native-paper';
 import { z } from 'zod';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { useNavigation } from '@react-navigation/native';
+import { addCurrentUserToFirestore } from '../store/user/userThunks';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { FirebaseError } from 'firebase/app';
+import { RootStackParamList } from '../navigators/RootStackNavigator';
 
 const registerSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -13,7 +15,7 @@ const registerSchema = z.object({
 });
 
 export default function RegisterScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{
@@ -44,8 +46,9 @@ export default function RegisterScreen() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
+        addCurrentUserToFirestore();
         setErrors({});
-        navigation.goBack();
+        navigation.navigate('Home');
       })
       .catch((error: FirebaseError) => {
         if (error.code === 'auth/email-already-in-use') {
@@ -96,7 +99,7 @@ export default function RegisterScreen() {
       >
         <Button
           mode="contained"
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate('Login')}
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >

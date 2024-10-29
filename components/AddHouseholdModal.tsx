@@ -11,8 +11,8 @@ import {
 import { z } from 'zod';
 import { avatarsMap } from '../data/data';
 import { selectCurrentUser } from '../store/sharedSelectors';
-import { addHousehold } from '../store/household/householdSlice';
-import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import { addHousehold } from '../store/household/householdThunks';
+import { addHouseholdMember } from '../store/householdmember/householdmemberThunks';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import AvatarModal from './AvatarModal';
 
@@ -48,8 +48,7 @@ export default function AddHouseholdModal({
     setHouseholdCode(result);
   };
 
-  const newHouseholdId = Date.now().toString();
-  const handleAddHousehold = () => {
+  const handleAddHousehold = async () => {
     const householdNameValidation =
       householdNameSchema.safeParse(householdName);
     const userNameValidation = userNameSchema.safeParse(userName);
@@ -76,26 +75,25 @@ export default function AddHouseholdModal({
       return;
     }
 
-    dispatch(
-      addHousehold({
-        id: newHouseholdId,
-        name: householdName,
-        code: householdCode,
-      }),
+    const newHousehold = await dispatch(
+      addHousehold({ name: householdName, code: householdCode }),
     );
 
-    dispatch(
-      addHouseholdMember({
-        id: Date.now().toString() + '1',
-        userId: currentUser.uid,
-        householdId: newHouseholdId,
-        avatar: selectedAvatar,
-        name: userName,
-        owner: true,
-        isActive: true,
-        isRequest: false,
-      }),
-    );
+    if (addHousehold.fulfilled.match(newHousehold)) {
+      const householdId = newHousehold.payload.id;
+
+      dispatch(
+        addHouseholdMember({
+          userId: currentUser.uid,
+          householdId: householdId,
+          avatar: selectedAvatar,
+          name: userName,
+          owner: true,
+          isActive: true,
+          isRequest: false,
+        }),
+      );
+    }
 
     setAddHouseholdModalVisible(false);
     setTimeout(() => {
