@@ -7,7 +7,7 @@ import { Button, Card, Text } from 'react-native-paper';
 import { mockedChores } from '../data/data';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { generateNextId } from '../store/chore/choresSelectors';
+import { generateCompletedChoreId } from '../store/chore/choresSelectors';
 import { addChoreCompleted } from '../store/choreCompleted/choreCompletedSlice';
 import {
   selectCurrentHousehold,
@@ -23,7 +23,7 @@ type ChoreProps = CompositeScreenProps<
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
   const chore = mockedChores.find((item) => item.id === route.params.id);
-  const nextCompletedChoreId = useAppSelector(generateNextId);
+  const completedChoreId = useAppSelector(generateCompletedChoreId);
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
   const dispatch = useAppDispatch();
@@ -47,9 +47,10 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
 
   const handlePress = () => {
     setIsChoreDone(true);
-    // gjorde en const av completed time så man kan se den i console.log för att testa.
-    // kan sätta date.now direkt i dispatch på choreComplete om man vill ha det så.
-    const choreCompletedTime = Date.now().toString();
+    const choreCompletedTime = Date.now();
+    const choreCompletedDate = new Date(choreCompletedTime)
+      .toISOString()
+      .split('T')[0];
 
     if (!currentHousehold) {
       console.error('No current household set');
@@ -61,21 +62,12 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
     }
     dispatch(
       addChoreCompleted({
-        id: nextCompletedChoreId,
+        id: completedChoreId,
         choreId: chore.id,
         householdMemberId: currentHouseholdMember.id,
-        choreComplete: choreCompletedTime,
+        choreComplete: choreCompletedDate,
         householdId: currentHousehold.id,
       }),
-      // bara för att se att det funkar. Kan tas bort.
-      console.log(
-        'Chore dispatched! ChoreCompletedDetails = ',
-        nextCompletedChoreId,
-        chore.id,
-        choreCompletedTime,
-        currentHouseholdMember.id,
-        currentHousehold.id,
-      ),
     );
     setTimeout(() => {
       navigation.navigate('Chores');
