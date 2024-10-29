@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { mockedChoresCompleted } from '../../data/data';
 import { ChoreCompleted } from '../../data/types';
 import { addChoreCompleted } from './chorecompletedThunks';
@@ -23,4 +23,4 @@ const choreCompletedSlice = createSlice({
 });
 
 export const choreCompletedReducer = choreCompletedSlice.reducer;
-/* export const {} = choreCompletedSlice.actions; */
+export const { addChoreCompleted } = choreCompletedSlice.actions;

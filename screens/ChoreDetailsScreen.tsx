@@ -40,7 +40,32 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   }
 
   const handlePress = () => {
-    setIsChoreDone(!isChoreDone);
+    setIsChoreDone(true);
+    const choreCompletedTime = Date.now();
+    const choreCompletedDate = new Date(choreCompletedTime)
+      .toISOString()
+      .split('T')[0];
+
+    if (!currentHousehold) {
+      console.error('No current household set');
+      return;
+    }
+    if (!currentHouseholdMember) {
+      console.error('No current household member set');
+      return;
+    }
+    dispatch(
+      addChoreCompleted({
+        id: completedChoreId,
+        choreId: chore.id,
+        householdMemberId: currentHouseholdMember.id,
+        choreComplete: choreCompletedDate,
+        householdId: currentHousehold.id,
+      }),
+    );
+    setTimeout(() => {
+      navigation.navigate('Chores');
+    }, 150);
   };
 
   return (
