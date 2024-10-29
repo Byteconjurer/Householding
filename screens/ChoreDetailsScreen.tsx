@@ -8,7 +8,10 @@ import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { selectChoreById } from '../store/chore/choresSelectors';
-import { selectCurrentHousehold, selectCurrentHouseholdMember } from '../store/sharedSelectors';
+import {
+  selectCurrentHousehold,
+  selectCurrentHouseholdMember,
+} from '../store/sharedSelectors';
 import { addChoreCompleted } from '../store/choreCompleted/chorecompletedThunks';
 
 type ChoreProps = CompositeScreenProps<
@@ -23,7 +26,6 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
   const choreId = route.params.id;
   const chore = useAppSelector(selectChoreById(choreId));
-    
 
   useLayoutEffect(() => {
     if (chore) {

@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Chore } from '../../data/types';
-import { addChore, modifyChoreInCurrentHousehold, deleteChoreInCurrentHousehold, fetchChoresForCurrentHousehold  } from './choreThunks';
+import {
+  addChore,
+  modifyChoreInCurrentHousehold,
+  deleteChoreInCurrentHousehold,
+  fetchChoresForCurrentHousehold,
+} from './choreThunks';
 
 type ChoreState = Chore[];
 
@@ -27,19 +32,29 @@ const choreSlice = createSlice({
     builder.addCase(addChore.fulfilled, (state, action) => {
       state.push(action.payload);
     });
-    builder.addCase(fetchChoresForCurrentHousehold.fulfilled, (state, action) => {
-      return action.payload;
-    });
-    builder.addCase(modifyChoreInCurrentHousehold.fulfilled, (state, action) => {
-      const index = state.findIndex((chore) => chore.id === action.payload.id);
-      if (index !== -1) {
-        state[index] = action.payload;
-      }
-    });
-    builder.addCase(deleteChoreInCurrentHousehold.fulfilled, (state, action) => {
-      return state.filter((chore) => chore.id !== action.payload);
-    });
-
+    builder.addCase(
+      fetchChoresForCurrentHousehold.fulfilled,
+      (state, action) => {
+        return action.payload;
+      },
+    );
+    builder.addCase(
+      modifyChoreInCurrentHousehold.fulfilled,
+      (state, action) => {
+        const index = state.findIndex(
+          (chore) => chore.id === action.payload.id,
+        );
+        if (index !== -1) {
+          state[index] = action.payload;
+        }
+      },
+    );
+    builder.addCase(
+      deleteChoreInCurrentHousehold.fulfilled,
+      (state, action) => {
+        return state.filter((chore) => chore.id !== action.payload);
+      },
+    );
   },
 });
 

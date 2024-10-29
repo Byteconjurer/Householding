@@ -1,5 +1,5 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
-import { CompositeScreenProps} from '@react-navigation/native';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';

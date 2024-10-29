@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { mockedChoresCompleted } from '../../data/data';
 import { ChoreCompleted } from '../../data/types';
 import { addChoreCompleted } from './chorecompletedThunks';
