@@ -21,13 +21,13 @@ export const selectCompletedChoresTodayByChoreId =
     return listOfDoneChoresByChoreIdForToday;
   };
 
-export const selectLatestCompletedChoreByChoreId =
-  (choreId: string) => (state: RootState) => {
-    const allCompletedChoresById = selectCompletedChoresList(state).filter(
-      (cc) => cc.choreId === choreId,
-    );
-    return null;
-  };
+// export const selectLatestCompletedChoreByChoreId =
+//   (choreId: string) => (state: RootState) => {
+//     const allCompletedChoresById = selectCompletedChoresList(state).filter(
+//       (cc) => cc.choreId === choreId,
+//     );
+//     return null;
+//   };
 
 export const selectLatestDateFromCompletedChoreByChoreId =
   (choreId: string) =>
@@ -40,14 +40,14 @@ export const selectLatestDateFromCompletedChoreByChoreId =
     if (completedChores.length === 0) return null; // Om inga chores är kompletta för angivet choreId
 
     // Reducera för att hitta det senaste completed date
-    const latestCompletedDate = completedChores.reduce((latest, current) => {
+    const latestCompletedDateStr = completedChores.reduce((latest, current) => {
       const currentDate = new Date(current.choreComplete);
       const latestDate = new Date(latest);
       return currentDate > latestDate ? current.choreComplete : latest;
     }, completedChores[0].choreComplete);
 
-    console.log(latestCompletedDate);
-    return latestCompletedDate;
+    // console.log(latestCompletedDate);
+    return latestCompletedDateStr;
   };
 
 export const selectHousehold = (state: RootState) => state.household;

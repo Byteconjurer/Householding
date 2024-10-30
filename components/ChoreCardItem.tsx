@@ -21,13 +21,31 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
   const completedToday = useAppSelector(
     selectCompletedChoresTodayByChoreId(chore.id),
   );
-  const latesteDateAsString = useAppSelector(
+  const latestDateAsString = useAppSelector(
     selectLatestDateFromCompletedChoreByChoreId(chore.id),
   );
   const todaysDate = new Date();
 
-  console.log(todaysDate);
+  const latestDateAsDate = latestDateAsString
+    ? new Date(latestDateAsString)
+    : null;
+
+  const daysDifference = latestDateAsDate
+    ? Math.floor(
+        (todaysDate.getTime() - latestDateAsDate.getTime()) /
+          (1000 * 60 * 60 * 24),
+      )
+    : null;
+
+  // console.log('Dagens datum:', { todaysDate });
   // console.log(latesteDateAsString);
+  console.log(
+    `Dagens datum utan tid: ${todaysDate.toISOString().split('T')[0]}`,
+  );
+  console.log(`Dagens datum: ${todaysDate.toISOString()}`);
+  console.log(`Senaste datum ChoreCompleted: ${latestDateAsString}`);
+  console.log(`Antal dagar mellan: ${daysDifference}`);
+
   const isCompletedToday = completedToday.length !== 0;
 
   // Ta reda på om det ska visas en/flera avatar eller en siffra.
