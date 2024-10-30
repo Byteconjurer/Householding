@@ -55,7 +55,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
   {
     id: '4',
     userId: 'hlgPocAGNkR3R16JdIRoNipdmlx2',
-    householdId: '1',
+    householdId: '2',
     avatar: 'frog',
     owner: true,
     name: 'Pappa',

@@ -6,14 +6,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
-import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import { selectHouseholdMembersList } from '../store/sharedSelectors';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import {
   selectCurrentHousehold,
   selectCurrentUser,
 } from '../store/sharedSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
@@ -21,20 +20,23 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const householdMembers = useAppSelector(selectHouseholdMembersList);
   const membersInCurrentHousehold = useAppSelector(
     selectMembersInCurrentHousehold,
   );
-
-  useEffect(() => {
-    if (currentUser?.uid) {
-      dispatch(setCurrentHouseholdMember(currentUser.uid));
-    }
-  }, [currentUser, dispatch]);
-
-  const currentMember = householdMembers.find(
+  const currentMember = membersInCurrentHousehold.find(
     (member) => member.userId === currentUser?.uid,
   );
+
+  useEffect(() => {
+    if (currentUser && currentHousehold) {
+      dispatch(
+        setCurrentHouseholdMember({
+          userId: currentUser.uid,
+          householdId: currentHousehold?.id,
+        }),
+      );
+    }
+  }, [currentHousehold, currentUser, dispatch]);
 
   if (!currentMember) {
     return (
