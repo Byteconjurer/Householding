@@ -50,7 +50,7 @@ export const getLastDayOfPreviousWeek = (): Date => {
 export const getFirstDayOfPreviousMonth = (): Date => {
   const date = new Date();
   return new Date(date.getFullYear(), date.getMonth() - 1, 1); // First day of the previous month
-}
+};
 
 /**
  * Returns the date of the last day of the previous month.
@@ -58,5 +58,4 @@ export const getFirstDayOfPreviousMonth = (): Date => {
 export const getLastDayOfPreviousMonth = (): Date => {
   const date = new Date();
   return new Date(date.getFullYear(), date.getMonth(), 0); // Last day of the previous month
-}
-
+};
