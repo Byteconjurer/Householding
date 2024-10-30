@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D96163',
   },
   lightGray: {
-    backgroundColor: '#EAEAEA',
+    backgroundColor: '#BBBBBB',
   },
   redCircleText: {
     color: '#fff',

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Avatar, Card, IconButton, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
@@ -176,11 +176,12 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                 <Avatar.Image
                   size={30}
                   source={avatarsMap[currentMember!.avatar].icon}
-                  style={{ backgroundColor: avatarsMap[currentMember.avatar].color }}
+                  style={{
+                    backgroundColor: avatarsMap[currentMember.avatar].color,
+                  }}
                 />
                 {isOwner && (
                   <View style={{ paddingRight: 3 }}>
-
                     <IconButton
                       icon="account-key"
                       iconColor={member.owner ? 'green' : '#777'}
