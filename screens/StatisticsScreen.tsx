@@ -15,8 +15,8 @@ import {
   getLastDayOfCurrentWeek,
   getFirstDayOfPreviousWeek,
   getLastDayOfPreviousWeek,
-  getFirstDayOfCurrentMonth,
-  getLastDayOfCurrentMonth,
+  getFirstDayOfPreviousMonth,
+  getLastDayOfPreviousMonth,
 } from '../utils/date';
 import { pieDataItem } from 'gifted-charts-core';
 import { selectCurrentHousehold } from '../store/sharedSelectors';
@@ -36,7 +36,7 @@ export default function StatisticsScreen({ route }: StatisticsProps) {
   const periodToDateRange = {
     'this-week': [getFirstDayOfCurrentWeek, getLastDayOfCurrentWeek],
     'previous-week': [getFirstDayOfPreviousWeek, getLastDayOfPreviousWeek],
-    'previous-month': [getFirstDayOfCurrentMonth, getLastDayOfCurrentMonth],
+    'previous-month': [getFirstDayOfPreviousMonth, getLastDayOfPreviousMonth],
   };
 
   const [startDateFunc, endDateFunc] = periodToDateRange[period];

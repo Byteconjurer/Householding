@@ -45,33 +45,18 @@ export const getLastDayOfPreviousWeek = (): Date => {
 };
 
 /**
- * Returns the date of the first day of the current month.
+ * Returns the date of the first day of the previous month.
  */
-export const getFirstDayOfCurrentMonth = (): Date => {
+export const getFirstDayOfPreviousMonth = (): Date => {
   const date = new Date();
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-};
+  return new Date(date.getFullYear(), date.getMonth() - 1, 1); // First day of the previous month
+}
 
 /**
- * Returns the date of the last day of the current month.
+ * Returns the date of the last day of the previous month.
  */
-export const getLastDayOfCurrentMonth = (): Date => {
+export const getLastDayOfPreviousMonth = (): Date => {
   const date = new Date();
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0); // Last day of the current month
-};
+  return new Date(date.getFullYear(), date.getMonth(), 0); // Last day of the previous month
+}
 
-/**
- * Returns the date of the first day of the current year.
- */
-export const getFirstDayOfCurrentYear = (): Date => {
-  const date = new Date();
-  return new Date(date.getFullYear(), 0, 1);
-};
-
-/**
- * Returns the date of the last day of the current year.
- */
-export const getLastDayOfCurrentYear = (): Date => {
-  const date = new Date();
-  return new Date(date.getFullYear(), 11, 31); // Last day of December
-};
