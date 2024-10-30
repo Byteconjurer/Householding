@@ -16,7 +16,6 @@ import {
   selectCurrentHousehold,
   selectCurrentHouseholdMember,
   selectCurrentUser,
-  selectHouseholdMembersList,
 } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
@@ -26,23 +25,26 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const householdMembers = useAppSelector(selectHouseholdMembersList);
   const membersInCurrentHousehold = useAppSelector(
     selectMembersInCurrentHousehold,
+  );
+  const currentMember = membersInCurrentHousehold.find(
+    (member) => member.userId === currentUser?.uid,
   );
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
 
   const isOwner = currentHouseholdMember?.owner ?? false;
 
   useEffect(() => {
-    if (currentUser?.uid) {
-      dispatch(setCurrentHouseholdMember(currentUser.uid));
+    if (currentUser && currentHousehold) {
+      dispatch(
+        setCurrentHouseholdMember({
+          userId: currentUser.uid,
+          householdId: currentHousehold?.id,
+        }),
+      );
     }
-  }, [currentUser, dispatch]);
-
-  const currentMember = householdMembers.find(
-    (member) => member.userId === currentUser?.uid,
-  );
+  }, [currentHousehold, currentUser, dispatch]);
 
   if (!currentMember) {
     return (
@@ -57,7 +59,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [newHouseholdName, setNewHouseholdName] = useState('');
 
-    const currentHouseholdName = useAppSelector(selectCurrentHousehold)?.name;
+    const currentHouseholdName = currentHousehold?.name;
 
     const handleSave = () => {
       dispatch(setHouseholdName(newHouseholdName));
@@ -114,7 +116,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image size={60} source={avatarsMap[currentMember!.avatar].icon} />
+      <Avatar.Image
+        size={60}
+        source={avatarsMap[currentMember!.avatar].icon}
+        style={{ backgroundColor: 'lightgrey' }}
+      />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
@@ -259,6 +265,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginRight: 8,
+    backgroundColor: 'lightgrey',
   },
   codeCard: {
     width: 300,

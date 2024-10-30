@@ -10,9 +10,9 @@ import {
 } from 'react-native-paper';
 import { z } from 'zod';
 import { avatarsMap } from '../data/data';
-import { selectCurrentUser } from '../store/sharedSelectors';
 import { addHousehold } from '../store/household/householdSlice';
 import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import { selectCurrentUser } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import AvatarModal from './AvatarModal';
 
