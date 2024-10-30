@@ -20,7 +20,7 @@ export default function BottomNavigator() {
         <MaterialIcons name="checklist" size={30} color="#777" />
       </Pressable>
       <Pressable
-        onPress={() => navigation.navigate('ThisWeek', { period: 'current' })}
+        onPress={() => navigation.navigate('ThisWeek', { period: 'this-week' })}
       >
         <MaterialCommunityIcons name="chart-pie" size={30} color="#777" />
       </Pressable>

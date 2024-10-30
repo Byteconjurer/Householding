@@ -37,7 +37,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     userId: 'eOa5LC0XcZTJQOKQZmuuQ3AmR3L2',
     householdId: '1',
     avatar: 'dolphin',
-    owner: false,
+    owner: true,
     name: 'Mammas nya kille',
     isActive: true,
     isRequest: false,
