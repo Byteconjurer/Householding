@@ -175,7 +175,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
               <View key={member.id} style={styles.memberItem}>
                 <Avatar.Image
                   size={30}
-                  source={avatarsMap[currentMember!.avatar].icon}
+                  source={avatarsMap[member!.avatar].icon}
                   style={{
                     backgroundColor: avatarsMap[currentMember.avatar].color,
                   }}
