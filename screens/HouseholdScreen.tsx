@@ -29,7 +29,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     selectMembersInCurrentHousehold,
   );
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
-  const [isMemberActive, setIsMemberActive] = useState(Boolean);
 
   const isOwner = currentHouseholdMember?.owner ?? false;
 
@@ -145,12 +144,10 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       dispatch(updateHouseholdMember(updateMember));
     };
     const handlePauseMember = (member: HouseholdMember) => {
-      console.log('PAUS BEFORE DISPATCH : isMemberActive: ', isMemberActive);
       if (!member) {
         console.error('No member to update!');
         return;
       }
-      setIsMemberActive(false);
       const updateMember = {
         id: member.id,
         userId: member.userId,
@@ -158,21 +155,17 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         avatar: member.avatar,
         name: member.name,
         owner: member.owner,
-        isActive: isMemberActive,
+        isActive: !member.isActive,
         isRequest: member.isRequest,
       };
       dispatch(updateHouseholdMember(updateMember));
-      console.log('PAUS AFTER DISPATCH : isMemberActive: ', isMemberActive);
     };
-    console.log('PAUS OUTSIDE HANDLEPRESS : isMemberActive: ', isMemberActive);
 
     const handlePlayMember = (member: HouseholdMember) => {
-      console.log('PLAY BEFORE DISPATCH : isMemberActive: ', isMemberActive);
       if (!member) {
         console.error('No member to update!');
         return;
       }
-      setIsMemberActive(true);
       const updateMember = {
         id: member.id,
         userId: member.userId,
@@ -180,13 +173,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         avatar: member.avatar,
         name: member.name,
         owner: member.owner,
-        isActive: isMemberActive,
+        isActive: !member.isActive,
         isRequest: member.isRequest,
       };
       dispatch(updateHouseholdMember(updateMember));
-      console.log('PLAY AFTER DISPATCH : isMemberActive: ', isMemberActive);
     };
-    console.log('PLAY OUTSIDE HANDLEPRESS : isMemberActive: ', isMemberActive);
 
     return (
       <Card style={styles.card}>
