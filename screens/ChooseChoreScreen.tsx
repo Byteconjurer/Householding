@@ -42,8 +42,6 @@ export default function ChooseChoresScreen({ navigation }: ChooseChoreProps) {
         <Button
           mode="elevated"
           icon="close-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.buttonText}
           style={styles.button}
           onPress={() => navigation.navigate('Chores')}
@@ -58,7 +56,6 @@ export default function ChooseChoresScreen({ navigation }: ChooseChoreProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAEAEA',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -71,7 +68,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 50,
     marginTop: 15,
-    backgroundColor: '#fff',
   },
   choreContainer: {
     flexDirection: 'row',

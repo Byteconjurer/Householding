@@ -1,8 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, Card, Text, TextInput } from 'react-native-paper';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { StyleSheet, View } from 'react-native';
+import { Avatar, Card, IconButton, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
@@ -76,20 +75,16 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
             {currentHouseholdName || 'Hushåll'}
           </Text>
         )}
-        <TouchableOpacity
+        <IconButton
+          icon={isEditing ? 'content-save' : 'pencil-outline'}
+          size={24}
           onPress={() => {
             if (isEditing) {
               handleSave();
             }
             setIsEditing(!isEditing);
           }}
-        >
-          <MaterialIcons
-            name={isEditing ? 'save' : 'edit'}
-            size={30}
-            color="#777"
-          />
-        </TouchableOpacity>
+        />
       </View>
     );
   };
@@ -111,11 +106,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
         </Text>
-        <TouchableOpacity
+        <IconButton
+          icon="pencil-outline"
+          size={24}
           onPress={() => console.log('Ändra avatar eller namn')}
-        >
-          <MaterialIcons name="edit" size={30} color="#777" />
-        </TouchableOpacity>
+        />
       </View>
     </View>
   );
@@ -143,9 +138,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const RemoveHousehold = () => (
     <View style={styles.binIcon}>
-      <TouchableOpacity onPress={() => console.log('Ta bort hushåll')}>
-        <MaterialIcons name="delete" size={30} color="#777" />
-      </TouchableOpacity>
+      <IconButton
+        icon="delete"
+        size={24}
+        onPress={() => console.log('Ta bort hushåll')}
+      />
     </View>
   );
 
@@ -166,7 +163,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
     maxHeight: 1000,
   },
   householdContainer: {
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-    backgroundColor: '#f8f9fa',
+
     borderRadius: 10,
     padding: 15,
     flexShrink: 1,
@@ -228,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-    backgroundColor: '#f8f9fa',
+
     borderRadius: 10,
   },
   binIcon: {

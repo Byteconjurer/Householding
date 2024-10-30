@@ -12,8 +12,27 @@ import { AuthProvider } from './providers/AuthContextProvider';
 import { selectCurrentUser } from './store/sharedSelectors';
 import store, { useAppDispatch, useAppSelector } from './store/store';
 import { setUser } from './store/user/userSlice';
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
+import {
+  MD3DarkTheme,
+  MD3LightTheme,
+  adaptNavigationTheme,
+} from 'react-native-paper';
+import merge from 'deepmerge';
+import { ThemePreferencesContext } from './providers/ThemePreferencesContext';
 
-function AppContent() {
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+  reactNavigationLight: NavigationDefaultTheme,
+  reactNavigationDark: NavigationDarkTheme,
+});
+
+const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
+const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
+
+function AppContent({ theme }: { theme: any }) {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
 
@@ -26,19 +45,37 @@ function AppContent() {
   }, [dispatch]);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme}>
       {user?.uid ? <RootStackNavigator /> : <LoginStackNavigator />}
     </NavigationContainer>
   );
 }
 
 export default function App() {
+  const [isThemeDark, setIsThemeDark] = React.useState(false);
+
+  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+
+  const toggleTheme = React.useCallback(() => {
+    return setIsThemeDark(!isThemeDark);
+  }, [isThemeDark]);
+
+  const preferences = React.useMemo(
+    () => ({
+      toggleTheme,
+      isThemeDark,
+    }),
+    [toggleTheme, isThemeDark],
+  );
+
   return (
     <ReduxProvider store={store}>
       <AuthProvider>
-        <PaperProvider>
-          <AppContent />
-        </PaperProvider>
+        <ThemePreferencesContext.Provider value={preferences}>
+          <PaperProvider theme={theme}>
+            <AppContent theme={theme} />
+          </PaperProvider>
+        </ThemePreferencesContext.Provider>
       </AuthProvider>
     </ReduxProvider>
   );

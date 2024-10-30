@@ -38,8 +38,6 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           <Button
             mode="elevated"
             icon="plus-circle-outline"
-            textColor="black"
-            buttonColor="#fff"
             labelStyle={styles.buttonText}
             onPress={() => navigation.navigate('AddChore')}
           >
@@ -48,8 +46,6 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           <Button
             mode="elevated"
             icon="pencil-outline"
-            textColor="black"
-            buttonColor="#fff"
             labelStyle={styles.buttonText}
             onPress={() => navigation.navigate('ChooseChore')}
           >
@@ -64,7 +60,6 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAEAEA',
   },
   scrollContainer: {
     flexGrow: 1,

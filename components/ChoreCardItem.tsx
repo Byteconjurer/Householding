@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 50,
     marginTop: 15,
-    backgroundColor: '#fff',
   },
   choreContainer: {
     flexDirection: 'row',

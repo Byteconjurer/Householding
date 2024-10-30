@@ -27,7 +27,7 @@ const PieChartComponent = ({
     return (
       <View style={styles.chartContainer}>
         <PieChart data={data} radius={size} labelsPosition="mid" />
-        <Text style={styles.title}>{title}</Text>
+        {data.length === 0 && <Text style={styles.title}>{title}</Text>}
       </View>
     );
   }

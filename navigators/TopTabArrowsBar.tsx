@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import { ParamListBase, NavigationHelpers } from '@react-navigation/native';
+import { Surface, Text } from 'react-native-paper';
 
 type TopTabArrowsBarProps = MaterialTopTabBarProps & {
   navigation: NavigationHelpers<ParamListBase>;
@@ -28,7 +29,7 @@ export function TopTabArrowsBar(props: TopTabArrowsBarProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <Surface style={styles.container}>
       {index === 0 ? (
         <TouchableOpacity onPress={goToHome}>
           <Text style={[styles.arrow]}>{'<'}</Text>
@@ -54,7 +55,7 @@ export function TopTabArrowsBar(props: TopTabArrowsBarProps) {
           {'>'}
         </Text>
       </TouchableOpacity>
-    </View>
+    </Surface>
   );
 }
 
@@ -64,11 +65,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: '#fff',
   },
   arrow: {
     fontSize: 24,
-    color: 'black',
   },
   disabledArrow: {
     color: 'white',
@@ -76,6 +75,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
 });

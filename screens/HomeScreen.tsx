@@ -106,7 +106,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: '#EAEAEA',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 80,
@@ -115,9 +114,7 @@ const styles = StyleSheet.create({
   householdContainer: {
     gap: 20,
   },
-  card: {
-    backgroundColor: '#fff',
-  },
+  card: {},
   content: {
     flexDirection: 'row',
     alignItems: 'center',
