@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, Card, IconButton, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
@@ -128,27 +128,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       </View>
     </View>
   );
-  const AllHouseholdMembers = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Text variant="titleLarge">Hushållsmedlemmar</Text>
-        <View style={styles.membersContainer}>
-          {membersInCurrentHousehold.map((member) => (
-            <View key={member.id} style={styles.memberItem}>
-              <Avatar.Image
-                size={30}
-                source={avatarsMap[member.avatar].icon}
-                style={{ backgroundColor: avatarsMap[member.avatar].color }}
-              />
-              <Text style={styles.memberName}>
-                {member.name || 'Medlemsnamn'}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </Card.Content>
-    </Card>
-  );
+
   const AllHouseholdMembers = () => {
     const handleMakeOwner = (member: HouseholdMember) => {
       if (!member) {
@@ -195,25 +175,26 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
               <View key={member.id} style={styles.memberItem}>
                 <Avatar.Image
                   size={30}
-                  source={avatarsMap[member.avatar].icon}
-                  style={styles.avatar}
+                  source={avatarsMap[currentMember!.avatar].icon}
+                  style={{ backgroundColor: avatarsMap[currentMember.avatar].color }}
                 />
                 {isOwner && (
                   <View style={{ paddingRight: 3 }}>
-                    <Pressable onPress={() => handleMakeOwner(member)}>
-                      <MaterialIcons
-                        name="face"
-                        size={20}
-                        color={member.owner ? 'green' : '#777'}
-                      />
-                    </Pressable>
-                    <Pressable onPress={() => handlePausePlayMember(member)}>
-                      <MaterialIcons
-                        name={member.isActive ? 'pause' : 'play-arrow'}
-                        size={20}
-                        color={member.isActive ? '#FF7F50' : 'green'}
-                      />
-                    </Pressable>
+
+                    <IconButton
+                      icon="account-key"
+                      iconColor={member.owner ? 'green' : '#777'}
+                      size={20}
+                      onPress={() => handleMakeOwner(member)}
+                    />
+
+                    <IconButton
+                      icon={member.isActive ? 'pause' : 'play'}
+                      iconColor={member.isActive ? '#FF7F50' : 'green'}
+                      size={20}
+                      onPress={() => handlePausePlayMember(member)}
+                      style={{ marginTop: -20 }}
+                    />
                   </View>
                 )}
                 <Text style={styles.memberName}>
@@ -259,6 +240,8 @@ const styles = StyleSheet.create({
   householdContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
   statisticsTextHouseHold: {
     fontSize: 30,
@@ -273,6 +256,7 @@ const styles = StyleSheet.create({
   avatarContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 30,
   },
   avatarBackground: {
     backgroundColor: 'lightgrey',
@@ -296,6 +280,7 @@ const styles = StyleSheet.create({
     padding: 15,
     flexShrink: 1,
     flexGrow: 0,
+    marginTop: 20,
   },
   membersContainer: {
     marginTop: 10,
@@ -307,7 +292,6 @@ const styles = StyleSheet.create({
     width: '45%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
   },
   codeCard: {
     width: 300,
