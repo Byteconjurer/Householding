@@ -11,6 +11,7 @@ import {
   Avatar,
   Button,
   Card,
+  Surface,
   Text,
   TextInput,
   useTheme,
@@ -82,7 +83,7 @@ const NameAndAvatarSelection = ({
   };
 
   return (
-    <View style={styles.container}>
+    <Surface elevation={2} style={styles.container}>
       <View style={styles.avatarContainer}>
         <View>
           <TouchableOpacity
@@ -158,7 +159,6 @@ const NameAndAvatarSelection = ({
             mode="text"
             onPress={() => setAvatarModalVisible(false)}
             style={styles.closeButton}
-            textColor="black"
           >
             Stäng
           </Button>
@@ -171,8 +171,6 @@ const NameAndAvatarSelection = ({
           disabled={!name || !selectedAvatar}
           mode="elevated"
           icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.buttonText}
           contentStyle={{ paddingVertical: 5 }}
         >
@@ -181,20 +179,19 @@ const NameAndAvatarSelection = ({
       </View>
 
       {saved && <Text style={styles.savedText}>Sparat!</Text>}
-    </View>
+    </Surface>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: 'transparent',
+    borderRadius: 10,
   },
   avatarContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginBottom: 15,
-    backgroundColor: 'transparent',
   },
   avatarCircle: {
     width: 100,
@@ -205,7 +202,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 15,
-    backgroundColor: '#EAEAEA',
   },
   avatarWrapper: {
     position: 'relative',
@@ -213,7 +209,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   circleText: {
-    color: 'black',
     fontWeight: 'bold',
   },
   householdName: {
@@ -223,14 +218,13 @@ const styles = StyleSheet.create({
   },
   inputtext: {
     fontSize: 20,
-    color: 'black',
     paddingBottom: 5,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   input: {
     marginBottom: 15,
-    backgroundColor: '#EAEAEA',
+
     borderRadius: 10,
     elevation: 5,
   },
@@ -274,7 +268,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     padding: 2,
-    color: 'black',
   },
   closeButton: {
     marginTop: 20,

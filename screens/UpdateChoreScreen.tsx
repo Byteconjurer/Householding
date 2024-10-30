@@ -6,11 +6,10 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button, Card, Text } from 'react-native-paper';
+import { Button, Card, Surface, Text, TextInput } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { selectChoreById } from '../store/chore/choresSelectors';
@@ -66,7 +65,7 @@ export default function UpdateChoreScreen({
             />
           </Card.Content>
         </Card>
-        <Card style={styles.white}>
+        <Card>
           <Card.Content style={styles.descriptionContainer}>
             <TextInput
               placeholder="Beskrivning"
@@ -117,9 +116,9 @@ export default function UpdateChoreScreen({
                   <Text style={styles.intervalWeightText}>Återkommer: </Text>
                   <View style={styles.inlineText}>
                     <Text style={{ fontSize: 20 }}>var </Text>
-                    <View style={styles.circle}>
+                    <Surface elevation={4} style={styles.circle}>
                       <Text style={styles.circleText}>{newChoreInterval}</Text>
-                    </View>
+                    </Surface>
                     <Text style={{ fontSize: 20 }}> dag</Text>
                   </View>
                 </View>
@@ -168,11 +167,11 @@ export default function UpdateChoreScreen({
                       Hur energikrävande är sysslan?
                     </Text>
                   </View>
-                  <View style={styles.circle}>
+                  <Surface elevation={4} style={styles.circle}>
                     <Text style={styles.circleText}>
                       {newChoreEnergyWeight}
                     </Text>
-                  </View>
+                  </Surface>
                 </View>
               </Pressable>
             </Card>
@@ -182,8 +181,6 @@ export default function UpdateChoreScreen({
       <View style={styles.buttonContainer}>
         <Button
           icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.addButtonText}
           style={{
             width: '50%',
@@ -197,8 +194,6 @@ export default function UpdateChoreScreen({
         </Button>
         <Button
           icon="close-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.cancelButtonText}
           style={{
             width: '50%',
@@ -218,13 +213,10 @@ export default function UpdateChoreScreen({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#EAEAEA',
     padding: 13,
     gap: 13,
   },
-  white: {
-    backgroundColor: '#fff',
-  },
+
   input: {
     padding: 2,
     fontSize: 20,
@@ -232,25 +224,21 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     minHeight: 150,
   },
-
   //ny tillagd Styling
   intervalEnergyButtons: {
     gap: 16,
   },
   intervalCard: {
-    backgroundColor: 'white',
     height: 60,
     borderRadius: 12,
     paddingHorizontal: 18,
   },
   energyCard: {
-    backgroundColor: 'white',
     height: 80,
     borderRadius: 12,
     paddingHorizontal: 18,
   },
   intervalPicker: {
-    backgroundColor: '#fff',
     height: 60,
     borderRadius: 12,
   },
@@ -270,12 +258,12 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 12,
   },
+  white: {},
   inlineText: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   energyPicker: {
-    backgroundColor: '#fff',
     height: 80,
     borderRadius: 12,
   },
@@ -285,15 +273,13 @@ const styles = StyleSheet.create({
   energyPickerItem: {
     padding: 8,
     marginHorizontal: 8,
-    backgroundColor: '#f0f0f0',
+
     borderRadius: 20,
     width: 40,
     height: 40,
     alignItems: 'center',
   },
-  selectedPickerItem: {
-    backgroundColor: '#d0d0d0',
-  },
+
   energyPickerItemText: {
     fontSize: 18,
   },
@@ -316,7 +302,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -336,4 +321,5 @@ const styles = StyleSheet.create({
     padding: 2,
     justifyContent: 'center',
   },
+  selectedPickerItem: {},
 });

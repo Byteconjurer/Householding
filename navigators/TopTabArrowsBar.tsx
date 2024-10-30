@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import { ParamListBase, NavigationHelpers } from '@react-navigation/native';
 
@@ -8,7 +9,7 @@ type TopTabArrowsBarProps = MaterialTopTabBarProps & {
 };
 
 export function TopTabArrowsBar(props: TopTabArrowsBarProps) {
-  const { navigation, state } = props;
+  const { navigation, state, descriptors } = props;
   const { index, routeNames } = state;
 
   const goToPrevious = () => {
@@ -27,19 +28,23 @@ export function TopTabArrowsBar(props: TopTabArrowsBarProps) {
     navigation.navigate('Home');
   };
 
+  const currentRoute = state.routes[index];
+  const routeOptions = descriptors[currentRoute.key].options;
+  const title = routeOptions.title || routeNames[index];
+
   return (
     <View style={styles.container}>
       {index === 0 ? (
         <TouchableOpacity onPress={goToHome}>
-          <Text style={[styles.arrow]}>{'<'}</Text>
+          <Text style={styles.arrow}>{'<'}</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={goToPrevious}>
-          <Text style={[styles.arrow]}>{'<'}</Text>
+          <Text style={styles.arrow}>{'<'}</Text>
         </TouchableOpacity>
       )}
 
-      <Text style={styles.title}>{routeNames[index]}</Text>
+      <Text style={styles.title}>{title}</Text>
 
       <TouchableOpacity
         onPress={goToNext}
@@ -64,18 +69,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: '#fff',
   },
   arrow: {
     fontSize: 24,
-    color: 'black',
   },
   disabledArrow: {
-    color: 'white',
+    color: 'grey',
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
 });

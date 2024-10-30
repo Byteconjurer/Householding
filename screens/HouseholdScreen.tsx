@@ -1,14 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Card, Text, TextInput } from 'react-native-paper';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Image, StyleSheet, View } from 'react-native';
+import { Card, IconButton, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
@@ -92,20 +85,16 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
             {currentHouseholdName || 'Hushåll'}
           </Text>
         )}
-        <TouchableOpacity
+        <IconButton
+          icon={isEditing ? 'content-save' : 'pencil-outline'}
+          size={24}
           onPress={() => {
             if (isEditing) {
               handleSave();
             }
             setIsEditing(!isEditing);
           }}
-        >
-          <MaterialIcons
-            name={isEditing ? 'save' : 'edit'}
-            size={30}
-            color="#777"
-          />
-        </TouchableOpacity>
+        />
       </View>
     );
   };
@@ -139,14 +128,15 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
         </Text>
-        <TouchableOpacity
+        <IconButton
+          icon="pencil-outline"
+          size={24}
           onPress={() => console.log('Ändra avatar eller namn')}
-        >
-          <MaterialIcons name="edit" size={30} color="#777" />
-        </TouchableOpacity>
+        />
       </View>
     </View>
   );
+
   const AllHouseholdMembers = () => {
     const handleMakeOwner = (member: HouseholdMember) => {
       if (!member) {
@@ -206,20 +196,20 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                 </Card>
                 {isOwner && (
                   <View style={{ paddingRight: 3 }}>
-                    <Pressable onPress={() => handleMakeOwner(member)}>
-                      <MaterialIcons
-                        name="face"
-                        size={20}
-                        color={member.owner ? 'green' : '#777'}
-                      />
-                    </Pressable>
-                    <Pressable onPress={() => handlePausePlayMember(member)}>
-                      <MaterialIcons
-                        name={member.isActive ? 'pause' : 'play-arrow'}
-                        size={20}
-                        color={member.isActive ? '#FF7F50' : 'green'}
-                      />
-                    </Pressable>
+                    <IconButton
+                      icon="account-key"
+                      iconColor={member.owner ? 'green' : '#777'}
+                      size={20}
+                      onPress={() => handleMakeOwner(member)}
+                    />
+
+                    <IconButton
+                      icon={member.isActive ? 'pause' : 'play'}
+                      iconColor={member.isActive ? '#FF7F50' : 'green'}
+                      size={20}
+                      onPress={() => handlePausePlayMember(member)}
+                      style={{ marginTop: -12 }}
+                    />
                   </View>
                 )}
                 <Text style={styles.memberName}>
@@ -235,9 +225,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const RemoveHousehold = () => (
     <View style={styles.binIcon}>
-      <TouchableOpacity onPress={() => console.log('Ta bort hushåll')}>
-        <MaterialIcons name="delete" size={30} color="#777" />
-      </TouchableOpacity>
+      <IconButton
+        icon="delete"
+        size={24}
+        onPress={() => console.log('Ta bort hushåll')}
+      />
     </View>
   );
 
@@ -258,12 +250,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
     maxHeight: 1000,
   },
   householdContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
   statisticsTextHouseHold: {
     fontSize: 30,
@@ -278,6 +271,10 @@ const styles = StyleSheet.create({
   avatarContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 30,
+  },
+  avatarBackground: {
+    backgroundColor: 'lightgrey',
   },
   usernameContainer: {
     flexDirection: 'row',
@@ -293,11 +290,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-    backgroundColor: '#f8f9fa',
+
     borderRadius: 10,
     padding: 15,
     flexShrink: 1,
     flexGrow: 0,
+    marginTop: 20,
   },
   membersContainer: {
     marginTop: 10,
@@ -309,11 +307,6 @@ const styles = StyleSheet.create({
     width: '45%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-  },
-  avatar: {
-    marginRight: 8,
-    backgroundColor: 'lightgrey',
   },
   codeCard: {
     width: 300,
@@ -321,7 +314,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-    backgroundColor: '#f8f9fa',
+
     borderRadius: 10,
   },
   binIcon: {
@@ -357,7 +350,6 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    overflow: 'hidden',
   },
   memberAvatarImage: {
     width: 20,
@@ -372,6 +364,5 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    overflow: 'hidden',
   },
 });

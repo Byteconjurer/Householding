@@ -5,6 +5,7 @@ import {
   Card,
   Modal,
   Portal,
+  Surface,
   Text,
   TextInput,
 } from 'react-native-paper';
@@ -117,7 +118,7 @@ export default function AddHouseholdModal({
         onDismiss={() => setAddHouseholdModalVisible(false)}
         contentContainerStyle={styles.modalContainer}
       >
-        <View style={styles.container}>
+        <Surface style={styles.container}>
           <View style={{ alignItems: 'center' }}>
             <TouchableOpacity
               style={styles.avatarCircle}
@@ -178,8 +179,6 @@ export default function AddHouseholdModal({
             <Button
               mode="elevated"
               icon="plus-circle-outline"
-              textColor="black"
-              buttonColor="#fff"
               labelStyle={styles.buttonText}
               contentStyle={{ paddingVertical: 5 }}
               onPress={handleAddHousehold}
@@ -187,7 +186,7 @@ export default function AddHouseholdModal({
               Lägg till
             </Button>
           </View>
-        </View>
+        </Surface>
       </Modal>
       <AvatarModal
         avatarModalVisible={avatarModalVisible}
@@ -200,14 +199,11 @@ export default function AddHouseholdModal({
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    margin: 20,
-    borderRadius: 10,
+    margin: 30,
   },
   container: {
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 40,
+    borderRadius: 10,
   },
   avatarCircle: {
     width: 100,
@@ -216,7 +212,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 15,
-    backgroundColor: '#EAEAEA',
   },
   avatarBackground: {
     flex: 1,
@@ -229,7 +224,6 @@ const styles = StyleSheet.create({
   avatarImage: {
     width: 80,
     height: 80,
-    backgroundColor: 'transparent',
   },
   circleText: {
     fontWeight: 'bold',
@@ -241,7 +235,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 15,
-    backgroundColor: '#EAEAEA',
+
     borderRadius: 10,
     elevation: 5,
   },
@@ -262,7 +256,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingBottom: 5,
   },
-  card: {
-    backgroundColor: '#EAEAEA',
-  },
+  card: {},
 });
