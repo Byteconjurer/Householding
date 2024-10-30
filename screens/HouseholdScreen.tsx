@@ -16,7 +16,6 @@ import {
   selectCurrentHousehold,
   selectCurrentHouseholdMember,
   selectCurrentUser,
-  selectHouseholdMembersList,
 } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
@@ -26,11 +25,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const householdMembers = useAppSelector(selectHouseholdMembersList);
   const membersInCurrentHousehold = useAppSelector(
     selectMembersInCurrentHousehold,
   );
   const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+  const [isMemberActive, setIsMemberActive] = useState(Boolean);
 
   const isOwner = currentHouseholdMember?.owner ?? false;
 
@@ -40,7 +39,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     }
   }, [currentUser, dispatch]);
 
-  const currentMember = householdMembers.find(
+  const currentMember = membersInCurrentHousehold.find(
     (member) => member.userId === currentUser?.uid,
   );
 
@@ -145,6 +144,50 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       };
       dispatch(updateHouseholdMember(updateMember));
     };
+    const handlePauseMember = (member: HouseholdMember) => {
+      console.log('PAUS BEFORE DISPATCH : isMemberActive: ', isMemberActive);
+      if (!member) {
+        console.error('No member to update!');
+        return;
+      }
+      setIsMemberActive(false);
+      const updateMember = {
+        id: member.id,
+        userId: member.userId,
+        householdId: member.householdId,
+        avatar: member.avatar,
+        name: member.name,
+        owner: member.owner,
+        isActive: isMemberActive,
+        isRequest: member.isRequest,
+      };
+      dispatch(updateHouseholdMember(updateMember));
+      console.log('PAUS AFTER DISPATCH : isMemberActive: ', isMemberActive);
+    };
+    console.log('PAUS OUTSIDE HANDLEPRESS : isMemberActive: ', isMemberActive);
+
+    const handlePlayMember = (member: HouseholdMember) => {
+      console.log('PLAY BEFORE DISPATCH : isMemberActive: ', isMemberActive);
+      if (!member) {
+        console.error('No member to update!');
+        return;
+      }
+      setIsMemberActive(true);
+      const updateMember = {
+        id: member.id,
+        userId: member.userId,
+        householdId: member.householdId,
+        avatar: member.avatar,
+        name: member.name,
+        owner: member.owner,
+        isActive: isMemberActive,
+        isRequest: member.isRequest,
+      };
+      dispatch(updateHouseholdMember(updateMember));
+      console.log('PLAY AFTER DISPATCH : isMemberActive: ', isMemberActive);
+    };
+    console.log('PLAY OUTSIDE HANDLEPRESS : isMemberActive: ', isMemberActive);
+
     return (
       <Card style={styles.card}>
         <Card.Content>
@@ -166,6 +209,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                         color={member.owner ? 'green' : '#777'}
                       />
                     </Pressable>
+                    {member.isActive ? (
+                      <Pressable onPress={() => handlePauseMember(member)}>
+                        <MaterialIcons name="pause" size={20} color="#FF7F50" />
+                      </Pressable>
+                    ) : (
+                      <Pressable onPress={() => handlePlayMember(member)}>
+                        <MaterialIcons
+                          name="play-arrow"
+                          size={20}
+                          color="green"
+                        />
+                      </Pressable>
+                    )}
                   </View>
                 )}
                 <Text style={styles.memberName}>
