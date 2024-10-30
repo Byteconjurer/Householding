@@ -32,8 +32,8 @@ export default function RootStackNavigator() {
         component={HomeScreen}
         options={{
           title: 'Startskärm',
-          headerTitleAlign: 'left',
-          headerRight(props) {
+          headerTitleAlign: 'center',
+          headerRight() {
             return (
               <Switch
                 color={'red'}
