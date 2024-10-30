@@ -41,7 +41,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
                   dispatch(setCurrentHousehold(household.id));
                   navigation.navigate('TopTabNavigator', {
                     screen: 'Household',
-                    params: { householdId: household.id },
                   });
                 }}
               >
@@ -69,8 +68,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
         <Button
           mode="elevated"
           icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.buttonText}
           onPress={handleAddHousehold}
         >
@@ -79,8 +76,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
         <Button
           mode="elevated"
           icon="arrow-right"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.buttonText}
           contentStyle={{ flexDirection: 'row-reverse' }}
           onPress={handleJoinOnClick}

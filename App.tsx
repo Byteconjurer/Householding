@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 /* import { useAuth } from './hooks/useAuth'; */
@@ -29,8 +29,23 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationDark: NavigationDarkTheme,
 });
 
-const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
-const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
+const CombinedDefaultTheme = merge(MD3LightTheme, {
+  ...LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    ...LightTheme.colors,
+    primary: '#2f9388',
+  },
+});
+
+const CombinedDarkTheme = merge(MD3DarkTheme, {
+  ...DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    ...DarkTheme.colors,
+    primary: '#2f9388',
+  },
+});
 
 function AppContent({ theme }: { theme: any }) {
   const dispatch = useAppDispatch();
@@ -52,15 +67,15 @@ function AppContent({ theme }: { theme: any }) {
 }
 
 export default function App() {
-  const [isThemeDark, setIsThemeDark] = React.useState(false);
+  const [isThemeDark, setIsThemeDark] = useState(false);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
-  const toggleTheme = React.useCallback(() => {
+  const toggleTheme = useCallback(() => {
     return setIsThemeDark(!isThemeDark);
   }, [isThemeDark]);
 
-  const preferences = React.useMemo(
+  const preferences = useMemo(
     () => ({
       toggleTheme,
       isThemeDark,

@@ -179,8 +179,6 @@ export default function AddHouseholdModal({
             <Button
               mode="elevated"
               icon="plus-circle-outline"
-              textColor="black"
-              buttonColor="#fff"
               labelStyle={styles.buttonText}
               contentStyle={{ paddingVertical: 5 }}
               onPress={handleAddHousehold}

@@ -101,7 +101,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image size={60} source={avatarsMap[currentMember!.avatar].icon} />
+      <Avatar.Image
+        size={60}
+        source={avatarsMap[currentMember!.avatar].icon}
+        style={{ backgroundColor: avatarsMap[currentMember.avatar].color }}
+      />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
@@ -124,7 +128,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
               <Avatar.Image
                 size={30}
                 source={avatarsMap[member.avatar].icon}
-                style={styles.avatar}
+                style={{ backgroundColor: avatarsMap[member.avatar].color }}
               />
               <Text style={styles.memberName}>
                 {member.name || 'Medlemsnamn'}
@@ -183,6 +187,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  avatarBackground: {
+    backgroundColor: 'lightgrey',
+  },
   usernameContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -214,9 +221,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
-  },
-  avatar: {
-    marginRight: 8,
   },
   codeCard: {
     width: 300,
