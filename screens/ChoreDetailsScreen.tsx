@@ -73,7 +73,7 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
     );
     setTimeout(() => {
       navigation.navigate('Chores');
-    }, 150);
+    }, 300);
   };
 
   return (

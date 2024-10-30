@@ -194,7 +194,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                       iconColor={member.isActive ? '#FF7F50' : 'green'}
                       size={20}
                       onPress={() => handlePausePlayMember(member)}
-                      style={{ marginTop: -20 }}
+                      style={{ marginTop: -12 }}
                     />
                   </View>
                 )}
