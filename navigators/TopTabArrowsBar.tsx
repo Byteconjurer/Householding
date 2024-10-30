@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
- 
   },
   arrow: {
     fontSize: 24,

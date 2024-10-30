@@ -47,7 +47,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
                 <Card style={styles.card}>
                   <Card.Content style={styles.content}>
                     <Text style={styles.text}>{household.name}</Text>
-                    <View style={styles.avatar}>
+                    {/* <View style={styles.avatar}>
                       <Text>🐻</Text>
                       <Text>🐻</Text>
                       <Text>🐻</Text>
@@ -56,7 +56,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
                       <Text>🐻</Text>
                       <Text>🐻</Text>
                       <Text>🐻</Text>
-                    </View>
+                    </View> */}
                   </Card.Content>
                 </Card>
               </Pressable>
@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
   },
   card: {},
   content: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    textAlign: 'center',
   },
   text: {
     fontSize: 32,
