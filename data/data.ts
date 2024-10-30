@@ -49,7 +49,7 @@ export const mockedHouseholdMembers: HouseholdMember[] = [
     avatar: 'fox',
     owner: false,
     name: 'Junior',
-    isActive: true,
+    isActive: false,
     isRequest: false,
   },
   {
