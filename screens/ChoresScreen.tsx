@@ -33,29 +33,30 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
           />
         ))}
       </ScrollView>
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="elevated"
-          icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
-          labelStyle={styles.buttonText}
-          onPress={() => navigation.navigate('AddChore')}
-          disabled={!isOwner}
-        >
-          Lägg till
-        </Button>
-        <Button
-          mode="elevated"
-          icon="pencil-outline"
-          textColor="black"
-          buttonColor="#fff"
-          labelStyle={styles.buttonText}
-          onPress={() => navigation.navigate('ChooseChore')}
-        >
-          Ändra
-        </Button>
-      </View>
+      {isOwner && (
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="elevated"
+            icon="plus-circle-outline"
+            textColor="black"
+            buttonColor="#fff"
+            labelStyle={styles.buttonText}
+            onPress={() => navigation.navigate('AddChore')}
+          >
+            Lägg till
+          </Button>
+          <Button
+            mode="elevated"
+            icon="pencil-outline"
+            textColor="black"
+            buttonColor="#fff"
+            labelStyle={styles.buttonText}
+            onPress={() => navigation.navigate('ChooseChore')}
+          >
+            Ändra
+          </Button>
+        </View>
+      )}
     </View>
   );
 }

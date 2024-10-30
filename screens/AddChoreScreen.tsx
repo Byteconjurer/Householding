@@ -12,7 +12,7 @@ import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { generateNextId } from '../store/chore/choresSelectors';
 import { addChore } from '../store/chore/choresSlice';
 import { selectCurrentHousehold } from '../store/sharedSelectors';
-import store, { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<TopTabParamList>;
 
@@ -33,9 +33,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
       return;
     }
 
-    // Remove the log when done with testing
-    console.log('Adding chore with ID:', nextChoreId);
-
     const newChore = {
       id: nextChoreId,
       title: newChoreTitle,
@@ -46,10 +43,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
     };
 
     dispatch(addChore(newChore));
-
-    // Remove the logs when done with testing
-    console.log('New chore added:', newChore);
-    console.log('Updated state:', store.getState().chore);
 
     navigation.navigate('Chores');
   };

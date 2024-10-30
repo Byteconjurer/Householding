@@ -1,19 +1,24 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Avatar, Card, Text, TextInput } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { avatarsMap } from '../data/data';
+import { HouseholdMember } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
-import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import { selectHouseholdMembersList } from '../store/sharedSelectors';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import {
+  setCurrentHouseholdMember,
+  updateHouseholdMember,
+} from '../store/householdmember/householdmemberSlice';
 import {
   selectCurrentHousehold,
+  selectCurrentHouseholdMember,
   selectCurrentUser,
+  selectHouseholdMembersList,
 } from '../store/sharedSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
@@ -25,6 +30,9 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const membersInCurrentHousehold = useAppSelector(
     selectMembersInCurrentHousehold,
   );
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+
+  const isOwner = currentHouseholdMember?.owner ?? false;
 
   useEffect(() => {
     if (currentUser?.uid) {
@@ -119,27 +127,57 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       </View>
     </View>
   );
-  const AllHouseholdMembers = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Text variant="titleLarge">Hushållsmedlemmar</Text>
-        <View style={styles.membersContainer}>
-          {membersInCurrentHousehold.map((member) => (
-            <View key={member.id} style={styles.memberItem}>
-              <Avatar.Image
-                size={30}
-                source={avatarsMap[member.avatar].icon}
-                style={styles.avatar}
-              />
-              <Text style={styles.memberName}>
-                {member.name || 'Medlemsnamn'}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </Card.Content>
-    </Card>
-  );
+  const AllHouseholdMembers = () => {
+    const handleMakeOwner = (member: HouseholdMember) => {
+      if (!member) {
+        console.error('No member to update!');
+        return;
+      }
+      const updateMember = {
+        id: member.id,
+        userId: member.userId,
+        householdId: member.householdId,
+        avatar: member.avatar,
+        name: member.name,
+        owner: true,
+        isActive: member.isActive,
+        isRequest: member.isRequest,
+      };
+      dispatch(updateHouseholdMember(updateMember));
+    };
+    return (
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text variant="titleLarge">Hushållsmedlemmar</Text>
+          <View style={styles.membersContainer}>
+            {membersInCurrentHousehold.map((member) => (
+              <View key={member.id} style={styles.memberItem}>
+                <Avatar.Image
+                  size={30}
+                  source={avatarsMap[member.avatar].icon}
+                  style={styles.avatar}
+                />
+                {isOwner && (
+                  <View style={{ paddingRight: 3 }}>
+                    <Pressable onPress={() => handleMakeOwner(member)}>
+                      <MaterialIcons
+                        name="face"
+                        size={20}
+                        color={member.owner ? 'green' : '#777'}
+                      />
+                    </Pressable>
+                  </View>
+                )}
+                <Text style={styles.memberName}>
+                  {member.name || 'Medlemsnamn'}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  };
 
   const RemoveHousehold = () => (
     <View style={styles.binIcon}>
@@ -241,7 +279,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   memberName: {
+    maxWidth: 100,
+    padding: 2,
     fontSize: 16,
+    flexWrap: 'wrap',
   },
   errorText: {
     fontSize: 18,
