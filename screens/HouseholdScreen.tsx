@@ -177,7 +177,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                   size={30}
                   source={avatarsMap[member!.avatar].icon}
                   style={{
-                    backgroundColor: avatarsMap[currentMember.avatar].color,
+                    backgroundColor: avatarsMap[member.avatar].color,
                   }}
                 />
                 {isOwner && (
