@@ -1,7 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, Card, Text, TextInput } from 'react-native-paper';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Card, Text, TextInput } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
@@ -116,11 +122,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image
-        size={60}
-        source={avatarsMap[currentMember!.avatar].icon}
-        style={{ backgroundColor: 'lightgrey' }}
-      />
+      <Card
+        style={[
+          styles.avatarCard,
+          {
+            backgroundColor: avatarsMap[currentMember!.avatar].color,
+          },
+        ]}
+      >
+        <Image
+          source={avatarsMap[currentMember!.avatar].icon}
+          style={styles.avatarImage}
+        />
+      </Card>
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
@@ -158,11 +172,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
           <View style={styles.membersContainer}>
             {membersInCurrentHousehold.map((member) => (
               <View key={member.id} style={styles.memberItem}>
-                <Avatar.Image
-                  size={30}
-                  source={avatarsMap[member.avatar].icon}
-                  style={styles.avatar}
-                />
+                <Card
+                  style={[
+                    styles.memberAvatarCard,
+                    {
+                      backgroundColor: avatarsMap[member.avatar].color,
+                    },
+                  ]}
+                >
+                  <Image
+                    source={avatarsMap[member.avatar].icon}
+                    style={styles.memberAvatarImage}
+                  />
+                </Card>
                 {isOwner && (
                   <View style={{ paddingRight: 3 }}>
                     <Pressable onPress={() => handleMakeOwner(member)}>
@@ -295,5 +317,35 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'red',
     marginTop: 20,
+  },
+  avatarImage: {
+    width: 55,
+    height: 55,
+    margin: 10,
+    backgroundColor: 'transparent',
+  },
+  avatarCard: {
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    overflow: 'hidden',
+  },
+  memberAvatarImage: {
+    width: 20,
+    height: 20,
+    margin: 1,
+    backgroundColor: 'transparent',
+  },
+  memberAvatarCard: {
+    margin: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    overflow: 'hidden',
   },
 });
