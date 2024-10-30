@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Avatar, Card, IconButton, Text, TextInput } from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
+import { Card, IconButton, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
@@ -111,11 +111,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image
-        size={60}
-        source={avatarsMap[currentMember!.avatar].icon}
-        style={{ backgroundColor: avatarsMap[currentMember.avatar].color }}
-      />
+      <Card
+        style={[
+          styles.avatarCard,
+          {
+            backgroundColor: avatarsMap[currentMember!.avatar].color,
+          },
+        ]}
+      >
+        <Image
+          source={avatarsMap[currentMember!.avatar].icon}
+          style={styles.avatarImage}
+        />
+      </Card>
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
@@ -173,13 +181,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
           <View style={styles.membersContainer}>
             {membersInCurrentHousehold.map((member) => (
               <View key={member.id} style={styles.memberItem}>
-                <Avatar.Image
-                  size={30}
-                  source={avatarsMap[member!.avatar].icon}
-                  style={{
-                    backgroundColor: avatarsMap[member.avatar].color,
-                  }}
-                />
+                <Card
+                  style={[
+                    styles.memberAvatarCard,
+                    {
+                      backgroundColor: avatarsMap[member.avatar].color,
+                    },
+                  ]}
+                >
+                  <Image
+                    source={avatarsMap[member.avatar].icon}
+                    style={styles.memberAvatarImage}
+                  />
+                </Card>
                 {isOwner && (
                   <View style={{ paddingRight: 3 }}>
                     <IconButton
@@ -322,5 +336,33 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'red',
     marginTop: 20,
+  },
+  avatarImage: {
+    width: 55,
+    height: 55,
+    margin: 10,
+    backgroundColor: 'transparent',
+  },
+  avatarCard: {
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+  },
+  memberAvatarImage: {
+    width: 20,
+    height: 20,
+    margin: 1,
+    backgroundColor: 'transparent',
+  },
+  memberAvatarCard: {
+    margin: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
   },
 });
