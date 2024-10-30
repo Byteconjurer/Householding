@@ -88,7 +88,7 @@ Profil (6)
 - [x] En användare ska kunna ange sitt namn. \*
 - [x] En användare ska kunna välja en avatar (emoji-djur + färg) från en fördefinierad lista. \*
 - [x] Valda avatarer ska inte kunna väljas av andra användare i hushållet. \*
-- [] En användare ska kunna ställa in appens utseende (mörkt, ljust, auto).
+- [x] En användare ska kunna ställa in appens utseende (mörkt, ljust, auto).
 - [x] Avataren ska användas i appen för att visa vad användaren har gjort. \*
 - [x] Om en användare tillhör två eller fler hushåll ska denne kunna välja att byta mellan de
       olika hushållen.
