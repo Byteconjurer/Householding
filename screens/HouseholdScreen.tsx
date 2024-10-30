@@ -116,7 +116,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image size={60} source={avatarsMap[currentMember!.avatar].icon} />
+      <Avatar.Image
+        size={60}
+        source={avatarsMap[currentMember!.avatar].icon}
+        style={{ backgroundColor: 'lightgrey' }}
+      />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentMember!.name || 'användarnamn'}
@@ -261,6 +265,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginRight: 8,
+    backgroundColor: 'lightgrey',
   },
   codeCard: {
     width: 300,
