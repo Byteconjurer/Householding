@@ -35,6 +35,9 @@ const CombinedDefaultTheme = merge(MD3LightTheme, {
     ...MD3LightTheme.colors,
     ...LightTheme.colors,
     primary: '#2f9388',
+    background: '#e8e8e8', 
+    surface: '#FFFFFF',
+    text: '#000000'
   },
 });
 

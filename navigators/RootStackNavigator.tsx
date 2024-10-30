@@ -36,7 +36,7 @@ export default function RootStackNavigator() {
           headerRight() {
             return (
               <Switch
-                color={'red'}
+                color={'white'}
                 value={isThemeDark}
                 onValueChange={toggleTheme}
               />
