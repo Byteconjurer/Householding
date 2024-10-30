@@ -8,7 +8,6 @@ import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
 import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import { selectHouseholdMembersList } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   selectCurrentHousehold,
@@ -21,8 +20,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const householdMembers = useAppSelector(selectHouseholdMembersList);
-  const membersInCurrentHousehold = useAppSelector(
+  const householdMembers = useAppSelector(
     selectMembersInCurrentHousehold,
   );
 
@@ -124,7 +122,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       <Card.Content>
         <Text variant="titleLarge">Hushållsmedlemmar</Text>
         <View style={styles.membersContainer}>
-          {membersInCurrentHousehold.map((member) => (
+          {householdMembers.map((member) => (
             <View key={member.id} style={styles.memberItem}>
               <Avatar.Image
                 size={30}
