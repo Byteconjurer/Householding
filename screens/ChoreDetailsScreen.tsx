@@ -29,6 +29,7 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const chore = chores.find((item) => item.id === route.params.id);
   const dispatch = useAppDispatch();
 
+  const isActive = currentHouseholdMember?.isActive ?? false;
   useLayoutEffect(() => {
     if (chore) {
       navigation.setOptions({
@@ -92,6 +93,7 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
             labelStyle={styles.buttonLabelText}
             contentStyle={styles.buttonContent}
             onPress={handlePress}
+            disabled={!isActive}
           >
             {isChoreDone ? 'Utförd!' : 'Utförd?'}
           </Button>
