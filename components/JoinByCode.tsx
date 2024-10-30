@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Surface, Text } from 'react-native-paper';
-import { useAppSelector } from '../store/store';
+import { StyleSheet, View } from 'react-native';
+import { Button, TextInput, Text } from 'react-native-paper';
 import { Household } from '../data/types';
-import { selectHouseholdsList } from '../store/sharedSelectors';
+import {
+  selectCurrentUser,
+  selectHouseholdMembersList,
+  selectHouseholdsList,
+} from '../store/sharedSelectors';
+import { useAppSelector } from '../store/store';
 
 const JoinByCode = ({
   onCodeValidated,
@@ -12,6 +16,8 @@ const JoinByCode = ({
 }) => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const currentUser = useAppSelector(selectCurrentUser);
+  const householdMembers = useAppSelector(selectHouseholdMembersList);
 
   const households = useAppSelector(selectHouseholdsList);
 
@@ -19,9 +25,20 @@ const JoinByCode = ({
     const foundHousehold = households.find(
       (household: Household) => household.code === code,
     );
+
     if (foundHousehold) {
-      setError('');
-      onCodeValidated(foundHousehold.id);
+      if (
+        householdMembers.find(
+          (member) =>
+            member.householdId === foundHousehold.id &&
+            member.userId === currentUser?.uid,
+        )
+      ) {
+        setError('Du är redan med i detta hushållet');
+      } else {
+        setError('');
+        onCodeValidated(foundHousehold.id);
+      }
     } else {
       setError('Fel kod. Vänligen försök igen.');
     }

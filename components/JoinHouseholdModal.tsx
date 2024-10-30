@@ -27,7 +27,10 @@ export default function JoinHouseholdModal({
     <Portal>
       <Modal
         visible={joinModalVisible}
-        onDismiss={() => setJoinModalVisible(false)}
+        onDismiss={() => {
+          setJoinModalVisible(false);
+          resetHouseholdId();
+        }}
         contentContainerStyle={styles.modalContainer}
       >
         {householdId === null ? (

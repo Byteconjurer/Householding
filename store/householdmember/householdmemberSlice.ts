@@ -32,9 +32,14 @@ const householdmemberSlice = createSlice({
         state.list[index] = action.payload;
       }
     },
-    setCurrentHouseholdMember: (state, action: PayloadAction<string>) => {
+    setCurrentHouseholdMember: (
+      state,
+      action: PayloadAction<{ userId: string; householdId: string }>,
+    ) => {
       const householdmember = state.list.find(
-        (member) => member.userId === action.payload,
+        (member) =>
+          member.userId === action.payload.userId &&
+          member.householdId === action.payload.householdId,
       );
       if (householdmember) {
         state.current = householdmember;
