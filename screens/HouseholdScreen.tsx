@@ -134,11 +134,11 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         return;
       }
       const updateMember = {
-        id: member.id.toString(),
-        userId: member.userId.toString(),
-        householdId: member.householdId.toString(),
-        avatar: member.avatar.toString(),
-        name: member.name.toString(),
+        id: member.id,
+        userId: member.userId,
+        householdId: member.householdId,
+        avatar: member.avatar,
+        name: member.name,
         owner: true,
         isActive: member.isActive,
         isRequest: member.isRequest,
