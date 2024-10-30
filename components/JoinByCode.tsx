@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput, Text } from 'react-native-paper';
+import { Button, TextInput, Text, Surface } from 'react-native-paper';
 import { Household } from '../data/types';
 import {
   selectCurrentUser,
@@ -45,7 +45,7 @@ const JoinByCode = ({
   };
 
   return (
-    <View style={styles.container}>
+    <Surface style={styles.container}>
       <Text style={styles.inputtext}>Ange kod</Text>
       <TextInput
         mode="outlined"
@@ -72,24 +72,21 @@ const JoinByCode = ({
           Gå med
         </Button>
       </View>
-    </View>
+    </Surface>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
   },
   inputtext: {
     fontSize: 20,
-    color: 'black',
     paddingBottom: 5,
     fontWeight: 'bold',
   },
   input: {
     marginBottom: 15,
-    backgroundColor: '#EAEAEA',
     borderRadius: 10,
     elevation: 5,
   },
@@ -101,7 +98,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     padding: 2,
-    color: 'black',
   },
   errorText: {
     color: 'red',

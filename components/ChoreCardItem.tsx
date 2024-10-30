@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 50,
     marginTop: 15,
-    backgroundColor: '#fff',
   },
   choreContainer: {
     flexDirection: 'row',
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D96163',
   },
   lightGray: {
-    backgroundColor: '#EAEAEA',
+    backgroundColor: '#BBBBBB',
   },
   redCircleText: {
     color: '#fff',

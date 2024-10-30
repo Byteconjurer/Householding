@@ -41,14 +41,13 @@ export default function HomeScreen({ navigation }: HomeProps) {
                   dispatch(setCurrentHousehold(household.id));
                   navigation.navigate('TopTabNavigator', {
                     screen: 'Household',
-                    params: { householdId: household.id },
                   });
                 }}
               >
                 <Card style={styles.card}>
                   <Card.Content style={styles.content}>
                     <Text style={styles.text}>{household.name}</Text>
-                    <View style={styles.avatar}>
+                    {/* <View style={styles.avatar}>
                       <Text>🐻</Text>
                       <Text>🐻</Text>
                       <Text>🐻</Text>
@@ -57,7 +56,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
                       <Text>🐻</Text>
                       <Text>🐻</Text>
                       <Text>🐻</Text>
-                    </View>
+                    </View> */}
                   </Card.Content>
                 </Card>
               </Pressable>
@@ -69,8 +68,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
         <Button
           mode="elevated"
           icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.buttonText}
           onPress={handleAddHousehold}
         >
@@ -79,8 +76,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
         <Button
           mode="elevated"
           icon="arrow-right"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.buttonText}
           contentStyle={{ flexDirection: 'row-reverse' }}
           onPress={handleJoinOnClick}
@@ -106,7 +101,6 @@ export default function HomeScreen({ navigation }: HomeProps) {
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: '#EAEAEA',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingBottom: 80,
@@ -115,13 +109,11 @@ const styles = StyleSheet.create({
   householdContainer: {
     gap: 20,
   },
-  card: {
-    backgroundColor: '#fff',
-  },
+  card: {},
   content: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    textAlign: 'center',
   },
   text: {
     fontSize: 32,

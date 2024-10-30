@@ -6,6 +6,9 @@ import ChoreDetailsScreen from '../screens/ChoreDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UpdateChoreScreen from '../screens/UpdateChoreScreen';
 import TopTabNavigator, { TopTabParamList } from './TopTabNavigator';
+import { ThemePreferencesContext } from '../providers/ThemePreferencesContext';
+import { useContext } from 'react';
+import { Switch } from 'react-native-paper';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -20,6 +23,8 @@ export type RootStackParamList = {
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
+  const { toggleTheme, isThemeDark } = useContext(ThemePreferencesContext);
+
   return (
     <RootStack.Navigator initialRouteName="Home">
       <RootStack.Screen
@@ -27,7 +32,16 @@ export default function RootStackNavigator() {
         component={HomeScreen}
         options={{
           title: 'Startskärm',
-          headerTitleAlign: 'center', // Centrerar titeln.
+          headerTitleAlign: 'center',
+          headerRight() {
+            return (
+              <Switch
+                color={'white'}
+                value={isThemeDark}
+                onValueChange={toggleTheme}
+              />
+            );
+          },
         }}
       />
       <RootStack.Screen
