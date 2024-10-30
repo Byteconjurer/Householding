@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Avatar, Card, Text, TextInput } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -8,33 +8,36 @@ import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
 import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import { selectHouseholdMembersList } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import {
   selectCurrentHousehold,
   selectCurrentUser,
 } from '../store/sharedSelectors';
 import { fetchChoresForCurrentHousehold } from '../store/chore/choreThunks';
+import { deleteHouseholdMember, fetchHouseholdMembersInCurrentHousehold } from '../store/householdmember/householdmemberThunks';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../navigators/RootStackNavigator';
+import { deleteHousehold } from '../store/household/householdThunks';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
 export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const householdMembers = useAppSelector(selectHouseholdMembersList);
-  const membersInCurrentHousehold = useAppSelector(
-    selectMembersInCurrentHousehold,
-  );
+  const membersInCurrentHousehold = useAppSelector(selectMembersInCurrentHousehold);
+  
 
   useEffect(() => {
     if (currentUser?.uid) {
+      dispatch(fetchHouseholdMembersInCurrentHousehold());
       dispatch(setCurrentHouseholdMember(currentUser.uid));
       dispatch(fetchChoresForCurrentHousehold());
     }
   }, [currentUser, dispatch]);
 
-  const currentMember = householdMembers.find(
+  const currentMember = membersInCurrentHousehold.find(
     (member) => member.userId === currentUser?.uid,
   );
 
@@ -111,7 +114,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       <Avatar.Image size={60} source={avatarsMap[currentMember!.avatar].icon} />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
-          {currentMember!.name || 'användarnamn'}
+          {currentMember.name || 'användarnamn'}
         </Text>
         <TouchableOpacity
           onPress={() => console.log('Ändra avatar eller namn')}
@@ -145,7 +148,12 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const RemoveHousehold = () => (
     <View style={styles.binIcon}>
-      <TouchableOpacity onPress={() => console.log('Ta bort hushåll')}>
+      <TouchableOpacity onPress={() =>{ 
+        dispatch(deleteHouseholdMember(currentMember!.id));
+        if(currentMember.owner){dispatch(deleteHousehold(currentHousehold!.id));}
+        navigation.navigate("Home");}
+      }
+        >
         <MaterialIcons name="delete" size={30} color="#777" />
       </TouchableOpacity>
     </View>

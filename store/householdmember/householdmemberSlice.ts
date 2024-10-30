@@ -3,6 +3,7 @@ import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
 import {
   addHouseholdMember,
+  fetchHouseholdMembersInCurrentHousehold,
   fetchUserHouseholdMembers,
 } from './householdmemberThunks';
 
@@ -20,9 +21,6 @@ const householdmemberSlice = createSlice({
   name: 'householdmember',
   initialState: initialState,
   reducers: {
-    addHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
-      state.list.push(action.payload);
-    },
     // deleteHouseholdmember: (state, action: PayloadAction<number>) => {
     //   return state.filter(
     //     (householdmember) => householdmember.id !== action.payload,
@@ -50,6 +48,9 @@ const householdmemberSlice = createSlice({
       state.list.push(action.payload);
     });
     builder.addCase(fetchUserHouseholdMembers.fulfilled, (state, action) => {
+      state.list = action.payload;
+    });
+    builder.addCase(fetchHouseholdMembersInCurrentHousehold.fulfilled, (state, action) => {
       state.list = action.payload;
     });
   },

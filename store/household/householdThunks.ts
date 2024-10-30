@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Household, HouseholdData } from '../../data/types';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 export const addHousehold = createAsyncThunk<Household, HouseholdData>(
@@ -12,6 +12,22 @@ export const addHousehold = createAsyncThunk<Household, HouseholdData>(
         console.error('Error adding household :', error);
         return rejectWithValue('Failed to add household ');
       }),
+);
+
+// Async thunk for deleting a household from Firestore
+export const deleteHousehold = createAsyncThunk<
+  void,
+  string,
+  { rejectValue: string }
+>('household/deleteHousehold', async (id, { rejectWithValue }) =>
+  deleteDoc(doc(db, 'Household', id))
+    .then(() => {
+      console.log('Household deleted');
+    })
+    .catch((error) => {
+      console.error('Error deleting household:', error);
+      return rejectWithValue('Failed to delete household');
+    }),
 );
 
 export const fetchHouseholds = createAsyncThunk<

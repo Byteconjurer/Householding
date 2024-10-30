@@ -19,7 +19,7 @@ import { avatarsMap } from '../data/data';
 import { selectHouseholdById } from '../store/household/householdSelectors';
 import { selectCurrentUser } from '../store/sharedSelectors';
 import { selectMembersByHouseholdId } from '../store/householdmember/householdmemberSelectors';
-import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import { addHouseholdMember } from '../store/householdmember/householdmemberThunks';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 const NameAndAvatarSelection = ({
@@ -62,7 +62,6 @@ const NameAndAvatarSelection = ({
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
       dispatch(
         addHouseholdMember({
-          id: Date.now().toString(),
           userId: currentUserId,
           householdId: householdId,
           avatar: selectedAvatar,
