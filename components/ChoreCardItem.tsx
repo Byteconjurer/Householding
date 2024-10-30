@@ -3,7 +3,10 @@ import { Card, Text } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { Chore } from '../data/types';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import { selectCompletedChoresTodayByChoreId } from '../store/sharedSelectors';
+import {
+  selectCompletedChoresTodayByChoreId,
+  selectLatestDateFromCompletedChoreByChoreId,
+} from '../store/sharedSelectors';
 import { useAppSelector } from '../store/store';
 
 interface Props {
@@ -18,7 +21,13 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
   const completedToday = useAppSelector(
     selectCompletedChoresTodayByChoreId(chore.id),
   );
+  const latesteDateAsString = useAppSelector(
+    selectLatestDateFromCompletedChoreByChoreId(chore.id),
+  );
+  const todaysDate = new Date();
 
+  console.log(todaysDate);
+  // console.log(latesteDateAsString);
   const isCompletedToday = completedToday.length !== 0;
 
   // Ta reda på om det ska visas en/flera avatar eller en siffra.
@@ -33,8 +42,8 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
   // översätter id listan till avatarer
   const avatars = memberIdList.map((id) => idToAvatarMap[id]);
 
-  console.log(memberIdList);
-  console.log(avatars);
+  // console.log(memberIdList);
+  // console.log(avatars);
 
   return (
     <Pressable style={styles.chorePressable}>
