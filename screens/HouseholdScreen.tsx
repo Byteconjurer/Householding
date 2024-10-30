@@ -137,31 +137,14 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         householdId: member.householdId,
         avatar: member.avatar,
         name: member.name,
-        owner: true,
+        owner: !member.owner,
         isActive: member.isActive,
         isRequest: member.isRequest,
       };
       dispatch(updateHouseholdMember(updateMember));
     };
-    const handlePauseMember = (member: HouseholdMember) => {
-      if (!member) {
-        console.error('No member to update!');
-        return;
-      }
-      const updateMember = {
-        id: member.id,
-        userId: member.userId,
-        householdId: member.householdId,
-        avatar: member.avatar,
-        name: member.name,
-        owner: member.owner,
-        isActive: !member.isActive,
-        isRequest: member.isRequest,
-      };
-      dispatch(updateHouseholdMember(updateMember));
-    };
 
-    const handlePlayMember = (member: HouseholdMember) => {
+    const handlePausePlayMember = (member: HouseholdMember) => {
       if (!member) {
         console.error('No member to update!');
         return;
@@ -200,19 +183,13 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                         color={member.owner ? 'green' : '#777'}
                       />
                     </Pressable>
-                    {member.isActive ? (
-                      <Pressable onPress={() => handlePauseMember(member)}>
-                        <MaterialIcons name="pause" size={20} color="#FF7F50" />
-                      </Pressable>
-                    ) : (
-                      <Pressable onPress={() => handlePlayMember(member)}>
-                        <MaterialIcons
-                          name="play-arrow"
-                          size={20}
-                          color="green"
-                        />
-                      </Pressable>
-                    )}
+                    <Pressable onPress={() => handlePausePlayMember(member)}>
+                      <MaterialIcons
+                        name={member.isActive ? 'pause' : 'play-arrow'}
+                        size={20}
+                        color={member.isActive ? '#FF7F50' : 'green'}
+                      />
+                    </Pressable>
                   </View>
                 )}
                 <Text style={styles.memberName}>
