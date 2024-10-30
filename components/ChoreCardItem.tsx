@@ -16,8 +16,6 @@ interface Props {
 
 export default function ChoreCardItem({ chore, onPress }: Props) {
   const members = useAppSelector(selectMembersInCurrentHousehold);
-
-  // Lista av objekt (completedChores) som är filtrerat mot idag och en syssla
   const completedToday = useAppSelector(
     selectCompletedChoresTodayByChoreId(chore.id),
   );
@@ -37,31 +35,15 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
       )
     : null;
 
-  // console.log('Dagens datum:', { todaysDate });
-  // console.log(latesteDateAsString);
-  console.log(
-    `Dagens datum utan tid: ${todaysDate.toISOString().split('T')[0]}`,
-  );
-  console.log(`Dagens datum: ${todaysDate.toISOString()}`);
-  console.log(`Senaste datum ChoreCompleted: ${latestDateAsString}`);
-  console.log(`Antal dagar mellan: ${daysDifference}`);
-
+  const isIntervalExceeded =
+    daysDifference !== null && daysDifference > chore.interval;
   const isCompletedToday = completedToday.length !== 0;
 
-  // Ta reda på om det ska visas en/flera avatar eller en siffra.
-
-  // Plockar ut alla medlemsID för varje objekt och sparar i lista.
   const memberIdList = completedToday.map((ct) => ct.householdMemberId);
-
-  // Bygger ett objekt där id från en medlem mappas mot avatar.
   const idToAvatarMap = Object.fromEntries(
     members.map((member) => [member.id, member.avatar]),
   );
-  // översätter id listan till avatarer
   const avatars = memberIdList.map((id) => idToAvatarMap[id]);
-
-  // console.log(memberIdList);
-  // console.log(avatars);
 
   return (
     <Pressable style={styles.chorePressable}>
@@ -71,16 +53,32 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
             <Text style={styles.choreTitle}>{chore.title}</Text>
           </View>
           <View style={styles.avatarContainer}>
-            {isCompletedToday ? (
+            {isCompletedToday &&
               avatars.map((a, index) => (
                 <Image
                   key={index}
                   source={avatarsMap[a].icon}
                   style={styles.avatar}
                 />
-              ))
-            ) : (
-              <Text style={styles.choreTitle}>{chore.interval}</Text>
+              ))}
+            {latestDateAsString && daysDifference !== 0 && (
+              <View
+                style={[
+                  styles.circle,
+                  isIntervalExceeded ? styles.red : styles.lightGray,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.daysDifference,
+                    isIntervalExceeded
+                      ? styles.redCircleText
+                      : styles.grayCircleText,
+                  ]}
+                >
+                  {daysDifference}
+                </Text>
+              </View>
             )}
           </View>
         </View>
@@ -109,6 +107,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 15,
   },
+  daysDifference: {
+    fontSize: 17,
+  },
   avatarContainer: {
     flexDirection: 'row',
     marginRight: 15,
@@ -120,5 +121,25 @@ const styles = StyleSheet.create({
   },
   widthTitle: {
     maxWidth: '50%',
+  },
+  circle: {
+    borderRadius: 12.5,
+    width: 25,
+    height: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  red: {
+    backgroundColor: '#D96163',
+  },
+  lightGray: {
+    backgroundColor: '#EAEAEA',
+  },
+  redCircleText: {
+    color: '#fff',
+    fontSize: 17,
+  },
+  grayCircleText: {
+    fontSize: 17,
   },
 });
