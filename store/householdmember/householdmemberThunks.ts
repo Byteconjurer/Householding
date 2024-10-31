@@ -1,6 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { HouseholdMember, HouseholdMemberData } from '../../data/types';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { RootState } from '../store';
 import { selectCurrentHousehold } from '../sharedSelectors';
@@ -23,15 +31,15 @@ export const deleteHouseholdMember = createAsyncThunk<
   void,
   string,
   { rejectValue: string }
->('householdmember/deleteHouseholdMember', async (id, { rejectWithValue }) => 
+>('householdmember/deleteHouseholdMember', async (id, { rejectWithValue }) =>
   deleteDoc(doc(db, 'Householdmember', id))
-  .then(() => {
-    console.log('Household member deleted');
-  })
-  .catch((error) => {
-    console.error('Error deleting household member:', error);
-    return rejectWithValue('Failed to delete household member');
-  }),
+    .then(() => {
+      console.log('Household member deleted');
+    })
+    .catch((error) => {
+      console.error('Error deleting household member:', error);
+      return rejectWithValue('Failed to delete household member');
+    }),
 );
 
 export const fetchUserHouseholdMembers = createAsyncThunk<
@@ -75,20 +83,51 @@ export const fetchHouseholdMembersInCurrentHousehold = createAsyncThunk<
 
     const householdMembersQuery = query(
       collection(db, 'Householdmember'),
-      where('householdId', '==', currentHousehold.id)
+      where('householdId', '==', currentHousehold.id),
     );
 
     try {
       const querySnapshot = await getDocs(householdMembersQuery);
-      const householdMembers: HouseholdMember[] = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as HouseholdMemberData),
-      }));
+      const householdMembers: HouseholdMember[] = querySnapshot.docs.map(
+        (doc) => ({
+          id: doc.id,
+          ...(doc.data() as HouseholdMemberData),
+        }),
+      );
       return householdMembers;
     } catch (error) {
       console.error('Error fetching household members:', error);
       return rejectWithValue('Failed to fetch household members');
     }
-  }
+  },
 );
 
+// Async thunk for fetching all household members in a specific household.
+export const fetchHouseholdMembersInHousehold = createAsyncThunk<
+  HouseholdMember[],
+  string,
+  { rejectValue: string }
+>(
+  'householdmember/fetchHouseholdMembersInHousehold',
+  async (householdId, { rejectWithValue }) => {
+    const householdMembersQuery = query(
+      collection(db, 'Householdmember'),
+      where('householdId', '==', householdId),
+    );
+
+    return getDocs(householdMembersQuery)
+      .then((querySnapshot) => {
+        return querySnapshot.docs.map((doc) => {
+          const data = doc.data() as HouseholdMemberData;
+          return {
+            id: doc.id,
+            ...data,
+          };
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching household members:', error);
+        return rejectWithValue('Failed to fetch household members');
+      });
+  },
+);

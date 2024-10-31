@@ -27,7 +27,10 @@ export default function JoinHouseholdModal({
     <Portal>
       <Modal
         visible={joinModalVisible}
-        onDismiss={() => setJoinModalVisible(false)}
+        onDismiss={() => {
+          setJoinModalVisible(false);
+          resetHouseholdId();
+        }}
         contentContainerStyle={styles.modalContainer}
       >
         {householdId === null ? (
@@ -46,9 +49,7 @@ export default function JoinHouseholdModal({
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    margin: 20,
+    margin: 50,
     borderRadius: 10,
   },
 });

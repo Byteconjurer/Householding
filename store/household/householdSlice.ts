@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Household } from '../../data/types';
-import { addHousehold, fetchHouseholds } from './householdThunks';
+import {
+  addHousehold,
+  fetchHouseholds,
+  updateHousehold,
+} from './householdThunks';
 
 type HouseholdState = {
   list: Household[];
@@ -26,14 +30,14 @@ const householdSlice = createSlice({
     // deleteHousehold: (state, action: PayloadAction<string>) => {
     //   return state.list.filter((household) => household.id !== action.payload);
     // },
-    updateHousehold: (state, action: PayloadAction<Household>) => {
+    /*     updateHousehold: (state, action: PayloadAction<Household>) => {
       const index = state.list.findIndex(
         (household) => household.id === action.payload.id,
       );
       if (index !== -1) {
         state.list[index] = action.payload;
       }
-    },
+    }, */
     setCurrentHousehold: (state, action: PayloadAction<string>) => {
       const household = state.list.find(
         (household) => household.id === action.payload,
@@ -64,11 +68,18 @@ const householdSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+    builder.addCase(updateHousehold.fulfilled, (state, action) => {
+      const index = state.list.findIndex(
+        (household) => household.id === action.payload.id,
+      );
+      if (index !== -1) {
+        state.list[index] = action.payload;
+      }
+    });
   },
 });
 
 export const householdReducer = householdSlice.reducer;
-export const { updateHousehold, setCurrentHousehold, setHouseholdName } =
-  householdSlice.actions;
+export const { setCurrentHousehold, setHouseholdName } = householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;

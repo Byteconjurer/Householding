@@ -12,7 +12,7 @@ import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { generateNextId } from '../store/chore/choresSelectors';
 import { addChore } from '../store/chore/choreThunks';
 import { selectCurrentHousehold } from '../store/sharedSelectors';
-import store, { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/store';
 
 type ChoresProps = NativeStackScreenProps<TopTabParamList>;
 
@@ -25,15 +25,11 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
   const dispatch = useAppDispatch();
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const nextChoreId = useAppSelector(generateNextId);
   const handleAddChore = () => {
     if (!currentHousehold) {
       console.error('No current household set');
       return;
     }
-
-    // Remove the log when done with testing
-    console.log('Adding chore with ID:', nextChoreId);
 
     const newChore = {
       title: newChoreTitle,
@@ -44,10 +40,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
     };
 
     dispatch(addChore(newChore));
-
-    // Remove the logs when done with testing
-    console.log('New chore added:', newChore);
-    console.log('Updated state:', store.getState().chore);
 
     navigation.navigate('Chores');
   };
@@ -180,8 +172,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
       <View style={styles.buttonContainer}>
         <Button
           icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.addButtonText}
           style={{
             width: '50%',
@@ -195,8 +185,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
         </Button>
         <Button
           icon="close-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.cancelButtonText}
           style={{
             width: '50%',
@@ -216,7 +204,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#EAEAEA',
   },
   content: {
     flex: 1,
@@ -224,11 +211,9 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   titleCard: {
-    backgroundColor: '#fff',
     height: 60,
   },
   descriptionCard: {
-    backgroundColor: '#fff',
     height: 150,
   },
   cardContent: {
@@ -242,11 +227,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   intervalPicker: {
-    backgroundColor: '#fff',
     height: 60,
   },
   energyPicker: {
-    backgroundColor: '#fff',
     height: 80,
     borderRadius: 12,
   },
@@ -265,7 +248,6 @@ const styles = StyleSheet.create({
   energyPickerItem: {
     padding: 8,
     marginHorizontal: 8,
-    backgroundColor: '#f0f0f0',
     borderRadius: 20,
     width: 40,
     height: 40,
@@ -279,7 +261,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   selectedPickerItem: {
-    backgroundColor: '#d0d0d0',
+    backgroundColor: '#777777',
   },
   intervalButton: {
     height: 60,
@@ -313,7 +295,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -323,17 +304,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
     height: 80,
   },
   intervalCard: {
-    backgroundColor: 'white',
     height: 60,
     borderRadius: 12,
     paddingHorizontal: 18,
   },
   energyCard: {
-    backgroundColor: 'white',
     height: 80,
     borderRadius: 12,
     paddingHorizontal: 18,

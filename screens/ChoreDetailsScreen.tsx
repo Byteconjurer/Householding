@@ -3,7 +3,7 @@ import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useLayoutEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, Text } from 'react-native-paper';
+import { Button, Card, Surface, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -27,6 +27,7 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const choreId = route.params.id;
   const chore = useAppSelector(selectChoreById(choreId));
 
+  const isActive = currentHouseholdMember?.isActive ?? false;
   useLayoutEffect(() => {
     if (chore) {
       navigation.setOptions({
@@ -84,11 +85,11 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
           <Button
             mode="elevated"
             icon={isChoreDone ? 'check-circle-outline' : 'circle-outline'}
-            textColor="black"
-            buttonColor={isChoreDone ? '#8BCB7A' : '#fff'}
+            buttonColor={isChoreDone ? '#8BCB7A' : ''}
             labelStyle={styles.buttonLabelText}
             contentStyle={styles.buttonContent}
             onPress={handlePress}
+            disabled={!isActive}
           >
             {isChoreDone ? 'Utförd!' : 'Utförd?'}
           </Button>
@@ -113,9 +114,9 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
                 Hur energikrävande är sysslan?
               </Text>
             </View>
-            <View style={[styles.circle, styles.lightGray]}>
+            <Surface elevation={5} style={[styles.circle]}>
               <Text style={styles.grayCircleText}>{chore.energyWeight}</Text>
-            </View>
+            </Surface>
           </Card.Content>
         </Card>
       </ScrollView>
@@ -142,7 +143,6 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAEAEA',
     alignItems: 'center',
   },
   scrollContainer: {
@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   basicCard: {
-    backgroundColor: '#fff',
     maxWidth: '97%',
     minWidth: '97%',
   },
@@ -198,9 +197,7 @@ const styles = StyleSheet.create({
   red: {
     backgroundColor: '#D96163',
   },
-  lightGray: {
-    backgroundColor: '#EAEAEA',
-  },
+
   redCircleText: {
     color: '#fff',
     fontSize: 17,
@@ -214,7 +211,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
     height: 55,
   },
   closeButtonText: {

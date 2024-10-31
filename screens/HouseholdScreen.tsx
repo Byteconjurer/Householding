@@ -1,23 +1,32 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, Card, Text, TextInput } from 'react-native-paper';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Avatar, Card, IconButton, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
+import { HouseholdMember } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
-import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import {
+  setCurrentHouseholdMember,
+  updateHouseholdMember,
+} from '../store/householdmember/householdmemberSlice';
 import {
   selectCurrentHousehold,
+  selectCurrentHouseholdMember,
   selectCurrentUser,
 } from '../store/sharedSelectors';
-import { fetchChoresForCurrentHousehold } from '../store/chore/choreThunks';
-import { deleteHouseholdMember, fetchHouseholdMembersInCurrentHousehold } from '../store/householdmember/householdmemberThunks';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
-import { deleteHousehold } from '../store/household/householdThunks';
+import {
+  deleteHouseholdMember,
+  fetchHouseholdMembersInCurrentHousehold,
+} from '../store/householdmember/householdmemberThunks';
+import {
+  deleteHouseholdAndMembers,
+  updateHousehold,
+} from '../store/household/householdThunks';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
@@ -26,20 +35,27 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const membersInCurrentHousehold = useAppSelector(selectMembersInCurrentHousehold);
-  
-
-  useEffect(() => {
-    if (currentUser?.uid) {
-      dispatch(fetchHouseholdMembersInCurrentHousehold());
-      dispatch(setCurrentHouseholdMember(currentUser.uid));
-      dispatch(fetchChoresForCurrentHousehold());
-    }
-  }, [currentUser, dispatch]);
-
+  const membersInCurrentHousehold = useAppSelector(
+    selectMembersInCurrentHousehold,
+  );
   const currentMember = membersInCurrentHousehold.find(
     (member) => member.userId === currentUser?.uid,
   );
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+
+  const isOwner = currentHouseholdMember?.owner ?? false;
+
+  useEffect(() => {
+    dispatch(fetchHouseholdMembersInCurrentHousehold());
+    if (currentUser && currentHousehold) {
+      dispatch(
+        setCurrentHouseholdMember({
+          userId: currentUser.uid,
+          householdId: currentHousehold?.id,
+        }),
+      );
+    }
+  }, [currentHousehold, currentUser, dispatch]);
 
   if (!currentMember) {
     return (
@@ -54,9 +70,12 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [newHouseholdName, setNewHouseholdName] = useState('');
 
-    const currentHouseholdName = useAppSelector(selectCurrentHousehold)?.name;
+    const currentHouseholdName = currentHousehold?.name;
 
     const handleSave = () => {
+      dispatch(
+        updateHousehold({ ...currentHousehold!, name: newHouseholdName }),
+      );
       dispatch(setHouseholdName(newHouseholdName));
       setIsEditing(false);
     };
@@ -81,20 +100,16 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
             {currentHouseholdName || 'Hushåll'}
           </Text>
         )}
-        <TouchableOpacity
+        <IconButton
+          icon={isEditing ? 'content-save' : 'pencil-outline'}
+          size={24}
           onPress={() => {
             if (isEditing) {
               handleSave();
             }
             setIsEditing(!isEditing);
           }}
-        >
-          <MaterialIcons
-            name={isEditing ? 'save' : 'edit'}
-            size={30}
-            color="#777"
-          />
-        </TouchableOpacity>
+        />
       </View>
     );
   };
@@ -111,51 +126,117 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image size={60} source={avatarsMap[currentMember!.avatar].icon} />
+      <Avatar.Image
+        size={60}
+        source={avatarsMap[currentMember!.avatar].icon}
+        style={{ backgroundColor: avatarsMap[currentMember.avatar].color }}
+      />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentMember.name || 'användarnamn'}
         </Text>
-        <TouchableOpacity
+        <IconButton
+          icon="pencil-outline"
+          size={24}
           onPress={() => console.log('Ändra avatar eller namn')}
-        >
-          <MaterialIcons name="edit" size={30} color="#777" />
-        </TouchableOpacity>
+        />
       </View>
     </View>
   );
-  const AllHouseholdMembers = () => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Text variant="titleLarge">Hushållsmedlemmar</Text>
-        <View style={styles.membersContainer}>
-          {membersInCurrentHousehold.map((member) => (
-            <View key={member.id} style={styles.memberItem}>
-              <Avatar.Image
-                size={30}
-                source={avatarsMap[member.avatar].icon}
-                style={styles.avatar}
-              />
-              <Text style={styles.memberName}>
-                {member.name || 'Medlemsnamn'}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </Card.Content>
-    </Card>
-  );
+
+  const AllHouseholdMembers = () => {
+    const handleMakeOwner = (member: HouseholdMember) => {
+      if (!member) {
+        console.error('No member to update!');
+        return;
+      }
+      const updateMember = {
+        id: member.id,
+        userId: member.userId,
+        householdId: member.householdId,
+        avatar: member.avatar,
+        name: member.name,
+        owner: !member.owner,
+        isActive: member.isActive,
+        isRequest: member.isRequest,
+      };
+      dispatch(updateHouseholdMember(updateMember));
+    };
+
+    const handlePausePlayMember = (member: HouseholdMember) => {
+      if (!member) {
+        console.error('No member to update!');
+        return;
+      }
+      const updateMember = {
+        id: member.id,
+        userId: member.userId,
+        householdId: member.householdId,
+        avatar: member.avatar,
+        name: member.name,
+        owner: member.owner,
+        isActive: !member.isActive,
+        isRequest: member.isRequest,
+      };
+      dispatch(updateHouseholdMember(updateMember));
+    };
+
+    return (
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text variant="titleLarge">Hushållsmedlemmar</Text>
+          <View style={styles.membersContainer}>
+            {membersInCurrentHousehold.map((member) => (
+              <View key={member.id} style={styles.memberItem}>
+                <Avatar.Image
+                  size={30}
+                  source={avatarsMap[member!.avatar].icon}
+                  style={{
+                    backgroundColor: avatarsMap[member.avatar].color,
+                  }}
+                />
+                {isOwner && (
+                  <View style={{ paddingRight: 3 }}>
+                    <IconButton
+                      icon="account-key"
+                      iconColor={member.owner ? 'green' : '#777'}
+                      size={20}
+                      onPress={() => handleMakeOwner(member)}
+                    />
+
+                    <IconButton
+                      icon={member.isActive ? 'pause' : 'play'}
+                      iconColor={member.isActive ? '#FF7F50' : 'green'}
+                      size={20}
+                      onPress={() => handlePausePlayMember(member)}
+                      style={{ marginTop: -20 }}
+                    />
+                  </View>
+                )}
+                <Text style={styles.memberName}>
+                  {member.name || 'Medlemsnamn'}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  };
 
   const RemoveHousehold = () => (
     <View style={styles.binIcon}>
-      <TouchableOpacity onPress={() =>{ 
-        dispatch(deleteHouseholdMember(currentMember!.id));
-        if(currentMember.owner){dispatch(deleteHousehold(currentHousehold!.id));}
-        navigation.navigate("Home");}
-      }
-        >
-        <MaterialIcons name="delete" size={30} color="#777" />
-      </TouchableOpacity>
+      <IconButton
+        icon="exit-run"
+        size={30}
+        onPress={() => {
+          dispatch(deleteHouseholdMember(currentMember.id));
+          if (currentHouseholdMember?.owner) {
+            dispatch(deleteHouseholdAndMembers(currentHousehold!.id));
+          }
+          navigation.navigate('Home');
+        }}
+      />
     </View>
   );
 
@@ -176,12 +257,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
     maxHeight: 1000,
   },
   householdContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
   statisticsTextHouseHold: {
     fontSize: 30,
@@ -196,6 +278,10 @@ const styles = StyleSheet.create({
   avatarContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 30,
+  },
+  avatarBackground: {
+    backgroundColor: 'lightgrey',
   },
   usernameContainer: {
     flexDirection: 'row',
@@ -211,11 +297,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-    backgroundColor: '#f8f9fa',
+
     borderRadius: 10,
     padding: 15,
     flexShrink: 1,
     flexGrow: 0,
+    marginTop: 20,
   },
   membersContainer: {
     marginTop: 10,
@@ -227,10 +314,6 @@ const styles = StyleSheet.create({
     width: '45%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-  },
-  avatar: {
-    marginRight: 8,
   },
   codeCard: {
     width: 300,
@@ -238,7 +321,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-    backgroundColor: '#f8f9fa',
+
     borderRadius: 10,
   },
   binIcon: {
@@ -251,7 +334,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   memberName: {
+    maxWidth: 100,
+    padding: 2,
     fontSize: 16,
+    flexWrap: 'wrap',
   },
   errorText: {
     fontSize: 18,

@@ -1,34 +1,48 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { useAppSelector } from '../store/store';
-import { Household } from '../data/types';
-import { selectHouseholdsList } from '../store/sharedSelectors';
+import { StyleSheet, View } from 'react-native';
+import { Button, TextInput, Text, Surface } from 'react-native-paper';
+import {
+  selectCurrentUser,
+  selectHouseholdMembersList,
+} from '../store/sharedSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { fetchHouseholdByCode } from '../store/household/householdThunks';
 
 const JoinByCode = ({
   onCodeValidated,
 }: {
   onCodeValidated: (householdId: string) => void;
 }) => {
+  const dispatch = useAppDispatch();
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const currentUser = useAppSelector(selectCurrentUser);
+  const householdMembers = useAppSelector(selectHouseholdMembersList);
 
-  const households = useAppSelector(selectHouseholdsList);
-
-  const validateCode = () => {
-    const foundHousehold = households.find(
-      (household: Household) => household.code === code,
-    );
-    if (foundHousehold) {
-      setError('');
-      onCodeValidated(foundHousehold.id);
-    } else {
-      setError('Fel kod. Vänligen försök igen.');
+  const validateCode = async () => {
+    try {
+      const foundHousehold = await dispatch(
+        fetchHouseholdByCode(code),
+      ).unwrap();
+      if (
+        householdMembers.find(
+          (member) =>
+            member.householdId === foundHousehold.id &&
+            member.userId === currentUser?.uid,
+        )
+      ) {
+        setError('Du är redan med i detta hushållet');
+      } else {
+        setError('');
+        onCodeValidated(foundHousehold.id);
+      }
+    } catch (error) {
+      setError('Fel kod. Vänligen försök igen.' + error);
     }
   };
 
   return (
-    <View style={styles.container}>
+    <Surface style={styles.container}>
       <Text style={styles.inputtext}>Ange kod</Text>
       <TextInput
         mode="outlined"
@@ -55,24 +69,21 @@ const JoinByCode = ({
           Gå med
         </Button>
       </View>
-    </View>
+    </Surface>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
   },
   inputtext: {
     fontSize: 20,
-    color: 'black',
     paddingBottom: 5,
     fontWeight: 'bold',
   },
   input: {
     marginBottom: 15,
-    backgroundColor: '#EAEAEA',
     borderRadius: 10,
     elevation: 5,
   },
@@ -84,7 +95,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     padding: 2,
-    color: 'black',
   },
   errorText: {
     color: 'red',

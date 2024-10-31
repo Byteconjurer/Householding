@@ -4,6 +4,7 @@ import { HouseholdMember } from '../../data/types';
 import {
   addHouseholdMember,
   fetchHouseholdMembersInCurrentHousehold,
+  fetchHouseholdMembersInHousehold,
   fetchUserHouseholdMembers,
 } from './householdmemberThunks';
 
@@ -34,9 +35,14 @@ const householdmemberSlice = createSlice({
         state.list[index] = action.payload;
       }
     },
-    setCurrentHouseholdMember: (state, action: PayloadAction<string>) => {
+    setCurrentHouseholdMember: (
+      state,
+      action: PayloadAction<{ userId: string; householdId: string }>,
+    ) => {
       const householdmember = state.list.find(
-        (member) => member.userId === action.payload,
+        (member) =>
+          member.userId === action.payload.userId &&
+          member.householdId === action.payload.householdId,
       );
       if (householdmember) {
         state.current = householdmember;
@@ -50,9 +56,18 @@ const householdmemberSlice = createSlice({
     builder.addCase(fetchUserHouseholdMembers.fulfilled, (state, action) => {
       state.list = action.payload;
     });
-    builder.addCase(fetchHouseholdMembersInCurrentHousehold.fulfilled, (state, action) => {
-      state.list = action.payload;
-    });
+    builder.addCase(
+      fetchHouseholdMembersInCurrentHousehold.fulfilled,
+      (state, action) => {
+        state.list = action.payload;
+      },
+    );
+    builder.addCase(
+      fetchHouseholdMembersInHousehold.fulfilled,
+      (state, action) => {
+        state.list = action.payload;
+      },
+    );
   },
 });
 
