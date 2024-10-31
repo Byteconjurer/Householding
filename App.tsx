@@ -3,26 +3,25 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 /* import { useAuth } from './hooks/useAuth'; */
-import { onAuthStateChanged } from 'firebase/auth';
-import { User } from './data/types';
-import { auth } from './firebase';
-import LoginStackNavigator from './navigators/LoginStackNavigator';
-import RootStackNavigator from './navigators/RootStackNavigator';
-import { AuthProvider } from './providers/AuthContextProvider';
-import { selectCurrentUser } from './store/sharedSelectors';
-import store, { useAppDispatch, useAppSelector } from './store/store';
-import { setUser } from './store/user/userSlice';
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
+import merge from 'deepmerge';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   MD3DarkTheme,
   MD3LightTheme,
   adaptNavigationTheme,
 } from 'react-native-paper';
-import merge from 'deepmerge';
+import { User } from './data/types';
+import { auth } from './firebase';
+import LoginStackNavigator from './navigators/LoginStackNavigator';
+import RootStackNavigator from './navigators/RootStackNavigator';
 import { ThemePreferencesContext } from './providers/ThemePreferencesContext';
+import { selectCurrentUser } from './store/sharedSelectors';
+import store, { useAppDispatch, useAppSelector } from './store/store';
+import { setUser } from './store/user/userSlice';
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -88,13 +87,11 @@ export default function App() {
 
   return (
     <ReduxProvider store={store}>
-      <AuthProvider>
-        <ThemePreferencesContext.Provider value={preferences}>
-          <PaperProvider theme={theme}>
-            <AppContent theme={theme} />
-          </PaperProvider>
-        </ThemePreferencesContext.Provider>
-      </AuthProvider>
+      <ThemePreferencesContext.Provider value={preferences}>
+        <PaperProvider theme={theme}>
+          <AppContent theme={theme} />
+        </PaperProvider>
+      </ThemePreferencesContext.Provider>
     </ReduxProvider>
   );
 }
