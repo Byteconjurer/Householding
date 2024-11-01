@@ -8,6 +8,7 @@ import {
   selectLatestDateFromCompletedChoreByChoreId,
 } from '../store/choreCompleted/choreCompletedSelectors';
 import { useAppSelector } from '../store/store';
+import { formatToDashedDate } from '../utils/date';
 
 interface Props {
   chore: Chore;
@@ -32,14 +33,17 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
   const completedToday = useAppSelector(
     selectCompletedChoresTodayByChoreId(chore.id),
   );
+
   const latestDateAsString = useAppSelector(
     selectLatestDateFromCompletedChoreByChoreId(chore.id),
   );
 
+  const latestDateAsDashedString = formatToDashedDate(latestDateAsString || '');
+
   const todaysDate = new Date();
 
-  const latestDateAsDate = latestDateAsString
-    ? new Date(latestDateAsString)
+  const latestDateAsDate = latestDateAsDashedString
+    ? new Date(latestDateAsDashedString)
     : null;
 
   const daysDifference = latestDateAsDate

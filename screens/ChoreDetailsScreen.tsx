@@ -13,6 +13,7 @@ import {
   selectCurrentHouseholdMember,
 } from '../store/sharedSelectors';
 import { addChoreCompleted } from '../store/choreCompleted/chorecompletedThunks';
+import { formatDateToYYYYMMDD } from '../utils/date';
 
 type ChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
@@ -48,10 +49,9 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const handlePress = () => {
     setIsChoreDone(true);
     const choreCompletedTime = Date.now();
-    const choreCompletedDate = new Date(choreCompletedTime)
-      .toISOString()
-      .split('T')[0];
-
+    const choreCompletedDate = formatDateToYYYYMMDD(
+      new Date(choreCompletedTime),
+    );
     if (!currentHousehold) {
       console.error('No current household set');
       return;

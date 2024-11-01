@@ -82,7 +82,6 @@ export const fetchHouseholds = createAsyncThunk<
       id: doc.id,
       ...doc.data(),
     })) as Household[];
-    console.log('Households fetched:', households);
     return households;
   } catch (error) {
     console.error('Error fetching households:', error);

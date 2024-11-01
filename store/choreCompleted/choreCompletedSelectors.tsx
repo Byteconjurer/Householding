@@ -10,12 +10,12 @@ import {
   selectCurrentHousehold,
 } from '../sharedSelectors';
 import { RootState } from '../store';
+import { formatDateToYYYYMMDD } from '../../utils/date';
 
 export const selectCompletedChoresTodayByChoreId = (choreId: string) =>
   createSelector([selectCompletedChoresList], (completedChores) => {
     const time = Date.now();
-    const today = new Date(time).toISOString().split('T')[0];
-
+    const today = formatDateToYYYYMMDD(new Date(time));
     return completedChores.filter(
       (cc) => cc.choreComplete === today && cc.choreId === choreId,
     );
@@ -30,8 +30,8 @@ export const selectLatestDateFromCompletedChoreByChoreId = (choreId: string) =>
     if (completedChores.length === 0) return null;
 
     const latestCompletedDateStr = completedChores.reduce((latest, current) => {
-      const currentDate = new Date(current.choreComplete);
-      const latestDate = new Date(latest);
+      const currentDate = current.choreComplete;
+      const latestDate = latest;
       return currentDate > latestDate ? current.choreComplete : latest;
     }, completedChores[0].choreComplete);
 
@@ -130,11 +130,9 @@ export const selectChoresPieDataByHouseholdMember = createSelector(
       endDate,
   ],
   (householdMembers, chores, choresCompleted, startDate, endDate) => {
-    const normalizedStartDate = new Date(startDate);
-    normalizedStartDate.setHours(0, 0, 0, 0);
+    const normalizedStartDate = formatDateToYYYYMMDD(startDate);
 
-    const normalizedEndDate = new Date(endDate);
-    normalizedEndDate.setHours(23, 59, 59, 999);
+    const normalizedEndDate = formatDateToYYYYMMDD(endDate);
 
     const getPieData = (choreId: string) =>
       householdMembers.map((member) => {
@@ -142,8 +140,8 @@ export const selectChoresPieDataByHouseholdMember = createSelector(
           (completion) =>
             completion.householdMemberId === member.id &&
             completion.choreId === choreId &&
-            new Date(completion.choreComplete) >= normalizedStartDate &&
-            new Date(completion.choreComplete) <= normalizedEndDate,
+            completion.choreComplete >= normalizedStartDate &&
+            completion.choreComplete <= normalizedEndDate,
         );
 
         const totalEnergyWeight = completions.reduce(
@@ -210,18 +208,15 @@ export const selectTotalEnergyWeightsByHouseholdMember = createSelector(
       endDate,
   ],
   (householdMembers, chores, choresCompleted, startDate, endDate) => {
-    const normalizedStartDate = new Date(startDate);
-    normalizedStartDate.setHours(0, 0, 0, 0);
-
-    const normalizedEndDate = new Date(endDate);
-    normalizedEndDate.setHours(23, 59, 59, 999);
+    const normalizedStartDate = formatDateToYYYYMMDD(startDate);
+    const normalizedEndDate = formatDateToYYYYMMDD(endDate);
 
     const getTotalEnergyWeight = (memberId: string) => {
       const completions = choresCompleted.filter(
         (completion) =>
           completion.householdMemberId === memberId &&
-          new Date(completion.choreComplete) >= normalizedStartDate &&
-          new Date(completion.choreComplete) <= normalizedEndDate,
+          completion.choreComplete >= normalizedStartDate &&
+          completion.choreComplete <= normalizedEndDate,
       );
 
       return completions.reduce((acc, completion) => {
