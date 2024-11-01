@@ -16,10 +16,11 @@ interface Props {
 
 function getMatchingAvatars(
   householdMembers: HouseholdMember[],
-  choresCompleted: ChoreCompleted[]
+  choresCompleted: ChoreCompleted[],
 ): string[] {
-
-  const choreMemberIds = new Set(choresCompleted.map((chore) => chore.householdMemberId));
+  const choreMemberIds = new Set(
+    choresCompleted.map((chore) => chore.householdMemberId),
+  );
 
   return householdMembers
     .filter((member) => choreMemberIds.has(member.id))

@@ -24,29 +24,40 @@ export const fetchChoresCompletedForHousehold = createAsyncThunk<
   ChoreCompleted[],
   string,
   { rejectValue: string }
->('chorecompleted/fetchChoresCompleted', async (householdId, { rejectWithValue }) => {
-  try {
-    const choreCompleteds: ChoreCompleted[] = [];
-    
-    const householdMembersSnapshot = await getDocs(
-      query(collection(db, 'Householdmember'), where('householdId', '==', householdId))
-    );
-    
-    const fetchChoreCompletedPromises = householdMembersSnapshot.docs.map(async (memberDoc) => {
-      const choreCompletedSnapshot = await getDocs(
-        collection(db, `Householdmember/${memberDoc.id}/Chorecompleted`)
+>(
+  'chorecompleted/fetchChoresCompleted',
+  async (householdId, { rejectWithValue }) => {
+    try {
+      const choreCompleteds: ChoreCompleted[] = [];
+
+      const householdMembersSnapshot = await getDocs(
+        query(
+          collection(db, 'Householdmember'),
+          where('householdId', '==', householdId),
+        ),
       );
-      
-      choreCompletedSnapshot.forEach((doc) => {
-        choreCompleteds.push({ id: doc.id, ...doc.data() } as ChoreCompleted);
-      });
-    });
 
-    await Promise.all(fetchChoreCompletedPromises);
+      const fetchChoreCompletedPromises = householdMembersSnapshot.docs.map(
+        async (memberDoc) => {
+          const choreCompletedSnapshot = await getDocs(
+            collection(db, `Householdmember/${memberDoc.id}/Chorecompleted`),
+          );
 
-    return choreCompleteds;
-  } catch (error) {
-    console.error('Error fetching chorecompleteds:', error);
-    return rejectWithValue('Failed to fetch chorecompleteds');
-  }
-});
+          choreCompletedSnapshot.forEach((doc) => {
+            choreCompleteds.push({
+              id: doc.id,
+              ...doc.data(),
+            } as ChoreCompleted);
+          });
+        },
+      );
+
+      await Promise.all(fetchChoreCompletedPromises);
+
+      return choreCompleteds;
+    } catch (error) {
+      console.error('Error fetching chorecompleteds:', error);
+      return rejectWithValue('Failed to fetch chorecompleteds');
+    }
+  },
+);

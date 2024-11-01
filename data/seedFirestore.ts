@@ -6,12 +6,11 @@ import {
   HouseholdMemberData,
 } from './types';
 import { db } from '../firebase';
-import {
-  mockedChores,
+import {} from /*   mockedChores,
   mockedChoresCompleted,
   mockedHouseholdMembers,
-  mockedHouseholds,
-} from './data';
+  mockedHouseholds, */
+'./data';
 
 export async function addHouseholds(households: HouseholdData[]) {
   try {

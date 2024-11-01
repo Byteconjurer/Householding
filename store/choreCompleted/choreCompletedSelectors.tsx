@@ -34,7 +34,7 @@ export const selectLatestDateFromCompletedChoreByChoreId = (choreId: string) =>
 
     return latestCompletedDateStr;
   });
-  
+
 export const selectCompletedChoresByCurrentHousehold = createSelector(
   [
     selectCompletedChoresList,

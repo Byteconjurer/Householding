@@ -1,12 +1,22 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Avatar, Card, IconButton, Modal, Text, TextInput } from 'react-native-paper';
+import {
+  Avatar,
+  Card,
+  IconButton,
+  Modal,
+  Text,
+  TextInput,
+} from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
-import { selectMembersInCurrentHousehold, selectCurrentHouseholdMember } from '../store/householdmember/householdmemberSelectors';
+import {
+  selectMembersInCurrentHousehold,
+  selectCurrentHouseholdMember,
+} from '../store/householdmember/householdmemberSelectors';
 import {
   selectCurrentHousehold,
   selectCurrentUser,
@@ -118,7 +128,9 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       <Avatar.Image
         size={60}
         source={avatarsMap[currentHouseholdMember!.avatar].icon}
-        style={{ backgroundColor: avatarsMap[currentHouseholdMember.avatar].color }}
+        style={{
+          backgroundColor: avatarsMap[currentHouseholdMember.avatar].color,
+        }}
       />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
@@ -164,7 +176,15 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
           <Text variant="titleLarge">Hushållsmedlemmar</Text>
           <View style={styles.membersContainer}>
             {membersInCurrentHousehold.map((member) => (
-              <View key={member.id} style={    {width: '50%', flexDirection: 'row', alignItems: 'center', marginTop: currentHouseholdMember.owner ? -10 : 15}}>
+              <View
+                key={member.id}
+                style={{
+                  width: '50%',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: currentHouseholdMember.owner ? -10 : 15,
+                }}
+              >
                 <Avatar.Image
                   size={30}
                   source={avatarsMap[member!.avatar].icon}
@@ -190,7 +210,15 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                     />
                   </View>
                 )}
-                <Text style={{ maxWidth: 100, padding: 2, fontSize: 16, flexWrap: 'wrap', marginLeft: currentHouseholdMember.owner ? 0 : 15}}>
+                <Text
+                  style={{
+                    maxWidth: 100,
+                    padding: 2,
+                    fontSize: 16,
+                    flexWrap: 'wrap',
+                    marginLeft: currentHouseholdMember.owner ? 0 : 15,
+                  }}
+                >
                   {member.name || 'Medlemsnamn'}
                 </Text>
               </View>
@@ -218,13 +246,18 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
   );
 
   const EditModal = () => (
-    <Modal visible={editModalVisible} onDismiss={() => setEditModalVisible(false)}>
+    <Modal
+      visible={editModalVisible}
+      onDismiss={() => setEditModalVisible(false)}
+    >
       <NameAndAvatarSelection
         householdId={currentHousehold!.id}
         householdMembers={membersInCurrentHousehold}
         setJoinModalVisible={setEditModalVisible}
-        resetHouseholdId={() => dispatch(fetchHouseholdMembersInCurrentHousehold())}
-        edit = {true}
+        resetHouseholdId={() =>
+          dispatch(fetchHouseholdMembersInCurrentHousehold())
+        }
+        edit={true}
       />
     </Modal>
   );

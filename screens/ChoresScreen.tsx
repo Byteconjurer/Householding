@@ -26,8 +26,7 @@ export default function ChoresScreen({ navigation }: ChoresProps) {
 
   useEffect(() => {
     dispatch(fetchChoresForCurrentHousehold());
-  }
-  , [dispatch]);
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -101,9 +100,9 @@ const styles = StyleSheet.create({
     maxWidth: '50%',
   },
   emptyText: {
-    fontSize:25, 
-    alignSelf:'center',
+    fontSize: 25,
+    alignSelf: 'center',
     marginTop: 50,
     padding: 20,
-    },
+  },
 });

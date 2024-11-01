@@ -66,7 +66,12 @@ export default function HomeScreen({ navigation }: HomeProps) {
                 key={household.id}
                 onPress={() => {
                   dispatch(setCurrentHousehold(household.id));
-                  dispatch(setCurrentHouseholdMember({ userId: currentUser!.uid, householdId: household.id }));
+                  dispatch(
+                    setCurrentHouseholdMember({
+                      userId: currentUser!.uid,
+                      householdId: household.id,
+                    }),
+                  );
                   navigation.navigate('TopTabNavigator', {
                     screen: 'Household',
                   });
@@ -91,7 +96,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
             );
           })}
         </View>
-       {/*  <Button onPress={() => addChoresCompleted(mockedChoresCompleted)}>Adda Chorecompleted</Button> */}
+        {/*  <Button onPress={() => addChoresCompleted(mockedChoresCompleted)}>Adda Chorecompleted</Button> */}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <Button

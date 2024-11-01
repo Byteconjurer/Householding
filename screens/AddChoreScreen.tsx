@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { generateNextId } from '../store/chore/choresSelectors';
 import { addChore } from '../store/chore/choreThunks';
 import { selectCurrentHousehold } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';

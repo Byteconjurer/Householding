@@ -30,7 +30,7 @@ export const addHouseholdMember = createAsyncThunk<
 // Async thunk for updating a household member in Firestore
 export const updateHouseholdMember = createAsyncThunk<
   HouseholdMember,
-  Partial<HouseholdMember> & { id: string }, 
+  Partial<HouseholdMember> & { id: string },
   { rejectValue: string }
 >(
   'householdmember/updateHouseholdMember',
@@ -40,12 +40,12 @@ export const updateHouseholdMember = createAsyncThunk<
     try {
       const docRef = doc(db, 'Householdmember', id);
       await updateDoc(docRef, fieldsToUpdate);
-      return member as HouseholdMember; 
+      return member as HouseholdMember;
     } catch (error) {
       console.error('Error updating household member:', error);
       return rejectWithValue('Failed to update household member');
     }
-  }
+  },
 );
 
 // Async thunk for deleting a householdmember from Firestore

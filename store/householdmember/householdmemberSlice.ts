@@ -29,7 +29,7 @@ const householdmemberSlice = createSlice({
     //     (householdmember) => householdmember.id !== action.payload,
     //   );
     // },
-/*     updateHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
+    /*     updateHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
       const index = state.list.findIndex(
         (householdmember) => householdmember.id === action.payload.id,
       );
@@ -71,7 +71,7 @@ const householdmemberSlice = createSlice({
     builder.addCase(fetchUserHouseholdMembers.fulfilled, (state, action) => {
       state.list = action.payload;
     });
-    builder.addCase( 
+    builder.addCase(
       fetchHouseholdMembersInCurrentHousehold.fulfilled,
       (state, action) => {
         state.list = action.payload;

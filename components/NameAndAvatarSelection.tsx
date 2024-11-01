@@ -45,38 +45,41 @@ const NameAndAvatarSelection = ({
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [householdMembersState, setHouseholdMembers] = useState<HouseholdMember[]>(
-    [],
-  );
+  const [householdMembersState, setHouseholdMembers] = useState<
+    HouseholdMember[]
+  >([]);
   const dispatch = useAppDispatch();
   const currentUserId = useAppSelector(selectCurrentUser)?.uid;
   console.log('Current user ID:', currentUserId);
 
   useEffect(() => {
-    
     const fetchData = async () => {
       try {
         const householdMembers = await dispatch(
           fetchHouseholdMembersInHousehold(householdId),
         ).unwrap();
         setHouseholdMembers(householdMembers);
+        console.log('bajs');
       } catch (error) {
         console.error('Failed to fetch household members:', error);
       }
     };
-    if (!edit){
+    if (!edit) {
       fetchData();
     } else {
       setHouseholdMembers(householdMembers!);
     }
-  }, [dispatch, householdId]);
+  }, [dispatch, edit, householdMembers, householdId]);
 
-  const currentHouseholdMember = householdMembers?.find((member) => member.userId === currentUserId);
+  const currentHouseholdMember = householdMembers?.find(
+    (member) => member.userId === currentUserId,
+  );
 
   const { colors } = useTheme();
 
   const handleAvatarSelect = (avatarKey: string) => {
-    if (householdMembersState.some((member) => member.avatar === avatarKey)) return;
+    if (householdMembersState.some((member) => member.avatar === avatarKey))
+      return;
     setSelectedAvatar(avatarKey);
     setAvatarModalVisible(false);
   };
@@ -91,19 +94,31 @@ const NameAndAvatarSelection = ({
     if (name && selectedAvatar) {
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
       if (!edit) {
-      dispatch(
-        addHouseholdMember({
-          userId: currentUserId,
-          householdId: householdId,
-          avatar: selectedAvatar,
-          name: name,
-          owner: false,
-          isActive: true,
-          isRequest: false,
-        }),
-      ); } else {
-        dispatch(updateHouseholdMember({id: currentHouseholdMember!.id, name: name, avatar: selectedAvatar}));
-        dispatch(setCurrentHouseholdMember({userId: currentUserId, householdId: householdId}));
+        dispatch(
+          addHouseholdMember({
+            userId: currentUserId,
+            householdId: householdId,
+            avatar: selectedAvatar,
+            name: name,
+            owner: false,
+            isActive: true,
+            isRequest: false,
+          }),
+        );
+      } else {
+        dispatch(
+          updateHouseholdMember({
+            id: currentHouseholdMember!.id,
+            name: name,
+            avatar: selectedAvatar,
+          }),
+        );
+        dispatch(
+          setCurrentHouseholdMember({
+            userId: currentUserId,
+            householdId: householdId,
+          }),
+        );
       }
       setSaved(true);
       setTimeout(() => {
