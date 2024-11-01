@@ -33,7 +33,7 @@ const CombinedDefaultTheme = merge(MD3LightTheme, {
   colors: {
     ...MD3LightTheme.colors,
     ...LightTheme.colors,
-    primary: '#2f9388',
+    primary: '#0c5e54',
     background: '#e8e8e8',
     surface: '#FFFFFF',
     text: '#000000',

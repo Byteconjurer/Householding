@@ -126,8 +126,6 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
       <View style={styles.buttonContainer}>
         <Button
           icon="close-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
           labelStyle={styles.closeButtonText}
           style={{
             width: '100%',
