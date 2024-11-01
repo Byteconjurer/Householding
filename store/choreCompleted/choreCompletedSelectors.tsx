@@ -3,12 +3,13 @@ import { pieDataItem } from 'gifted-charts-core';
 import SvgComponent from '../../components/SvgComponent';
 import { avatarsMap } from '../../data/data';
 import { selectMembersInCurrentHousehold } from '../householdmember/householdmemberSelectors';
-import { selectChores, selectCompletedChoresList } from '../sharedSelectors';
+import {
+  selectChores,
+  selectCompletedChoresList,
+  selectHouseholdMembersList,
+  selectCurrentHousehold,
+} from '../sharedSelectors';
 import { RootState } from '../store';
-import { avatarsMap } from '../../data/data';
-import { pieDataItem } from 'gifted-charts-core';
-import { selectMembersInCurrentHousehold } from '../householdmember/householdmemberSelectors';
-import SvgComponent from '../../components/SvgComponent';
 
 export const selectCompletedChoresTodayByChoreId = (choreId: string) =>
   createSelector([selectCompletedChoresList], (completedChores) => {

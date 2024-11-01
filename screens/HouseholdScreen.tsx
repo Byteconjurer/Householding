@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import {
   Avatar,
   Card,
@@ -102,9 +102,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         <IconButton
           icon={isEditing ? 'content-save' : 'pencil-outline'}
           size={24}
-        <IconButton
-          icon={isEditing ? 'content-save' : 'pencil-outline'}
-          size={24}
           onPress={() => {
             if (isEditing) {
               handleSave();
@@ -132,12 +129,12 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         style={[
           styles.avatarCard,
           {
-            backgroundColor: avatarsMap[currentMember!.avatar].color,
+            backgroundColor: avatarsMap[currentHouseholdMember!.avatar].color,
           },
         ]}
       >
         <Image
-          source={avatarsMap[currentMember!.avatar].icon}
+          source={avatarsMap[currentHouseholdMember!.avatar].icon}
           style={styles.avatarImage}
         />
       </Card>
@@ -153,7 +150,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       </View>
     </View>
   );
-
 
   const AllHouseholdMembers = () => {
     const handleMakeOwner = (member: HouseholdMember) => {
@@ -297,8 +293,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 20,
-    marginTop: 20,
-    marginBottom: 20,
   },
   statisticsTextHouseHold: {
     fontSize: 30,
@@ -319,9 +313,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgrey',
     marginTop: 30,
   },
-  avatarBackground: {
-    backgroundColor: 'lightgrey',
-  },
   usernameContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -341,7 +332,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     flexGrow: 0,
     marginTop: 20,
-    marginTop: 20,
   },
   membersContainer: {
     marginTop: 10,
@@ -355,7 +345,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-
 
     borderRadius: 10,
   },

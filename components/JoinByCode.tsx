@@ -43,34 +43,34 @@ const JoinByCode = ({
 
   return (
     <Surface style={styles.container}>
-    <Surface style={styles.container}>
-      <Text style={styles.inputtext}>Ange kod</Text>
-      <TextInput
-        mode="outlined"
-        value={code}
-        onChangeText={setCode}
-        style={styles.input}
-        theme={{ roundness: 10 }}
-        error={!!error}
-      />
+      <Surface style={styles.container}>
+        <Text style={styles.inputtext}>Ange kod</Text>
+        <TextInput
+          mode="outlined"
+          value={code}
+          onChangeText={setCode}
+          style={styles.input}
+          theme={{ roundness: 10 }}
+          error={!!error}
+        />
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="elevated"
-          disabled={!code}
-          icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
-          labelStyle={styles.buttonText}
-          contentStyle={{ paddingVertical: 5 }}
-          onPress={validateCode}
-        >
-          Gå med
-        </Button>
-      </View>
-    </Surface>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="elevated"
+            disabled={!code}
+            icon="plus-circle-outline"
+            textColor="black"
+            buttonColor="#fff"
+            labelStyle={styles.buttonText}
+            contentStyle={{ paddingVertical: 5 }}
+            onPress={validateCode}
+          >
+            Gå med
+          </Button>
+        </View>
+      </Surface>
     </Surface>
   );
 };
