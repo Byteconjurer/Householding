@@ -34,7 +34,6 @@ import {
   updateHousehold,
 } from '../store/household/householdThunks';
 import NameAndAvatarSelection from '../components/NameAndAvatarSelection';
-import { fetchChoresCompletedForHousehold } from '../store/choreCompleted/chorecompletedThunks';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
@@ -53,7 +52,6 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   useEffect(() => {
     dispatch(fetchHouseholdMembersInCurrentHousehold());
-    dispatch(fetchChoresCompletedForHousehold(currentHousehold!.id));
   }, [currentHousehold, currentUser, dispatch]);
 
   if (!currentHouseholdMember) {

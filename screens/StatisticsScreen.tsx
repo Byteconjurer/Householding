@@ -10,16 +10,11 @@ import {
   selectNormalizedTotalPieData,
   selectTotalEnergyWeightsByHouseholdMember,
 } from '../store/choreCompleted/choreCompletedSelectors';
-import {
-  getFirstDayOfCurrentWeek,
-  getLastDayOfCurrentWeek,
-  getFirstDayOfPreviousWeek,
-  getLastDayOfPreviousWeek,
-  getFirstDayOfPreviousMonth,
-  getLastDayOfPreviousMonth,
-} from '../utils/date';
+import { getDateRange } from '../utils/date';
 import { pieDataItem } from 'gifted-charts-core';
 import { selectCurrentHousehold } from '../store/sharedSelectors';
+
+export type Period = 'this-week' | 'previous-week' | 'previous-month';
 
 type StatisticsProps = NativeStackScreenProps<
   TopTabParamList,
@@ -27,21 +22,11 @@ type StatisticsProps = NativeStackScreenProps<
 >;
 
 export default function StatisticsScreen({ route }: StatisticsProps) {
-  const period = route.params.period as
-    | 'this-week'
-    | 'previous-week'
-    | 'previous-month';
+  const period = route.params.period as Period;
+
   const householdId = useAppSelector(selectCurrentHousehold)!.id;
 
-  const periodToDateRange = {
-    'this-week': [getFirstDayOfCurrentWeek, getLastDayOfCurrentWeek],
-    'previous-week': [getFirstDayOfPreviousWeek, getLastDayOfPreviousWeek],
-    'previous-month': [getFirstDayOfPreviousMonth, getLastDayOfPreviousMonth],
-  };
-
-  const [startDateFunc, endDateFunc] = periodToDateRange[period];
-  const startDate = startDateFunc();
-  const endDate = endDateFunc();
+  const { startDate, endDate } = getDateRange(period);
 
   const normalizedTotalPieData = useAppSelector((state: RootState) =>
     selectNormalizedTotalPieData(

@@ -31,7 +31,7 @@ export default function RootStackNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Startskärm',
+          title: 'Mina hushåll',
           headerTitleAlign: 'center',
           headerRight() {
             return (

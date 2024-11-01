@@ -19,17 +19,18 @@ export const addChoreCompleted = createAsyncThunk<
     }),
 );
 
-// Async thunk for fetching all Chorecompleted entries for a household from Firestore
-export const fetchChoresCompletedForHousehold = createAsyncThunk<
+// Async thunk for fetching all Chorecompleted within the current week for a household from Firestore
+export const fetchChoresCompletedByDateAndHousehold = createAsyncThunk<
   ChoreCompleted[],
-  string,
+  { householdId: string; startDate: string; endDate: string },
   { rejectValue: string }
 >(
   'chorecompleted/fetchChoresCompleted',
-  async (householdId, { rejectWithValue }) => {
+  async ({ householdId, startDate, endDate }, { rejectWithValue }) => {
     try {
       const choreCompleteds: ChoreCompleted[] = [];
 
+      // Get all household members for the specified householdId
       const householdMembersSnapshot = await getDocs(
         query(
           collection(db, 'Householdmember'),
@@ -37,10 +38,15 @@ export const fetchChoresCompletedForHousehold = createAsyncThunk<
         ),
       );
 
+      // Fetch ChoreCompleted subcollection documents for each member in the household
       const fetchChoreCompletedPromises = householdMembersSnapshot.docs.map(
         async (memberDoc) => {
           const choreCompletedSnapshot = await getDocs(
-            collection(db, `Householdmember/${memberDoc.id}/Chorecompleted`),
+            query(
+              collection(db, `Householdmember/${memberDoc.id}/Chorecompleted`),
+              where('choreComplete', '>=', startDate),
+              where('choreComplete', '<=', endDate),
+            ),
           );
 
           choreCompletedSnapshot.forEach((doc) => {

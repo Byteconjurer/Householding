@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { ChoreCompleted } from '../../data/types';
 import {
   addChoreCompleted,
-  fetchChoresCompletedForHousehold,
+  fetchChoresCompletedByDateAndHousehold,
 } from './chorecompletedThunks';
 
 type ChoreCompletedState = {
@@ -22,9 +22,9 @@ const choreCompletedSlice = createSlice({
       state.list.push(action.payload);
     });
     builder.addCase(
-      fetchChoresCompletedForHousehold.fulfilled,
+      fetchChoresCompletedByDateAndHousehold.fulfilled,
       (state, action) => {
-        state.list = action.payload;
+        state.list.push(...action.payload);
       },
     );
   },
