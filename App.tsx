@@ -18,6 +18,7 @@ import { User } from './data/types';
 import { auth } from './firebase';
 import LoginStackNavigator from './navigators/LoginStackNavigator';
 import RootStackNavigator from './navigators/RootStackNavigator';
+import { Appearance } from 'react-native';
 import { ThemePreferencesContext } from './providers/ThemePreferencesContext';
 import { selectCurrentUser } from './store/sharedSelectors';
 import store, { useAppDispatch, useAppSelector } from './store/store';
@@ -69,13 +70,15 @@ function AppContent({ theme }: { theme: any }) {
 }
 
 export default function App() {
-  const [isThemeDark, setIsThemeDark] = useState(false);
+  const [isThemeDark, setIsThemeDark] = useState(
+    Appearance.getColorScheme() === 'dark',
+  );
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
   const toggleTheme = useCallback(() => {
-    return setIsThemeDark(!isThemeDark);
-  }, [isThemeDark]);
+    return setIsThemeDark((isDark) => !isDark);
+  }, []);
 
   const preferences = useMemo(
     () => ({
