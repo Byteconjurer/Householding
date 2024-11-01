@@ -1,19 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Avatar, Card, IconButton, Text, TextInput } from 'react-native-paper';
+import { Avatar, Card, IconButton, Modal, Text, TextInput } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
 import { HouseholdMember } from '../data/types';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
 import { setHouseholdName } from '../store/household/householdSlice';
-import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
-import {
-  setCurrentHouseholdMember,
-  updateHouseholdMember,
-} from '../store/householdmember/householdmemberSlice';
+import { selectMembersInCurrentHousehold, selectCurrentHouseholdMember } from '../store/householdmember/householdmemberSelectors';
 import {
   selectCurrentHousehold,
-  selectCurrentHouseholdMember,
   selectCurrentUser,
 } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -22,42 +17,36 @@ import { RootStackParamList } from '../navigators/RootStackNavigator';
 import {
   deleteHouseholdMember,
   fetchHouseholdMembersInCurrentHousehold,
+  updateHouseholdMember,
 } from '../store/householdmember/householdmemberThunks';
 import {
   deleteHouseholdAndMembers,
   updateHousehold,
 } from '../store/household/householdThunks';
+import NameAndAvatarSelection from '../components/NameAndAvatarSelection';
+import { fetchChoresCompletedForHousehold } from '../store/choreCompleted/chorecompletedThunks';
 
 type HouseholdProps = NativeStackScreenProps<TopTabParamList, 'Household'>;
 
 export default function HouseholdScreen({ route }: HouseholdProps) {
   const dispatch = useAppDispatch();
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const currentUser = useAppSelector(selectCurrentUser);
   const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
   const membersInCurrentHousehold = useAppSelector(
     selectMembersInCurrentHousehold,
   );
-  const currentMember = membersInCurrentHousehold.find(
-    (member) => member.userId === currentUser?.uid,
-  );
-  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
 
   const isOwner = currentHouseholdMember?.owner ?? false;
 
   useEffect(() => {
     dispatch(fetchHouseholdMembersInCurrentHousehold());
-    if (currentUser && currentHousehold) {
-      dispatch(
-        setCurrentHouseholdMember({
-          userId: currentUser.uid,
-          householdId: currentHousehold?.id,
-        }),
-      );
-    }
+    dispatch(fetchChoresCompletedForHousehold(currentHousehold!.id));
   }, [currentHousehold, currentUser, dispatch]);
 
-  if (!currentMember) {
+  if (!currentHouseholdMember) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Användaren kunde inte hittas.</Text>
@@ -128,17 +117,17 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     <View style={styles.avatarContainer}>
       <Avatar.Image
         size={60}
-        source={avatarsMap[currentMember!.avatar].icon}
-        style={{ backgroundColor: avatarsMap[currentMember.avatar].color }}
+        source={avatarsMap[currentHouseholdMember!.avatar].icon}
+        style={{ backgroundColor: avatarsMap[currentHouseholdMember.avatar].color }}
       />
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
-          {currentMember.name || 'användarnamn'}
+          {currentHouseholdMember.name || 'användarnamn'}
         </Text>
         <IconButton
           icon="pencil-outline"
           size={24}
-          onPress={() => console.log('Ändra avatar eller namn')}
+          onPress={() => setEditModalVisible(true)}
         />
       </View>
     </View>
@@ -152,13 +141,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       }
       const updateMember = {
         id: member.id,
-        userId: member.userId,
-        householdId: member.householdId,
-        avatar: member.avatar,
-        name: member.name,
         owner: !member.owner,
-        isActive: member.isActive,
-        isRequest: member.isRequest,
       };
       dispatch(updateHouseholdMember(updateMember));
     };
@@ -170,13 +153,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       }
       const updateMember = {
         id: member.id,
-        userId: member.userId,
-        householdId: member.householdId,
-        avatar: member.avatar,
-        name: member.name,
-        owner: member.owner,
         isActive: !member.isActive,
-        isRequest: member.isRequest,
       };
       dispatch(updateHouseholdMember(updateMember));
     };
@@ -187,7 +164,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
           <Text variant="titleLarge">Hushållsmedlemmar</Text>
           <View style={styles.membersContainer}>
             {membersInCurrentHousehold.map((member) => (
-              <View key={member.id} style={styles.memberItem}>
+              <View key={member.id} style={    {width: '50%', flexDirection: 'row', alignItems: 'center', marginTop: currentHouseholdMember.owner ? -10 : 15}}>
                 <Avatar.Image
                   size={30}
                   source={avatarsMap[member!.avatar].icon}
@@ -213,7 +190,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
                     />
                   </View>
                 )}
-                <Text style={styles.memberName}>
+                <Text style={{ maxWidth: 100, padding: 2, fontSize: 16, flexWrap: 'wrap', marginLeft: currentHouseholdMember.owner ? 0 : 15}}>
                   {member.name || 'Medlemsnamn'}
                 </Text>
               </View>
@@ -230,7 +207,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         icon="exit-run"
         size={30}
         onPress={() => {
-          dispatch(deleteHouseholdMember(currentMember.id));
+          dispatch(deleteHouseholdMember(currentHouseholdMember.id));
           if (currentHouseholdMember?.owner) {
             dispatch(deleteHouseholdAndMembers(currentHousehold!.id));
           }
@@ -240,6 +217,18 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
     </View>
   );
 
+  const EditModal = () => (
+    <Modal visible={editModalVisible} onDismiss={() => setEditModalVisible(false)}>
+      <NameAndAvatarSelection
+        householdId={currentHousehold!.id}
+        householdMembers={membersInCurrentHousehold}
+        setJoinModalVisible={setEditModalVisible}
+        resetHouseholdId={() => dispatch(fetchHouseholdMembersInCurrentHousehold())}
+        edit = {true}
+      />
+    </Modal>
+  );
+
   return (
     <View style={styles.container}>
       <CurrentHousehold />
@@ -247,6 +236,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       <CurrentUserAvatar />
       <AllHouseholdMembers />
       <RemoveHousehold />
+      <EditModal />
     </View>
   );
 }
@@ -297,7 +287,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
-
     borderRadius: 10,
     padding: 15,
     flexShrink: 1,
@@ -309,11 +298,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-  },
-  memberItem: {
-    width: '45%',
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   codeCard: {
     width: 300,
@@ -332,12 +316,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
-  },
-  memberName: {
-    maxWidth: 100,
-    padding: 2,
-    fontSize: 16,
-    flexWrap: 'wrap',
   },
   errorText: {
     fontSize: 18,
