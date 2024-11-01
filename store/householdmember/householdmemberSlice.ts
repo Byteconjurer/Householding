@@ -3,6 +3,8 @@ import { mockedHouseholdMembers } from '../../data/data';
 import { HouseholdMember } from '../../data/types';
 import {
   addHouseholdMember,
+  updateHouseholdMember,
+  deleteHouseholdMember,
   fetchHouseholdMembersInCurrentHousehold,
   fetchHouseholdMembersInHousehold,
   fetchUserHouseholdMembers,
@@ -27,14 +29,14 @@ const householdmemberSlice = createSlice({
     //     (householdmember) => householdmember.id !== action.payload,
     //   );
     // },
-    updateHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
+/*     updateHouseholdMember: (state, action: PayloadAction<HouseholdMember>) => {
       const index = state.list.findIndex(
         (householdmember) => householdmember.id === action.payload.id,
       );
       if (index !== -1) {
         state.list[index] = action.payload;
       }
-    },
+    }, */
     setCurrentHouseholdMember: (
       state,
       action: PayloadAction<{ userId: string; householdId: string }>,
@@ -53,10 +55,23 @@ const householdmemberSlice = createSlice({
     builder.addCase(addHouseholdMember.fulfilled, (state, action) => {
       state.list.push(action.payload);
     });
+    builder.addCase(updateHouseholdMember.fulfilled, (state, action) => {
+      const index = state.list.findIndex(
+        (householdmember) => householdmember.id === action.payload.id,
+      );
+      if (index !== -1) {
+        state.list[index] = action.payload;
+      }
+    });
+    builder.addCase(deleteHouseholdMember.fulfilled, (state, action) => {
+      state.list = state.list.filter(
+        (householdmember) => householdmember.id !== action.payload,
+      );
+    });
     builder.addCase(fetchUserHouseholdMembers.fulfilled, (state, action) => {
       state.list = action.payload;
     });
-    builder.addCase(
+    builder.addCase( 
       fetchHouseholdMembersInCurrentHousehold.fulfilled,
       (state, action) => {
         state.list = action.payload;
@@ -74,6 +89,6 @@ const householdmemberSlice = createSlice({
 export const householdmemberReducer = householdmemberSlice.reducer;
 export const {
   // deleteHouseholdmember,
-  updateHouseholdMember,
+  // updateHouseholdMember,
   setCurrentHouseholdMember,
 } = householdmemberSlice.actions;

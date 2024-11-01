@@ -7,6 +7,7 @@ import {
   doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { db } from '../../firebase';
@@ -26,16 +27,35 @@ export const addHouseholdMember = createAsyncThunk<
     }),
 );
 
+// Async thunk for updating a household member in Firestore
+export const updateHouseholdMember = createAsyncThunk<
+  HouseholdMember,
+  Partial<HouseholdMember> & { id: string }, 
+  { rejectValue: string }
+>(
+  'householdmember/updateHouseholdMember',
+  async (member, { rejectWithValue }) => {
+    const { id, ...fieldsToUpdate } = member;
+
+    try {
+      const docRef = doc(db, 'Householdmember', id);
+      await updateDoc(docRef, fieldsToUpdate);
+      return member as HouseholdMember; 
+    } catch (error) {
+      console.error('Error updating household member:', error);
+      return rejectWithValue('Failed to update household member');
+    }
+  }
+);
+
 // Async thunk for deleting a householdmember from Firestore
 export const deleteHouseholdMember = createAsyncThunk<
-  void,
+  string,
   string,
   { rejectValue: string }
 >('householdmember/deleteHouseholdMember', async (id, { rejectWithValue }) =>
   deleteDoc(doc(db, 'Householdmember', id))
-    .then(() => {
-      console.log('Household member deleted');
-    })
+    .then(() => id)
     .catch((error) => {
       console.error('Error deleting household member:', error);
       return rejectWithValue('Failed to delete household member');

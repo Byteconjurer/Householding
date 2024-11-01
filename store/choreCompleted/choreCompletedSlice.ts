@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { mockedChoresCompleted } from '../../data/data';
 import { ChoreCompleted } from '../../data/types';
-import { addChoreCompleted } from './chorecompletedThunks';
+import { addChoreCompleted, fetchChoresCompletedForHousehold } from './chorecompletedThunks';
 
 type ChoreCompletedState = {
   list: ChoreCompleted[];
 };
 
 const initialState: ChoreCompletedState = {
-  list: mockedChoresCompleted,
+  list: [],
 };
 
 const choreCompletedSlice = createSlice({
@@ -19,6 +18,10 @@ const choreCompletedSlice = createSlice({
     builder.addCase(addChoreCompleted.fulfilled, (state, action) => {
       state.list.push(action.payload);
     });
+    builder.addCase(fetchChoresCompletedForHousehold.fulfilled, (state, action) => {
+      state.list = action.payload;
+    });
+
   },
 });
 
