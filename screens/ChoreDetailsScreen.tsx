@@ -6,14 +6,14 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Surface, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { generateCompletedChoreId } from '../store/chore/choresSelectors';
-import { addChoreCompleted } from '../store/choreCompleted/choreCompletedSlice';
-import { selectChoresByCurrentHousehold } from '../store/household/householdSelectors';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { selectChoreById } from '../store/chore/choresSelectors';
 import {
   selectCurrentHousehold,
   selectCurrentHouseholdMember,
 } from '../store/sharedSelectors';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { addChoreCompleted } from '../store/choreCompleted/chorecompletedThunks';
+import { formatDateToYYYYMMDD } from '../utils/date';
 
 type ChoreProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, 'ChoreDetails'>,
@@ -22,12 +22,11 @@ type ChoreProps = CompositeScreenProps<
 
 export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const [isChoreDone, setIsChoreDone] = useState(false);
-  const completedChoreId = useAppSelector(generateCompletedChoreId);
-  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
-  const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const chores = useAppSelector(selectChoresByCurrentHousehold);
-  const chore = chores.find((item) => item.id === route.params.id);
   const dispatch = useAppDispatch();
+  const currentHousehold = useAppSelector(selectCurrentHousehold);
+  const currentHouseholdMember = useAppSelector(selectCurrentHouseholdMember);
+  const choreId = route.params.id;
+  const chore = useAppSelector(selectChoreById(choreId));
 
   const isActive = currentHouseholdMember?.isActive ?? false;
   useLayoutEffect(() => {
@@ -50,10 +49,9 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
   const handlePress = () => {
     setIsChoreDone(true);
     const choreCompletedTime = Date.now();
-    const choreCompletedDate = new Date(choreCompletedTime)
-      .toISOString()
-      .split('T')[0];
-
+    const choreCompletedDate = formatDateToYYYYMMDD(
+      new Date(choreCompletedTime),
+    );
     if (!currentHousehold) {
       console.error('No current household set');
       return;
@@ -64,7 +62,6 @@ export default function ChoreDetailsScreen({ route, navigation }: ChoreProps) {
     }
     dispatch(
       addChoreCompleted({
-        id: completedChoreId,
         choreId: chore.id,
         householdMemberId: currentHouseholdMember.id,
         choreComplete: choreCompletedDate,

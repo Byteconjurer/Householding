@@ -1,11 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { mockedHouseholds } from '../../data/data';
 import { Household } from '../../data/types';
+import {
+  addHousehold,
+  fetchHouseholds,
+  updateHousehold,
+} from './householdThunks';
 
-type HouseholdState = { list: Household[]; current?: Household };
+type HouseholdState = {
+  list: Household[];
+  current?: Household;
+  loading: boolean;
+  error?: string;
+};
+
 const initialState: HouseholdState = {
-  list: mockedHouseholds,
-  current: mockedHouseholds[0],
+  list: [],
+  current: undefined,
+  loading: false,
+  error: undefined,
 };
 
 const householdSlice = createSlice({
@@ -18,14 +30,14 @@ const householdSlice = createSlice({
     // deleteHousehold: (state, action: PayloadAction<string>) => {
     //   return state.list.filter((household) => household.id !== action.payload);
     // },
-    updateHousehold: (state, action: PayloadAction<Household>) => {
+    /*     updateHousehold: (state, action: PayloadAction<Household>) => {
       const index = state.list.findIndex(
         (household) => household.id === action.payload.id,
       );
       if (index !== -1) {
         state.list[index] = action.payload;
       }
-    },
+    }, */
     setCurrentHousehold: (state, action: PayloadAction<string>) => {
       const household = state.list.find(
         (household) => household.id === action.payload,
@@ -40,14 +52,34 @@ const householdSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(addHousehold.fulfilled, (state, action) => {
+      state.list.push(action.payload);
+    });
+    builder.addCase(fetchHouseholds.pending, (state) => {
+      state.loading = true;
+      state.error = undefined;
+    });
+    builder.addCase(fetchHouseholds.fulfilled, (state, action) => {
+      state.list = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(fetchHouseholds.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(updateHousehold.fulfilled, (state, action) => {
+      const index = state.list.findIndex(
+        (household) => household.id === action.payload.id,
+      );
+      if (index !== -1) {
+        state.list[index] = action.payload;
+      }
+    });
+  },
 });
 
 export const householdReducer = householdSlice.reducer;
-export const {
-  addHousehold,
-  updateHousehold,
-  setCurrentHousehold,
-  setHouseholdName,
-} = householdSlice.actions;
+export const { setCurrentHousehold, setHouseholdName } = householdSlice.actions;
 // export const { addHousehold, deleteHousehold, updateHousehold } =
 //   householdSlice.actions;

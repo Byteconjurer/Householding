@@ -1,17 +1,31 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { avatarsMap } from '../data/data';
-import { Chore } from '../data/types';
+import { Chore, ChoreCompleted, HouseholdMember } from '../data/types';
 import { selectMembersInCurrentHousehold } from '../store/householdmember/householdmemberSelectors';
 import {
   selectCompletedChoresTodayByChoreId,
   selectLatestDateFromCompletedChoreByChoreId,
-} from '../store/sharedSelectors';
+} from '../store/choreCompleted/choreCompletedSelectors';
 import { useAppSelector } from '../store/store';
+import { formatToDashedDate } from '../utils/date';
 
 interface Props {
   chore: Chore;
   onPress: () => void;
+}
+
+function getMatchingAvatars(
+  householdMembers: HouseholdMember[],
+  choresCompleted: ChoreCompleted[],
+): string[] {
+  const choreMemberIds = new Set(
+    choresCompleted.map((chore) => chore.householdMemberId),
+  );
+
+  return householdMembers
+    .filter((member) => choreMemberIds.has(member.id))
+    .map((member) => member.avatar);
 }
 
 export default function ChoreCardItem({ chore, onPress }: Props) {
@@ -19,13 +33,17 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
   const completedToday = useAppSelector(
     selectCompletedChoresTodayByChoreId(chore.id),
   );
+
   const latestDateAsString = useAppSelector(
     selectLatestDateFromCompletedChoreByChoreId(chore.id),
   );
+
+  const latestDateAsDashedString = formatToDashedDate(latestDateAsString || '');
+
   const todaysDate = new Date();
 
-  const latestDateAsDate = latestDateAsString
-    ? new Date(latestDateAsString)
+  const latestDateAsDate = latestDateAsDashedString
+    ? new Date(latestDateAsDashedString)
     : null;
 
   const daysDifference = latestDateAsDate
@@ -39,11 +57,7 @@ export default function ChoreCardItem({ chore, onPress }: Props) {
     daysDifference !== null && daysDifference > chore.interval;
   const isCompletedToday = completedToday.length !== 0;
 
-  const memberIdList = completedToday.map((ct) => ct.householdMemberId);
-  const idToAvatarMap = Object.fromEntries(
-    members.map((member) => [member.id, member.avatar]),
-  );
-  const avatars = memberIdList.map((id) => idToAvatarMap[id]);
+  const avatars = getMatchingAvatars(members, completedToday);
 
   return (
     <Pressable style={styles.chorePressable}>

@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, Text, Surface } from 'react-native-paper';
-import { Household } from '../data/types';
 import {
   selectCurrentUser,
   selectHouseholdMembersList,
-  selectHouseholdsList,
 } from '../store/sharedSelectors';
-import { useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { fetchHouseholdByCode } from '../store/household/householdThunks';
 
 const JoinByCode = ({
   onCodeValidated,
 }: {
   onCodeValidated: (householdId: string) => void;
 }) => {
+  const dispatch = useAppDispatch();
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const currentUser = useAppSelector(selectCurrentUser);
   const householdMembers = useAppSelector(selectHouseholdMembersList);
 
-  const households = useAppSelector(selectHouseholdsList);
-
-  const validateCode = () => {
-    const foundHousehold = households.find(
-      (household: Household) => household.code === code,
-    );
-
-    if (foundHousehold) {
+  const validateCode = async () => {
+    try {
+      const foundHousehold = await dispatch(
+        fetchHouseholdByCode(code),
+      ).unwrap();
       if (
         householdMembers.find(
           (member) =>
@@ -39,39 +36,41 @@ const JoinByCode = ({
         setError('');
         onCodeValidated(foundHousehold.id);
       }
-    } else {
-      setError('Fel kod. Vänligen försök igen.');
+    } catch (error) {
+      setError('Fel kod. Vänligen försök igen.' + error);
     }
   };
 
   return (
     <Surface style={styles.container}>
-      <Text style={styles.inputtext}>Ange kod</Text>
-      <TextInput
-        mode="outlined"
-        value={code}
-        onChangeText={setCode}
-        style={styles.input}
-        theme={{ roundness: 10 }}
-        error={!!error}
-      />
+      <Surface style={styles.container}>
+        <Text style={styles.inputtext}>Ange kod</Text>
+        <TextInput
+          mode="outlined"
+          value={code}
+          onChangeText={setCode}
+          style={styles.input}
+          theme={{ roundness: 10 }}
+          error={!!error}
+        />
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="elevated"
-          disabled={!code}
-          icon="plus-circle-outline"
-          textColor="black"
-          buttonColor="#fff"
-          labelStyle={styles.buttonText}
-          contentStyle={{ paddingVertical: 5 }}
-          onPress={validateCode}
-        >
-          Gå med
-        </Button>
-      </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="elevated"
+            disabled={!code}
+            icon="plus-circle-outline"
+            textColor="black"
+            buttonColor="#fff"
+            labelStyle={styles.buttonText}
+            contentStyle={{ paddingVertical: 5 }}
+            onPress={validateCode}
+          >
+            Gå med
+          </Button>
+        </View>
+      </Surface>
     </Surface>
   );
 };

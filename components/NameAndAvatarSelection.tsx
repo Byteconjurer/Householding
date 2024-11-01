@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -19,35 +19,67 @@ import {
 import { avatarsMap } from '../data/data';
 import { selectHouseholdById } from '../store/household/householdSelectors';
 import { selectCurrentUser } from '../store/sharedSelectors';
-import { selectMembersByHouseholdId } from '../store/householdmember/householdmemberSelectors';
-import { addHouseholdMember } from '../store/householdmember/householdmemberSlice';
+import {
+  addHouseholdMember,
+  fetchHouseholdMembersInHousehold,
+} from '../store/householdmember/householdmemberThunks';
 import { useAppDispatch, useAppSelector } from '../store/store';
+import { HouseholdMember } from '../data/types';
+import { updateHouseholdMember } from '../store/householdmember/householdmemberThunks';
+import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 
 const NameAndAvatarSelection = ({
   householdId,
+  edit,
+  householdMembers,
   setJoinModalVisible,
   resetHouseholdId,
 }: {
   householdId: string;
-  setJoinModalVisible: (visible: boolean) => void;
-  resetHouseholdId: () => void;
+  edit?: boolean;
+  householdMembers?: HouseholdMember[];
+  setJoinModalVisible?: (visible: boolean) => void;
+  resetHouseholdId?: () => void;
 }) => {
   const [name, setName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [householdMembersState, setHouseholdMembers] = useState<
+    HouseholdMember[]
+  >([]);
   const dispatch = useAppDispatch();
-
   const currentUserId = useAppSelector(selectCurrentUser)?.uid;
+  console.log('Current user ID:', currentUserId);
 
-  const householdMembers = useAppSelector(
-    selectMembersByHouseholdId(householdId),
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const householdMembers = await dispatch(
+          fetchHouseholdMembersInHousehold(householdId),
+        ).unwrap();
+        setHouseholdMembers(householdMembers);
+        console.log('bajs');
+      } catch (error) {
+        console.error('Failed to fetch household members:', error);
+      }
+    };
+    if (!edit) {
+      fetchData();
+    } else {
+      setHouseholdMembers(householdMembers!);
+    }
+  }, [dispatch, edit, householdMembers, householdId]);
+
+  const currentHouseholdMember = householdMembers?.find(
+    (member) => member.userId === currentUserId,
   );
 
   const { colors } = useTheme();
 
   const handleAvatarSelect = (avatarKey: string) => {
-    if (householdMembers.some((member) => member.avatar === avatarKey)) return;
+    if (householdMembersState.some((member) => member.avatar === avatarKey))
+      return;
     setSelectedAvatar(avatarKey);
     setAvatarModalVisible(false);
   };
@@ -61,23 +93,38 @@ const NameAndAvatarSelection = ({
     }
     if (name && selectedAvatar) {
       console.log('Namn:', name, 'Vald Avatar:', selectedAvatar);
-      dispatch(
-        addHouseholdMember({
-          id: Date.now().toString(),
-          userId: currentUserId,
-          householdId: householdId,
-          avatar: selectedAvatar,
-          name: name,
-          owner: false,
-          isActive: true,
-          isRequest: false,
-        }),
-      );
+      if (!edit) {
+        dispatch(
+          addHouseholdMember({
+            userId: currentUserId,
+            householdId: householdId,
+            avatar: selectedAvatar,
+            name: name,
+            owner: false,
+            isActive: true,
+            isRequest: false,
+          }),
+        );
+      } else {
+        dispatch(
+          updateHouseholdMember({
+            id: currentHouseholdMember!.id,
+            name: name,
+            avatar: selectedAvatar,
+          }),
+        );
+        dispatch(
+          setCurrentHouseholdMember({
+            userId: currentUserId,
+            householdId: householdId,
+          }),
+        );
+      }
       setSaved(true);
       setTimeout(() => {
         setSaved(false);
-        setJoinModalVisible(false);
-        resetHouseholdId();
+        setJoinModalVisible?.(false);
+        resetHouseholdId?.();
       }, 2000);
     }
   };
@@ -126,7 +173,7 @@ const NameAndAvatarSelection = ({
             keyExtractor={(item) => item}
             numColumns={4}
             renderItem={({ item }) => {
-              const isTaken = householdMembers.some(
+              const isTaken = householdMembersState.some(
                 (member) => member.avatar === item,
               );
               return (

@@ -1,3 +1,5 @@
+import { Period } from '../screens/StatisticsScreen';
+
 /**
  * Returns the date of the first day of the current week (Monday).
  */
@@ -47,15 +49,69 @@ export const getLastDayOfPreviousWeek = (): Date => {
 /**
  * Returns the date of the first day of the previous month.
  */
-export const getFirstDayOfPreviousMonth = (): Date => {
+export function getFirstDayOfPreviousMonth(): Date {
   const date = new Date();
-  return new Date(date.getFullYear(), date.getMonth() - 1, 1); // First day of the previous month
-};
+  // Set the date to the first day of the current month
+  date.setDate(1);
+  // Subtract one month
+  date.setMonth(date.getMonth() - 1);
+
+  return date;
+}
 
 /**
  * Returns the date of the last day of the previous month.
  */
 export const getLastDayOfPreviousMonth = (): Date => {
   const date = new Date();
-  return new Date(date.getFullYear(), date.getMonth(), 0); // Last day of the previous month
+  // Create a date object for the first day of the current month
+  const firstDayOfCurrentMonth = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    1,
+  );
+
+  // Subtract one millisecond to get the last day of the previous month
+  return new Date(firstDayOfCurrentMonth.getTime() - 1);
 };
+
+export const getDateRange = (
+  period: Period,
+): { startDate: Date; endDate: Date } => {
+  switch (period) {
+    case 'this-week':
+      return {
+        startDate: getFirstDayOfCurrentWeek(),
+        endDate: getLastDayOfCurrentWeek(),
+      };
+    case 'previous-week':
+      return {
+        startDate: getFirstDayOfPreviousWeek(),
+        endDate: getLastDayOfPreviousWeek(),
+      };
+    case 'previous-month':
+      return {
+        startDate: getFirstDayOfPreviousMonth(),
+        endDate: getLastDayOfPreviousMonth(),
+      };
+    default:
+      throw new Error('Invalid period');
+  }
+};
+
+export function formatDateToYYYYMMDD(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}${month}${day}`;
+}
+
+export function formatToDashedDate(dateString: string): string {
+  if (dateString.length !== 8) {
+    return '';
+  }
+  const year = dateString.slice(0, 4);
+  const month = dateString.slice(4, 6);
+  const day = dateString.slice(6, 8);
+  return `${year}-${month}-${day}`;
+}

@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import { TopTabParamList } from '../navigators/TopTabNavigator';
-import { generateNextId } from '../store/chore/choresSelectors';
-import { addChore } from '../store/chore/choresSlice';
+import { addChore } from '../store/chore/choreThunks';
 import { selectCurrentHousehold } from '../store/sharedSelectors';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
@@ -25,8 +24,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
   const [showEnergyWeightPicker, setShowEnergyWeightPicker] = useState(false);
   const dispatch = useAppDispatch();
   const currentHousehold = useAppSelector(selectCurrentHousehold);
-  const nextChoreId = useAppSelector(generateNextId);
-
   const handleAddChore = () => {
     if (!currentHousehold) {
       console.error('No current household set');
@@ -34,7 +31,6 @@ export default function AddChoreScreen({ navigation }: ChoresProps) {
     }
 
     const newChore = {
-      id: nextChoreId,
       title: newChoreTitle,
       description: newChoreDescription,
       interval: newChoreInterval,

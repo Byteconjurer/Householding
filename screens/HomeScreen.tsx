@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import AddHouseholdModal from '../components/AddHouseholdModal';
@@ -9,6 +9,16 @@ import { RootStackParamList } from '../navigators/RootStackNavigator';
 import { selectUserHouseholds } from '../store/household/householdSelectors';
 import { setCurrentHousehold } from '../store/household/householdSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
+import { fetchHouseholds } from '../store/household/householdThunks';
+import {
+  selectCurrentUser,
+  selectHouseholdError,
+  selectHouseholdLoading,
+} from '../store/sharedSelectors';
+import { useFocusEffect } from '@react-navigation/native';
+import { fetchUserHouseholdMembers } from '../store/householdmember/householdmemberThunks';
+import { ActivityIndicator } from 'react-native';
+import { setCurrentHouseholdMember } from '../store/householdmember/householdmemberSlice';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -19,7 +29,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
   async function signOutUser() {
     await signOut(getAuth());
   }
-
+  const currentUser = useAppSelector(selectCurrentUser);
   const handleJoinOnClick = () => {
     setJoinModalVisible(true);
   };
@@ -27,7 +37,24 @@ export default function HomeScreen({ navigation }: HomeProps) {
     setAddModalVisible(true);
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(fetchUserHouseholdMembers(currentUser!.uid));
+      dispatch(fetchHouseholds());
+    }, [dispatch, currentUser]),
+  );
+
+  const loading = useAppSelector(selectHouseholdLoading);
+  const error = useAppSelector(selectHouseholdError);
   const userHouseholds = useAppSelector(selectUserHouseholds);
+
+  if (loading)
+    return (
+      <View style={styles.spinnerConatiner}>
+        <ActivityIndicator size="large" color="#6200ee" />
+      </View>
+    );
+  if (error) return <Text>Error: {error}</Text>;
 
   return (
     <>
@@ -39,6 +66,12 @@ export default function HomeScreen({ navigation }: HomeProps) {
                 key={household.id}
                 onPress={() => {
                   dispatch(setCurrentHousehold(household.id));
+                  dispatch(
+                    setCurrentHouseholdMember({
+                      userId: currentUser!.uid,
+                      householdId: household.id,
+                    }),
+                  );
                   navigation.navigate('TopTabNavigator', {
                     screen: 'Household',
                   });
@@ -63,6 +96,7 @@ export default function HomeScreen({ navigation }: HomeProps) {
             );
           })}
         </View>
+        {/*  <Button onPress={() => addChoresCompleted(mockedChoresCompleted)}>Adda Chorecompleted</Button> */}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <Button
@@ -138,5 +172,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     padding: 2,
+  },
+  spinnerConatiner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
