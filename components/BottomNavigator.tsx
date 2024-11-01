@@ -21,7 +21,7 @@ export default function BottomNavigator() {
       />
       <IconButton
         onPress={() => navigation.navigate('ThisWeek', { period: 'this-week' })}
-        icon="account"
+        icon="chart-pie"
         size={30}
       />
     </Surface>

@@ -43,6 +43,7 @@ const JoinByCode = ({
 
   return (
     <Surface style={styles.container}>
+    <Surface style={styles.container}>
       <Text style={styles.inputtext}>Ange kod</Text>
       <TextInput
         mode="outlined"
@@ -69,6 +70,7 @@ const JoinByCode = ({
           Gå med
         </Button>
       </View>
+    </Surface>
     </Surface>
   );
 };

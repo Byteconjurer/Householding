@@ -1,14 +1,25 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 /* import { useAuth } from './hooks/useAuth'; */
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
+import merge from 'deepmerge';
 import { onAuthStateChanged } from 'firebase/auth';
+import {
+  MD3DarkTheme,
+  MD3LightTheme,
+  adaptNavigationTheme,
+} from 'react-native-paper';
 import { User } from './data/types';
 import { auth } from './firebase';
 import LoginStackNavigator from './navigators/LoginStackNavigator';
 import RootStackNavigator from './navigators/RootStackNavigator';
-import { AuthProvider } from './providers/AuthContextProvider';
+import { ThemePreferencesContext } from './providers/ThemePreferencesContext';
 import { selectCurrentUser } from './store/sharedSelectors';
 import store, { useAppDispatch, useAppSelector } from './store/store';
 import { setUser } from './store/user/userSlice';
@@ -64,12 +75,29 @@ function AppContent({ theme }: { theme: any }) {
 
   return (
     <NavigationContainer theme={theme}>
+    <NavigationContainer theme={theme}>
       {user?.uid ? <RootStackNavigator /> : <LoginStackNavigator />}
     </NavigationContainer>
   );
 }
 
 export default function App() {
+  const [isThemeDark, setIsThemeDark] = useState(false);
+
+  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+
+  const toggleTheme = useCallback(() => {
+    return setIsThemeDark(!isThemeDark);
+  }, [isThemeDark]);
+
+  const preferences = useMemo(
+    () => ({
+      toggleTheme,
+      isThemeDark,
+    }),
+    [toggleTheme, isThemeDark],
+  );
+
   const [isThemeDark, setIsThemeDark] = useState(false);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;

@@ -102,6 +102,9 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
         <IconButton
           icon={isEditing ? 'content-save' : 'pencil-outline'}
           size={24}
+        <IconButton
+          icon={isEditing ? 'content-save' : 'pencil-outline'}
+          size={24}
           onPress={() => {
             if (isEditing) {
               handleSave();
@@ -125,13 +128,19 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
 
   const CurrentUserAvatar = () => (
     <View style={styles.avatarContainer}>
-      <Avatar.Image
-        size={60}
-        source={avatarsMap[currentHouseholdMember!.avatar].icon}
-        style={{
-          backgroundColor: avatarsMap[currentHouseholdMember.avatar].color,
-        }}
-      />
+      <Card
+        style={[
+          styles.avatarCard,
+          {
+            backgroundColor: avatarsMap[currentMember!.avatar].color,
+          },
+        ]}
+      >
+        <Image
+          source={avatarsMap[currentMember!.avatar].icon}
+          style={styles.avatarImage}
+        />
+      </Card>
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>
           {currentHouseholdMember.name || 'användarnamn'}
@@ -144,6 +153,7 @@ export default function HouseholdScreen({ route }: HouseholdProps) {
       </View>
     </View>
   );
+
 
   const AllHouseholdMembers = () => {
     const handleMakeOwner = (member: HouseholdMember) => {
@@ -287,6 +297,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 20,
   },
   statisticsTextHouseHold: {
     fontSize: 30,
@@ -301,6 +313,10 @@ const styles = StyleSheet.create({
   avatarContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 30,
+  },
+  avatarBackground: {
+    backgroundColor: 'lightgrey',
     marginTop: 30,
   },
   avatarBackground: {
@@ -325,6 +341,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     flexGrow: 0,
     marginTop: 20,
+    marginTop: 20,
   },
   membersContainer: {
     marginTop: 10,
@@ -338,6 +355,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
+
 
     borderRadius: 10,
   },
@@ -354,5 +372,33 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'red',
     marginTop: 20,
+  },
+  avatarImage: {
+    width: 55,
+    height: 55,
+    margin: 10,
+    backgroundColor: 'transparent',
+  },
+  avatarCard: {
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+  },
+  memberAvatarImage: {
+    width: 20,
+    height: 20,
+    margin: 1,
+    backgroundColor: 'transparent',
+  },
+  memberAvatarCard: {
+    margin: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
   },
 });

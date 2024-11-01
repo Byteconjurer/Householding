@@ -1,6 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectCurrentHousehold } from '../sharedSelectors';
-import { selectHouseholdMembersList } from '../sharedSelectors';
+import { pieDataItem } from 'gifted-charts-core';
+import SvgComponent from '../../components/SvgComponent';
+import { avatarsMap } from '../../data/data';
+import { selectMembersInCurrentHousehold } from '../householdmember/householdmemberSelectors';
 import { selectChores, selectCompletedChoresList } from '../sharedSelectors';
 import { RootState } from '../store';
 import { avatarsMap } from '../../data/data';
