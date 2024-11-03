@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, StyleSheet, Image } from 'react-native';
+import { TextInput, Button, Text } from 'react-native-paper';
 import { z } from 'zod';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 15,
     backgroundColor: '#fff',
+    color: '#999',
     borderRadius: 10,
     elevation: 5,
   },
